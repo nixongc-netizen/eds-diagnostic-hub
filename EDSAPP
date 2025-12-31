@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDS Diagnostic Hub - Free Self-Assessment Tool</title>
+    <meta name="description" content="Free EDS diagnostic tool with Beighton Score calculator, symptom tracker, and medical summary generator">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .animate-bounce {
+            animation: bounce 1s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        const { useState } = React;
+        
+        // Lucide Icons as SVG components
+        const Heart = ({ className = "w-6 h-6" }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            </svg>
+        );
+        
+        const Activity = ({ className = "w-6 h-6" }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+        );
+        
+        const Stethoscope = ({ className = "w-6 h-6" }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+        );
+        
+        const TrendingUp = ({ className = "w-6 h-6" }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+            </svg>
+        );
+        
+        const BookOpen = ({ className = "w-6 h-6" }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            </svg>
+        );
+        
+        const FileText = ({ className = "w-6 h-6" }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+        );
+        
+        const Users = ({ className = "w-6 h-6" }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+        );
+        
+        const AlertCircle = ({ className = "w-6 h-6" }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+        );
+        
+        const CheckCircle = ({ className = "w-6 h-6" }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+        );
+        
+        const ExternalLink = ({ className = "w-6 h-6" }) => (
+            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+        );
+
+        function EDSApp() {
+            const [activeTab, setActiveTab] = useState('home');
+            const [beightonScore, setBeightonScore] = useState({
+                leftElbow: false, rightElbow: false, leftKnee: false, rightKnee: false,
+                leftThumb: false, rightThumb: false, leftPinky: false, rightPinky: false,
+                forwardBend: false
+            });
+            const [subtypeAnswers, setSubtypeAnswers] = useState({});
+            const [symptoms, setSymptoms] = useState([]);
+            const [newSymptom, setNewSymptom] = useState('');
+
+            const calculateBeighton = () => {
+                return Object.values(beightonScore).filter(v => v).length;
+            };
+
+            const getBeightonResult = () => {
+                const score = calculateBeighton();
+                if (score >= 5) return { text: 'Score suggests hypermobility (≥5/9)', color: 'text-orange-600' };
+                if (score >= 4) return { text: 'Borderline hypermobility (4/9)', color: 'text-yellow-600' };
+                return { text: 'Below threshold for hypermobility (<4/9)', color: 'text-green-600' };
+            };
+
+            const addSymptom = () => {
+                if (newSymptom.trim()) {
+                    setSymptoms([...symptoms, { text: newSymptom, date: new Date().toLocaleDateString() }]);
+                    setNewSymptom('');
+                }
+            };
+
+            return (
+                <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
+                    <div className="bg-white shadow-sm border-b border-gray-200">
+                        <div className="max-w-6xl mx-auto px-4 py-4">
+                            <div className="flex items-center gap-3">
+                                <Heart className="w-8 h-8 text-blue-600" />
+                                <div>
+                                    <h1 className="text-2xl font-bold text-gray-800">EDS Diagnostic Hub</h1>
+                                    <p className="text-sm text-gray-600">Free Self-Assessment & Resource Tool</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="bg-white shadow-sm">
+                        <div className="max-w-6xl mx-auto px-4">
+                            <div className="flex gap-1 overflow-x-auto">
+                                {[
+                                    { id: 'home', label: 'Home', icon: Heart },
+                                    { id: 'beighton', label: 'Beighton Score', icon: Activity },
+                                    { id: 'symptoms', label: 'Symptom Tracker', icon: TrendingUp },
+                                    { id: 'resources', label: 'Resources', icon: Users }
+                                ].map(tab => (
+                                    <button
+                                        key={tab.id}
+                                        onClick={() => setActiveTab(tab.id)}
+                                        className={`flex items-center gap-2 px-4 py-3 font-medium transition-colors ${
+                                            activeTab === tab.id
+                                                ? 'text-blue-600 border-b-2 border-blue-600'
+                                                : 'text-gray-600 hover:text-gray-800'
+                                        }`}
+                                    >
+                                        <tab.icon className="w-4 h-4" />
+                                        {tab.label}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="max-w-6xl mx-auto px-4 py-8">
+                        {activeTab === 'home' && (
+                            <div className="space-y-6">
+                                <div className="bg-white rounded-lg shadow-md p-6">
+                                    <h2 className="text-2xl font-bold text-gray-800 mb-4">Welcome to EDS Diagnostic Hub</h2>
+                                    <p className="text-gray-700 mb-4">
+                                        Free tool to help you assess joint hypermobility, track symptoms, and prepare for medical appointments.
+                                    </p>
+                                    <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+                                        <div className="flex items-start gap-2">
+                                            <AlertCircle className="w-5 h-5 text-yellow-600 mt-0.5 flex-shrink-0" />
+                                            <div>
+                                                <p className="font-semibold text-yellow-800">Important Disclaimer</p>
+                                                <p className="text-sm text-yellow-700">This is NOT a medical diagnosis tool. Always consult with a qualified healthcare provider.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="grid md:grid-cols-2 gap-6">
+                                    {[
+                                        { tab: 'beighton', color: 'blue', icon: Activity, title: 'Beighton Score', desc: 'Assess joint hypermobility' },
+                                        { tab: 'symptoms', color: 'green', icon: TrendingUp, title: 'Track Symptoms', desc: 'Document your health journey' },
+                                        { tab: 'resources', color: 'orange', icon: Users, title: 'Find Specialists', desc: 'Connect with EDS experts' }
+                                    ].map(item => (
+                                        <div key={item.tab}
+                                            onClick={() => setActiveTab(item.tab)}
+                                            className={`bg-gradient-to-br from-${item.color}-500 to-${item.color}-600 rounded-lg shadow-md p-6 text-white cursor-pointer hover:shadow-lg transition-shadow`}>
+                                            <item.icon className="w-12 h-12 mb-3" />
+                                            <h3 className="text-xl font-bold mb-2">{item.title}</h3>
+                                            <p className={`text-${item.color}-100`}>{item.desc}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {activeTab === 'beighton' && (
+                            <div className="bg-white rounded-lg shadow-md p-6">
+                                <h2 className="text-2xl font-bold text-gray-800 mb-4">Beighton Score Assessment</h2>
+                                <p className="text-gray-600 mb-6">The Beighton Score assesses joint hypermobility. Score of 5 or more suggests generalized hypermobility.</p>
+                                
+                                <div className="space-y-3 mb-6">
+                                    {[
+                                        { key: 'leftPinky', label: 'Left pinky extends back beyond 90°' },
+                                        { key: 'rightPinky', label: 'Right pinky extends back beyond 90°' },
+                                        { key: 'leftThumb', label: 'Left thumb touches forearm' },
+                                        { key: 'rightThumb', label: 'Right thumb touches forearm' },
+                                        { key: 'leftElbow', label: 'Left elbow hyperextends >10°' },
+                                        { key: 'rightElbow', label: 'Right elbow hyperextends >10°' },
+                                        { key: 'leftKnee', label: 'Left knee hyperextends >10°' },
+                                        { key: 'rightKnee', label: 'Right knee hyperextends >10°' },
+                                        { key: 'forwardBend', label: 'Palms flat on floor with straight knees' }
+                                    ].map(item => (
+                                        <label key={item.key} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer border">
+                                            <input
+                                                type="checkbox"
+                                                checked={beightonScore[item.key]}
+                                                onChange={(e) => setBeightonScore({ ...beightonScore, [item.key]: e.target.checked })}
+                                                className="w-5 h-5 text-blue-600 rounded"
+                                            />
+                                            <span className="text-gray-700">{item.label}</span>
+                                        </label>
+                                    ))}
+                                </div>
+
+                                <div className="bg-blue-50 border-l-4 border-blue-500 p-6">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <h3 className="text-xl font-bold text-gray-800">Your Score</h3>
+                                        <span className="text-4xl font-bold text-blue-600">{calculateBeighton()}/9</span>
+                                    </div>
+                                    <p className={`text-lg font-semibold ${getBeightonResult().color}`}>
+                                        {getBeightonResult().text}
+                                    </p>
+                                </div>
+                            </div>
+                        )}
+
+                        {activeTab === 'symptoms' && (
+                            <div className="bg-white rounded-lg shadow-md p-6">
+                                <h2 className="text-2xl font-bold text-gray-800 mb-4">Symptom Tracker</h2>
+                                <div className="flex gap-2 mb-6">
+                                    <input
+                                        type="text"
+                                        value={newSymptom}
+                                        onChange={(e) => setNewSymptom(e.target.value)}
+                                        onKeyPress={(e) => e.key === 'Enter' && addSymptom()}
+                                        placeholder="Describe your symptom..."
+                                        className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                    />
+                                    <button onClick={addSymptom} className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                                        Add
+                                    </button>
+                                </div>
+                                <div className="space-y-3">
+                                    {symptoms.length === 0 ? (
+                                        <div className="text-center py-12 text-gray-500">
+                                            <p>No symptoms tracked yet</p>
+                                        </div>
+                                    ) : (
+                                        symptoms.map((symptom, idx) => (
+                                            <div key={idx} className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg border">
+                                                <CheckCircle className="w-5 h-5 text-green-600 mt-0.5" />
+                                                <div className="flex-1">
+                                                    <p className="text-gray-800">{symptom.text}</p>
+                                                    <p className="text-sm text-gray-500 mt-1">{symptom.date}</p>
+                                                </div>
+                                            </div>
+                                        ))
+                                    )}
+                                </div>
+                            </div>
+                        )}
+
+                        {activeTab === 'resources' && (
+                            <div className="bg-white rounded-lg shadow-md p-6">
+                                <h2 className="text-2xl font-bold text-gray-800 mb-4">EDS Resources & Specialists</h2>
+                                <div className="space-y-4">
+                                    <a href="https://www.ehlers-danlos.com/healthcare-professionals-directory/" target="_blank" className="flex items-center justify-between p-4 bg-blue-50 rounded-lg hover:bg-blue-100 border">
+                                        <div>
+                                            <p className="font-semibold text-gray-800">EDS Society Provider Directory</p>
+                                            <p className="text-sm text-gray-600">Find EDS-aware healthcare professionals</p>
+                                        </div>
+                                        <ExternalLink className="w-5 h-5 text-blue-600" />
+                                    </a>
+                                    <a href="https://www.reddit.com/r/ehlersdanlos/" target="_blank" className="flex items-center justify-between p-4 bg-purple-50 rounded-lg hover:bg-purple-100 border">
+                                        <div>
+                                            <p className="font-semibold text-gray-800">r/EhlersDanlos Community</p>
+                                            <p className="text-sm text-gray-600">Support community with 70k+ members</p>
+                                        </div>
+                                        <ExternalLink className="w-5 h-5 text-purple-600" />
+                                    </a>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<EDSApp />, document.getElementById('root'));
+    </script>
+</body>
+</html>
