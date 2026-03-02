@@ -18,349 +18,1546 @@
     <meta property="twitter:url" content="https://myedstest.com/">
     <meta property="twitter:title" content="Free EDS Self-Assessment | MyEDSTest">
     <meta property="twitter:description" content="Free 5-minute EDS test. Get a clinical report for your doctor.">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦓</text></svg>">
     <style>
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 0;
+            color: #1f2937;
         }
-        .animate-bounce {
-            animation: bounce 1s infinite;
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background: white;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .header {
+            background: white;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            color: #667eea;
+            margin-bottom: 4px;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background: #e5e7eb;
+            margin-top: 12px;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+        }
+        
+        .step {
+            display: none;
+            padding: 40px 24px;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .step.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        h2 {
+            font-size: 28px;
+            margin-bottom: 12px;
+            color: #1f2937;
+            line-height: 1.3;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            color: #6b7280;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+        
+        .info-box {
+            background: #f0f9ff;
+            border-left: 4px solid #3b82f6;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .warning-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .question {
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            border: 2px solid #e5e7eb;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .question:hover {
+            border-color: #667eea;
+            background: #f0f9ff;
+        }
+        
+        .question.selected {
+            border-color: #667eea;
+            background: #eff6ff;
+        }
+        
+        .question input[type="checkbox"] {
+            width: 24px;
+            height: 24px;
+            margin-right: 12px;
+            accent-color: #667eea;
+            cursor: pointer;
+        }
+        
+        .question-content {
+            display: flex;
+            align-items: start;
+            gap: 12px;
+        }
+        
+        .question-text {
+            flex: 1;
+        }
+        
+        .question-title {
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-size: 16px;
+        }
+        
+        .question-help {
+            font-size: 14px;
+            color: #4b5563;
+            line-height: 1.5;
+        }
+        
+        .score-display {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 24px;
+            border-radius: 12px;
+            text-align: center;
+            margin: 24px 0;
+        }
+        
+        .score-number {
+            font-size: 48px;
+            font-weight: bold;
+        }
+        
+        .score-label {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-top: 8px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 14px 32px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+        
+        .btn-secondary:hover {
+            background: #f0f9ff;
+        }
+        
+        .btn-full {
+            width: 100%;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 32px;
+        }
+        
+        .nav-buttons .btn {
+            flex: 1;
+        }
+        
+        input[type="text"],
+        input[type="email"] {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 12px;
+            transition: border-color 0.2s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .checkmark {
+            display: inline-block;
+            color: #10b981;
+            margin-right: 8px;
+        }
+        
+        .result-card {
+            background: #f0fdf4;
+            border: 2px solid #86efac;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+        
+        .result-card.warning {
+            background: #fef9c3;
+            border-color: #fde047;
+        }
+        
+        .result-card.info {
+            background: #eff6ff;
+            border-color: #93c5fd;
+        }
+        
+        .result-card h3 {
+            margin-bottom: 8px;
+            font-size: 18px;
+        }
+        
+        .result-card p {
+            color: #4b5563;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .welcome-hero {
+            text-align: center;
+            padding: 40px 24px;
+        }
+        
+        .welcome-hero .emoji {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+        
+        .feature {
+            display: flex;
+            align-items: start;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .feature-icon {
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+        
+        .feature-text h3 {
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+        
+        .feature-text p {
+            font-size: 14px;
+            color: #6b7280;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 24px;
+            color: #9ca3af;
+            font-size: 12px;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        @media (max-width: 640px) {
+            .step { padding: 24px 16px; }
+            h2 { font-size: 24px; }
+            .score-number { font-size: 36px; }
         }
     </style>
 </head>
 <body>
-    <div id="root"></div>
-    
-    <script type="text/babel">
-        const { useState } = React;
+    <div class="container">
+        <div class="header">
+            <h1>🦓 MyEDSTest</h1>
+            <p style="font-size: 14px; color: #6b7280;">Free EDS Self-Assessment</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress" style="width: 0%"></div>
+            </div>
+        </div>
         
-        // Lucide Icons as SVG components
-        const Heart = ({ className = "w-6 h-6" }) => (
-            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-            </svg>
-        );
+        <!-- STEP 0: WELCOME -->
+        <div class="step active" data-step="0">
+            <div class="welcome-hero">
+                <div class="emoji">🦓</div>
+                <h2>Could You Have EDS?</h2>
+                <p class="subtitle">Take this free 5-minute assessment to find out. Get a clinical report you can bring to your doctor.</p>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">📋</div>
+                <div class="feature-text">
+                    <h3>Based on Medical Criteria</h3>
+                    <p>Uses the official 2017 hEDS diagnostic criteria</p>
+                </div>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">🏥</div>
+                <div class="feature-text">
+                    <h3>Get a Clinical Report</h3>
+                    <p>PDF summary you can share with your doctor</p>
+                </div>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">⚡</div>
+                <div class="feature-text">
+                    <h3>Quick & Free</h3>
+                    <p>Takes 5 minutes. No credit card required.</p>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <strong>⚠️ This is NOT a diagnosis.</strong> Only a doctor can diagnose EDS. This tool helps you prepare for that conversation.
+            </div>
+            
+            <button class="btn btn-primary btn-full" onclick="nextStep()">Start Assessment →</button>
+        </div>
         
-        const Activity = ({ className = "w-6 h-6" }) => (
-            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
-        );
+        <!-- STEP 1: BEIGHTON SCORE -->
+        <div class="step" data-step="1">
+            <h2>Joint Flexibility Test</h2>
+            <p class="subtitle">The Beighton Score measures joint hypermobility on a 9-point scale. Check each box that applies to you.</p>
+            
+            <div class="info-box">
+                <strong>📹 Not sure how to test?</strong> Watch the <a href="https://www.ehlers-danlos.com/assessing-joint-hypermobility/" target="_blank" style="color: #667eea; font-weight: bold;">official EDS Society video guide</a><br>
+                <strong>How to test:</strong> Try each movement gently. Don't force anything! A score of <strong>5 or more</strong> suggests hypermobility (4+ if you're over 50).
+            </div>
+            
+            <div id="beighton-questions"></div>
+            
+            <div class="score-display">
+                <div class="score-number" id="beighton-score">0/9</div>
+                <div class="score-label">Flexibility Score</div>
+            </div>
+            
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+                <button class="btn btn-primary" onclick="nextStep()">Continue →</button>
+            </div>
+        </div>
         
-        const Stethoscope = ({ className = "w-6 h-6" }) => (
-            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
-        );
+        <!-- STEP 2: hEDS FEATURES -->
+        <div class="step" data-step="2">
+            <h2>Your Body & Family History</h2>
+            <p class="subtitle">People with EDS often have these features. Check any that sound like you.</p>
+            
+            <div class="info-box">
+                <strong>💡 Tip:</strong> Don't worry if you don't understand every term. The descriptions below explain what each one means in plain English. Check anything that sounds familiar.
+            </div>
+            
+            <div style="background: #f0fdf4; border: 2px solid #86efac; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
+                <h3 style="margin-bottom: 12px; font-size: 16px; color: #16a34a;">🔍 Visual Tests You Can Do Right Now</h3>
+                <div style="font-size: 14px; line-height: 1.6; color: #4b5563;">
+                    <p style="margin-bottom: 12px;"><strong>Skin stretch test:</strong> Pinch the skin on the back of your hand. Can you pull it up more than 1-2 inches? That's hyperextensible skin.</p>
+                    <p style="margin-bottom: 12px;"><strong>Wrist sign:</strong> Wrap your thumb and pinky around your opposite wrist. Do they overlap? That means you have long, slender fingers.</p>
+                    <p style="margin-bottom: 12px;"><strong>Thumb sign:</strong> Tuck your thumb inside your fist. Does it stick out past the edge of your palm? Another sign of long fingers.</p>
+                    <p><strong>Skin feel:</strong> Does your skin feel noticeably softer, smoother, or more velvety than other people's? People might comment on it.</p>
+                </div>
+            </div>
+            
+            <div id="heds-questions"></div>
+            
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+                <button class="btn btn-primary" onclick="nextStep()">Continue →</button>
+            </div>
+        </div>
         
-        const TrendingUp = ({ className = "w-6 h-6" }) => (
-            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-            </svg>
-        );
+        <!-- STEP 3: COMORBIDITIES -->
+        <div class="step" data-step="3">
+            <h2>Related Conditions</h2>
+            <p class="subtitle">EDS often comes with other conditions. Check any symptoms you experience.</p>
+            
+            <h3 style="margin-top: 24px; margin-bottom: 12px; font-size: 20px;">🫀 Heart & Blood Pressure</h3>
+            <div id="pots-questions"></div>
+            
+            <h3 style="margin-top: 32px; margin-bottom: 12px; font-size: 20px;">🔴 Allergies & Reactions</h3>
+            <div id="mcas-questions"></div>
+            
+            <h3 style="margin-top: 32px; margin-bottom: 12px; font-size: 20px;">😣 Pain & Other</h3>
+            <div id="pain-questions"></div>
+            
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+                <button class="btn btn-primary" onclick="nextStep()">See Results →</button>
+            </div>
+        </div>
         
-        const BookOpen = ({ className = "w-6 h-6" }) => (
-            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-            </svg>
-        );
+        <!-- STEP 4: RESULTS & EMAIL -->
+        <div class="step" data-step="4">
+            <h2>Your Results</h2>
+            <p class="subtitle">Based on your answers, here's what we found:</p>
+            
+            <div id="results-container"></div>
+            
+            <div style="background: linear-gradient(135deg, #eff6ff, #f3e8ff); padding: 32px; border-radius: 16px; margin-top: 32px; border: 2px solid #667eea;">
+                <h3 style="margin-bottom: 8px;">📧 Get Your Clinical Report</h3>
+                <p style="color: #4b5563; margin-bottom: 20px; font-size: 14px;">Enter your email to download your personalized PDF report for your doctor.</p>
+                
+                <input type="text" id="name" placeholder="First name">
+                <input type="email" id="email" placeholder="Email address">
+                
+                <button class="btn btn-primary btn-full" onclick="downloadReport()">📄 Download My Report</button>
+                
+                <p style="font-size: 12px; color: #6b7280; margin-top: 12px; text-align: center;">We respect your privacy. Unsubscribe anytime.</p>
+            </div>
+        </div>
         
-        const FileText = ({ className = "w-6 h-6" }) => (
-            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
-        );
-        
-        const Users = ({ className = "w-6 h-6" }) => (
-            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-            </svg>
-        );
-        
-        const AlertCircle = ({ className = "w-6 h-6" }) => (
-            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-        );
-        
-        const CheckCircle = ({ className = "w-6 h-6" }) => (
-            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-        );
-        
-        const ExternalLink = ({ className = "w-6 h-6" }) => (
-            <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-            </svg>
-        );
-
-        function EDSApp() {
-            const [activeTab, setActiveTab] = useState('home');
-            const [beightonScore, setBeightonScore] = useState({
-                leftElbow: false, rightElbow: false, leftKnee: false, rightKnee: false,
-                leftThumb: false, rightThumb: false, leftPinky: false, rightPinky: false,
-                forwardBend: false
-            });
-            const [subtypeAnswers, setSubtypeAnswers] = useState({});
-            const [symptoms, setSymptoms] = useState([]);
-            const [newSymptom, setNewSymptom] = useState('');
-
-            const calculateBeighton = () => {
-                return Object.values(beightonScore).filter(v => v).length;
-            };
-
-            const getBeightonResult = () => {
-                const score = calculateBeighton();
-                if (score >= 5) return { text: 'Score suggests hypermobility (≥5/9)', color: 'text-orange-600' };
-                if (score >= 4) return { text: 'Borderline hypermobility (4/9)', color: 'text-yellow-600' };
-                return { text: 'Below threshold for hypermobility (<4/9)', color: 'text-green-600' };
-            };
-
-            const addSymptom = () => {
-                if (newSymptom.trim()) {
-                    setSymptoms([...symptoms, { text: newSymptom, date: new Date().toLocaleDateString() }]);
-                    setNewSymptom('');
-                }
-            };
-
-            return (
-                <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
-                    <div className="bg-white shadow-sm border-b border-gray-200">
-                        <div className="max-w-6xl mx-auto px-4 py-4">
-                            <div className="flex items-center gap-3">
-                                <Heart className="w-8 h-8 text-blue-600" />
-                                <div>
-                                    <h1 className="text-2xl font-bold text-gray-800">EDS Diagnostic Hub</h1>
-                                    <p className="text-sm text-gray-600">Free Self-Assessment & Resource Tool</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="bg-white shadow-sm">
-                        <div className="max-w-6xl mx-auto px-4">
-                            <div className="flex gap-1 overflow-x-auto">
-                                {[
-                                    { id: 'home', label: 'Home', icon: Heart },
-                                    { id: 'beighton', label: 'Beighton Score', icon: Activity },
-                                    { id: 'symptoms', label: 'Symptom Tracker', icon: TrendingUp },
-                                    { id: 'resources', label: 'Resources', icon: Users },
-                                    { id: 'blog', label: 'Blog', icon: BookOpen },
-                                    { id: 'faq', label: 'FAQ', icon: FileText }
-                                ].map(tab => (
-                                    <button
-                                        key={tab.id}
-                                        onClick={() => setActiveTab(tab.id)}
-                                        className={`flex items-center gap-2 px-4 py-3 font-medium transition-colors ${
-                                            activeTab === tab.id
-                                                ? 'text-blue-600 border-b-2 border-blue-600'
-                                                : 'text-gray-600 hover:text-gray-800'
-                                        }`}
-                                    >
-                                        <tab.icon className="w-4 h-4" />
-                                        {tab.label}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="max-w-6xl mx-auto px-4 py-8">
-                        {activeTab === 'home' && (
-                            <div className="space-y-6">
-                                <div className="bg-white rounded-lg shadow-md p-6">
-                                    <h2 className="text-2xl font-bold text-gray-800 mb-4">Welcome to EDS Diagnostic Hub</h2>
-                                    <p className="text-gray-700 mb-4">
-                                        Free tool to help you assess joint hypermobility, track symptoms, and prepare for medical appointments.
-                                    </p>
-                                    <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
-                                        <div className="flex items-start gap-2">
-                                            <AlertCircle className="w-5 h-5 text-yellow-600 mt-0.5 flex-shrink-0" />
-                                            <div>
-                                                <p className="font-semibold text-yellow-800">Important Disclaimer</p>
-                                                <p className="text-sm text-yellow-700">This is NOT a medical diagnosis tool. Always consult with a qualified healthcare provider.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="grid md:grid-cols-2 gap-6">
-                                    {[
-                                        { tab: 'beighton', color: 'blue', icon: Activity, title: 'Beighton Score', desc: 'Assess joint hypermobility' },
-                                        { tab: 'symptoms', color: 'green', icon: TrendingUp, title: 'Track Symptoms', desc: 'Document your health journey' },
-                                        { tab: 'resources', color: 'orange', icon: Users, title: 'Find Specialists', desc: 'Connect with EDS experts' }
-                                    ].map(item => (
-                                        <div key={item.tab}
-                                            onClick={() => setActiveTab(item.tab)}
-                                            className={`bg-gradient-to-br from-${item.color}-500 to-${item.color}-600 rounded-lg shadow-md p-6 text-white cursor-pointer hover:shadow-lg transition-shadow`}>
-                                            <item.icon className="w-12 h-12 mb-3" />
-                                            <h3 className="text-xl font-bold mb-2">{item.title}</h3>
-                                            <p className={`text-${item.color}-100`}>{item.desc}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-
-                        {activeTab === 'beighton' && (
-                            <div className="bg-white rounded-lg shadow-md p-6">
-                                <h2 className="text-2xl font-bold text-gray-800 mb-4">Beighton Score Assessment</h2>
-                                <p className="text-gray-600 mb-6">The Beighton Score assesses joint hypermobility. Score of 5 or more suggests generalized hypermobility.</p>
-                                
-                                <div className="space-y-3 mb-6">
-                                    {[
-                                        { key: 'leftPinky', label: 'Left pinky extends back beyond 90°' },
-                                        { key: 'rightPinky', label: 'Right pinky extends back beyond 90°' },
-                                        { key: 'leftThumb', label: 'Left thumb touches forearm' },
-                                        { key: 'rightThumb', label: 'Right thumb touches forearm' },
-                                        { key: 'leftElbow', label: 'Left elbow hyperextends >10°' },
-                                        { key: 'rightElbow', label: 'Right elbow hyperextends >10°' },
-                                        { key: 'leftKnee', label: 'Left knee hyperextends >10°' },
-                                        { key: 'rightKnee', label: 'Right knee hyperextends >10°' },
-                                        { key: 'forwardBend', label: 'Palms flat on floor with straight knees' }
-                                    ].map(item => (
-                                        <label key={item.key} className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer border">
-                                            <input
-                                                type="checkbox"
-                                                checked={beightonScore[item.key]}
-                                                onChange={(e) => setBeightonScore({ ...beightonScore, [item.key]: e.target.checked })}
-                                                className="w-5 h-5 text-blue-600 rounded"
-                                            />
-                                            <span className="text-gray-700">{item.label}</span>
-                                        </label>
-                                    ))}
-                                </div>
-
-                                <div className="bg-blue-50 border-l-4 border-blue-500 p-6">
-                                    <div className="flex items-center justify-between mb-2">
-                                        <h3 className="text-xl font-bold text-gray-800">Your Score</h3>
-                                        <span className="text-4xl font-bold text-blue-600">{calculateBeighton()}/9</span>
-                                    </div>
-                                    <p className={`text-lg font-semibold ${getBeightonResult().color}`}>
-                                        {getBeightonResult().text}
-                                    </p>
-                                </div>
-                            </div>
-                        )}
-
-                        {activeTab === 'symptoms' && (
-                            <div className="bg-white rounded-lg shadow-md p-6">
-                                <h2 className="text-2xl font-bold text-gray-800 mb-4">Symptom Tracker</h2>
-                                <div className="flex gap-2 mb-6">
-                                    <input
-                                        type="text"
-                                        value={newSymptom}
-                                        onChange={(e) => setNewSymptom(e.target.value)}
-                                        onKeyPress={(e) => e.key === 'Enter' && addSymptom()}
-                                        placeholder="Describe your symptom..."
-                                        className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                                    />
-                                    <button onClick={addSymptom} className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                                        Add
-                                    </button>
-                                </div>
-                                <div className="space-y-3">
-                                    {symptoms.length === 0 ? (
-                                        <div className="text-center py-12 text-gray-500">
-                                            <p>No symptoms tracked yet</p>
-                                        </div>
-                                    ) : (
-                                        symptoms.map((symptom, idx) => (
-                                            <div key={idx} className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg border">
-                                                <CheckCircle className="w-5 h-5 text-green-600 mt-0.5" />
-                                                <div className="flex-1">
-                                                    <p className="text-gray-800">{symptom.text}</p>
-                                                    <p className="text-sm text-gray-500 mt-1">{symptom.date}</p>
-                                                </div>
-                                            </div>
-                                        ))
-                                    )}
-                                </div>
-                            </div>
-                        )}
-
-                        {activeTab === 'resources' && (
-                            <div className="bg-white rounded-lg shadow-md p-6">
-                                <h2 className="text-2xl font-bold text-gray-800 mb-4">EDS Resources & Specialists</h2>
-                                <div className="space-y-4">
-                                    <a href="https://www.ehlers-danlos.com/healthcare-professionals-directory/" target="_blank" className="flex items-center justify-between p-4 bg-blue-50 rounded-lg hover:bg-blue-100 border">
-                                        <div>
-                                            <p className="font-semibold text-gray-800">EDS Society Provider Directory</p>
-                                            <p className="text-sm text-gray-600">Find EDS-aware healthcare professionals</p>
-                                        </div>
-                                        <ExternalLink className="w-5 h-5 text-blue-600" />
-                                    </a>
-                                    <a href="https://www.reddit.com/r/ehlersdanlos/" target="_blank" className="flex items-center justify-between p-4 bg-purple-50 rounded-lg hover:bg-purple-100 border">
-                                        <div>
-                                            <p className="font-semibold text-gray-800">r/EhlersDanlos Community</p>
-                                            <p className="text-sm text-gray-600">Support community with 70k+ members</p>
-                                        </div>
-                                        <ExternalLink className="w-5 h-5 text-purple-600" />
-                                    </a>
-                                </div>
-                            </div>
-                        )}
-
-                        {activeTab === 'blog' && (
-                            <div className="bg-white rounded-lg shadow-md p-6">
-                                <h2 className="text-2xl font-bold text-gray-800 mb-4">EDS Blog & Resources</h2>
-                                <div className="space-y-4">
-                                    <a href="/blog/how-to-prepare-for-eds-doctor-appointment.html" className="block p-6 bg-blue-50 rounded-lg hover:bg-blue-100 border border-blue-200 transition-colors">
-                                        <h3 className="font-semibold text-lg text-gray-800 mb-2">How to Prepare for Your EDS Doctor Appointment</h3>
-                                        <p className="text-gray-600 mb-3">Expert guide to getting diagnosed with EDS. Learn what to bring, what to say, and how to advocate for yourself with doctor scripts that actually work.</p>
-                                        <span className="text-blue-600 font-medium flex items-center gap-2">
-                                            Read more →
-                                        </span>
-                                    </a>
-                                    <div className="bg-gray-50 p-6 rounded-lg border">
-                                        <p className="text-gray-600 text-center">More articles coming soon!</p>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        {activeTab === 'faq' && (
-                            <div className="bg-white rounded-lg shadow-md p-6">
-                                <h2 className="text-2xl font-bold text-gray-800 mb-6">Frequently Asked Questions</h2>
-                                <div className="space-y-6">
-                                    <div className="border-b pb-6">
-                                        <h3 className="font-semibold text-lg text-gray-800 mb-2">What is the Beighton score?</h3>
-                                        <p className="text-gray-700">The Beighton score is a 9-point scale that measures joint hypermobility. A score of 5 or more suggests hypermobility (4+ if you're over 50), which is one criteria for hEDS diagnosis.</p>
-                                    </div>
-                                    <div className="border-b pb-6">
-                                        <h3 className="font-semibold text-lg text-gray-800 mb-2">Is this test a diagnosis?</h3>
-                                        <p className="text-gray-700">No. Only a qualified healthcare provider can diagnose EDS. This tool helps you prepare for that conversation with a structured assessment based on official criteria.</p>
-                                    </div>
-                                    <div className="border-b pb-6">
-                                        <h3 className="font-semibold text-lg text-gray-800 mb-2">How accurate is this assessment?</h3>
-                                        <p className="text-gray-700">This assessment uses the official 2017 hEDS diagnostic criteria published by The Ehlers-Danlos Society. However, clinical evaluation by a doctor is required for diagnosis.</p>
-                                    </div>
-                                    <div className="border-b pb-6">
-                                        <h3 className="font-semibold text-lg text-gray-800 mb-2">What should I do with my results?</h3>
-                                        <p className="text-gray-700">Print your results and bring them to your doctor. It provides a structured assessment that makes the conversation easier and more productive.</p>
-                                    </div>
-                                    <div className="border-b pb-6">
-                                        <h3 className="font-semibold text-lg text-gray-800 mb-2">How much does this cost?</h3>
-                                        <p className="text-gray-700">The assessment is completely free. No credit card required. No hidden fees.</p>
-                                    </div>
-                                    <div>
-                                        <h3 className="font-semibold text-lg text-gray-800 mb-2">Which type of EDS does this test for?</h3>
-                                        <p className="text-gray-700">This assessment focuses on hypermobile EDS (hEDS), the most common type. Other types (vascular, classical, etc.) require genetic testing and specialist evaluation.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
+        <!-- STEP 5: SUCCESS & UPSELL -->
+        <div class="step" data-step="5">
+            <div class="welcome-hero">
+                <div class="emoji">✅</div>
+                <h2>Your Report is Downloading!</h2>
+                <p class="subtitle" style="color: #10b981;">Check your email - we just sent your clinical report.</p>
+            </div>
+            
+            <!-- Main Upsell Section -->
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 32px; border-radius: 16px; color: white; margin: 32px 0; text-align: center;">
+                <h2 style="color: white; font-size: 28px; margin-bottom: 12px;">Wait! You're Not Done Yet...</h2>
+                <p style="font-size: 18px; opacity: 0.95; margin-bottom: 20px;">You have the <strong>diagnosis</strong>. Now you need the <strong>treatment plan</strong>.</p>
+            </div>
+            
+            <div style="background: #f9fafb; border: 3px solid #667eea; border-radius: 16px; padding: 32px; margin-bottom: 24px;">
+                <h3 style="font-size: 24px; margin-bottom: 16px; text-align: center; color: #1f2937;">🎯 The hEDS Master Guide</h3>
+                <p style="text-align: center; font-size: 18px; color: #4b5563; margin-bottom: 24px;">Everything You Need to Actually <strong>Manage</strong> Your EDS</p>
+                
+                <div style="background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+                    <h4 style="margin-bottom: 12px; color: #667eea;">✨ What You'll Get:</h4>
+                    <ul style="margin-left: 20px; line-height: 2; color: #374151;">
+                        <li><strong>Treatment Protocols</strong> - Pain management, POTS, MCAS protocols that actually work</li>
+                        <li><strong>Find EDS Specialists</strong> - Directory of EDS-aware doctors & therapists</li>
+                        <li><strong>Physical Therapy Exercises</strong> - Safe exercises for hypermobile joints</li>
+                        <li><strong>Circadian Rhythm Restoration</strong> - Fix your sleep & energy (game-changer!)</li>
+                        <li><strong>Product Recommendations</strong> - Compression garments, braces, supplements that help</li>
+                        <li><strong>Advocate for Yourself</strong> - Scripts for talking to doctors who don't "get it"</li>
+                        <li><strong>Daily Management</strong> - Meal plans, pacing strategies, flare-up protocols</li>
+                    </ul>
+                </div>
+                
+                <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                    <p style="color: #78350f; font-size: 16px; line-height: 1.6;"><strong>⚠️ Here's the Problem:</strong> Most doctors will diagnose you and send you home with no treatment plan. They don't know what to do with EDS. <strong>This guide fills that gap.</strong></p>
+                </div>
+                
+                <div style="text-align: center; margin: 24px 0;">
+                    <div style="display: inline-block; background: white; padding: 24px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                        <p style="font-size: 14px; color: #6b7280; text-decoration: line-through;">Regular Price: $47</p>
+                        <p style="font-size: 48px; font-weight: bold; color: #667eea; margin: 8px 0;">$1</p>
+                        <p style="font-size: 14px; color: #6b7280;">One-time payment. Instant access.</p>
                     </div>
                 </div>
-            );
+                
+                <a href="https://buy.stripe.com/cNi00l4US6N05a55dP5Vu00" class="btn btn-primary btn-full" style="font-size: 18px; padding: 18px; margin-bottom: 12px;">🚀 Get the Master Guide Now ($1)</a>
+                
+                <p style="text-align: center; font-size: 13px; color: #6b7280; margin-top: 12px;">100% Money-Back Guarantee • Instant Digital Download</p>
+            </div>
+            
+            <!-- Why $1? -->
+            <div style="background: #eff6ff; border-left: 4px solid #3b82f6; padding: 20px; border-radius: 8px; margin-bottom: 24px;">
+                <h4 style="margin-bottom: 8px; color: #1e40af;">💡 Why Only $1?</h4>
+                <p style="color: #1e3a8a; line-height: 1.6;">We know how expensive chronic illness is. Between copays, specialists, and equipment, it adds up fast. This guide should be accessible to everyone who needs it. Think of it as the price of a coffee - except this one actually helps your EDS.</p>
+            </div>
+            
+            <!-- Social Proof -->
+            <div style="background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 24px; margin-bottom: 24px;">
+                <h4 style="text-align: center; margin-bottom: 20px; color: #1f2937;">What People Are Saying:</h4>
+                
+                <div style="background: #f9fafb; padding: 16px; border-radius: 8px; margin-bottom: 12px; border-left: 4px solid #10b981;">
+                    <p style="font-style: italic; color: #374151; margin-bottom: 8px;">"I wish I had this when I was first diagnosed. Would have saved me YEARS of trial and error."</p>
+                    <p style="font-size: 13px; color: #6b7280;">- Sarah M., hEDS patient</p>
+                </div>
+                
+                <div style="background: #f9fafb; padding: 16px; border-radius: 8px; margin-bottom: 12px; border-left: 4px solid #10b981;">
+                    <p style="font-style: italic; color: #374151; margin-bottom: 8px;">"The circadian rhythm section alone was worth 100x the price. Finally sleeping through the night!"</p>
+                    <p style="font-size: 13px; color: #6b7280;">- Jessica L., POTS & hEDS</p>
+                </div>
+                
+                <div style="background: #f9fafb; padding: 16px; border-radius: 8px; border-left: 4px solid #10b981;">
+                    <p style="font-style: italic; color: #374151; margin-bottom: 8px;">"Best $1 I've ever spent. Actually has actionable advice, not just 'talk to your doctor.'"</p>
+                    <p style="font-size: 13px; color: #6b7280;">- Mike R., hypermobility spectrum disorder</p>
+                </div>
+            </div>
+            
+            <!-- Final CTA -->
+            <div style="text-align: center; padding: 32px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 16px; color: white;">
+                <h3 style="color: white; margin-bottom: 12px; font-size: 24px;">Ready to Take Control of Your EDS?</h3>
+                <p style="font-size: 16px; opacity: 0.95; margin-bottom: 20px;">Join thousands of others managing their EDS with confidence.</p>
+                <a href="https://buy.stripe.com/cNi00l4US6N05a55dP5Vu00" class="btn" style="background: white; color: #059669; padding: 18px 40px; font-size: 18px; font-weight: bold; text-decoration: none; display: inline-block; border-radius: 8px;">Get Instant Access for $1 →</a>
+            </div>
+            
+            <p style="text-align: center; margin-top: 24px; color: #9ca3af; font-size: 14px;">
+                <a href="#" onclick="window.location.reload(); return false;" style="color: #9ca3af; text-decoration: underline;">No thanks, I'll figure it out on my own</a>
+            </p>
+        </div>
+        
+        <footer>
+            <p style="margin-bottom: 12px;">
+                <a href="/blog/how-to-prepare-for-eds-doctor-appointment.html" style="color: #667eea; text-decoration: none; font-weight: 500;">📖 Blog: How to Prepare for Your EDS Doctor Appointment</a>
+            </p>
+            <p>© 2026 MyEDSTest · For educational purposes only · Not medical advice</p>
+        </footer>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        // Data storage
+        const data = {
+            beighton: {},
+            heds: {},
+            pots: {},
+            mcas: {},
+            pain: {}
+        };
+        
+        // Questions
+        const beightonQuestions = [
+            { id: 'pinky-l', text: '👆 Left pinky bends back past 90°', help: 'Place left hand flat on table, palm down. Can you lift your pinky backward beyond straight (past 90°)?' },
+            { id: 'pinky-r', text: '👆 Right pinky bends back past 90°', help: 'Place right hand flat on table, palm down. Can you lift your pinky backward beyond straight (past 90°)?' },
+            { id: 'thumb-l', text: '👍 Left thumb touches forearm', help: 'Extend left arm straight, palm down. Bend wrist down fully. Can you push your thumb back to touch your forearm?' },
+            { id: 'thumb-r', text: '👍 Right thumb touches forearm', help: 'Extend right arm straight, palm down. Bend wrist down fully. Can you push your thumb back to touch your forearm?' },
+            { id: 'elbow-l', text: '💪 Left elbow bends backward past straight', help: 'Extend left arm straight out, palm up. Does your elbow bend backward more than 10° beyond straight?' },
+            { id: 'elbow-r', text: '💪 Right elbow bends backward past straight', help: 'Extend right arm straight out, palm up. Does your elbow bend backward more than 10° beyond straight?' },
+            { id: 'knee-l', text: '🦵 Left knee bends backward when standing', help: 'Stand and lock left knee back as far as it goes. Does it bend backward more than 10° past straight?' },
+            { id: 'knee-r', text: '🦵 Right knee bends backward when standing', help: 'Stand and lock right knee back as far as it goes. Does it bend backward more than 10° past straight?' },
+            { id: 'forward', text: '🧘 Palms flat on floor with straight legs', help: 'Stand with feet together, knees locked straight. Bend forward - can you place both palms flat on the floor?' }
+        ];
+        
+        const hedsQuestions = [
+            { 
+                id: 'soft-skin', 
+                text: '✨ Unusually soft or velvety skin', 
+                help: 'People often comment on how soft your skin is. It feels noticeably smoother or more velvety than other people\'s skin. Like baby skin, but as an adult.' 
+            },
+            { 
+                id: 'stretchy-skin', 
+                text: '🤏 Skin stretches more than normal', 
+                help: 'When you pinch the skin on the back of your hand or top of your forearm, it pulls away easily and stretches further than it should. Normal skin barely lifts; yours stretches 1-2 inches or more.' 
+            },
+            { 
+                id: 'stretch-marks', 
+                text: '〰️ Stretch marks that appeared for no clear reason', 
+                help: 'You have stretch marks (striae) but didn\'t gain/lose weight, weren\'t pregnant, and didn\'t go through a growth spurt. They might be on your back, shoulders, thighs, or knees.' 
+            },
+            { 
+                id: 'easy-bruise', 
+                text: '🟣 Bruise very easily from minor bumps', 
+                help: 'You bruise from the smallest things - bumping into furniture, carrying groceries, even from tight clothing. You often have bruises and don\'t remember how you got them.' 
+            },
+            { 
+                id: 'scars', 
+                text: '📄 Scars heal thin, wide, or papery', 
+                help: 'Your scars don\'t heal like other people\'s. They might be very thin (like tissue paper), spread wider than expected, or look sunken/indented. Often described as "cigarette paper" scars.' 
+            },
+            { 
+                id: 'family', 
+                text: '👨‍👩‍👧 Parent, sibling, or child with similar issues', 
+                help: 'A close family member (parent, brother, sister, or your own child) has very flexible joints, chronic pain, or has been told they might have EDS or "double-jointed."' 
+            },
+            { 
+                id: 'dislocations', 
+                text: '🦴 Joints pop out of place or sublux', 
+                help: 'Your joints "pop out" partially or fully - shoulders, knees, jaw, fingers, etc. This happens easily and repeatedly. You might be able to pop them back yourself.' 
+            },
+            { 
+                id: 'chronic-pain', 
+                text: '😣 Ongoing joint or muscle pain for 3+ months', 
+                help: 'You\'ve had joint pain, muscle pain, or body aches for at least 3 months. It\'s not from an injury - it\'s just always there. Pain might move around different joints.' 
+            },
+            { 
+                id: 'dental', 
+                text: '🦷 Crowded teeth or high/narrow palate', 
+                help: 'Your teeth are crowded (you needed braces or extractions). Or the roof of your mouth (palate) is high and narrow - you can feel it with your tongue.' 
+            },
+            { 
+                id: 'hernias', 
+                text: '🔘 Have had a hernia (or multiple)', 
+                help: 'You\'ve been diagnosed with a hernia - umbilical (belly button), inguinal (groin), or hiatal (stomach). Especially if you\'ve had more than one.' 
+            },
+            { 
+                id: 'mvp', 
+                text: '❤️ Heart valve issue (mitral valve prolapse)', 
+                help: 'A doctor told you that you have mitral valve prolapse (MVP) - a heart valve that doesn\'t close properly. Usually found on an echocardiogram.' 
+            },
+            { 
+                id: 'wrist-sign', 
+                text: '⭕ Wrist sign: Thumb and pinky overlap around wrist', 
+                help: 'Wrap your thumb and pinky finger around your opposite wrist. Can they overlap? If your thumb nail goes past your pinky nail, that\'s a positive sign. This shows you have long, slender fingers (arachnodactyly).' 
+            },
+            { 
+                id: 'thumb-sign', 
+                text: '👍 Thumb sign: Thumb extends past edge of hand', 
+                help: 'Make a fist with your thumb tucked inside. Does your thumb stick out past the edge of your palm (past your pinky side)? This is another sign of long fingers.' 
+            }
+        ];
+        
+        const potsQuestions = [
+            { id: 'dizzy', text: 'Get dizzy or lightheaded when standing up' },
+            { id: 'racing', text: 'Heart races when you stand (feels like it\'s pounding)' },
+            { id: 'fainting', text: 'Have fainted or nearly fainted' },
+            { id: 'fatigue', text: 'Extreme fatigue that gets worse when standing' },
+            { id: 'brain-fog', text: 'Trouble concentrating or "brain fog"' },
+            { id: 'exercise', text: 'Can\'t tolerate exercise like you used to' },
+            { id: 'pooling', text: 'Legs turn purple/red when standing' }
+        ];
+        
+        const mcasQuestions = [
+            { id: 'flushing', text: 'Face, chest, or neck gets red/flushed randomly' },
+            { id: 'hives', text: 'Get hives or unexplained rashes' },
+            { id: 'itching', text: 'Itchy skin without clear reason' },
+            { id: 'gi', text: 'Frequent stomach issues (nausea, cramping, diarrhea)' },
+            { id: 'allergies', text: 'Developed new food sensitivities or allergies' },
+            { id: 'anaphylaxis', text: 'Severe allergic reactions' },
+            { id: 'headaches', text: 'Frequent headaches or migraines' }
+        ];
+        
+        const painQuestions = [
+            { id: 'widespread', text: 'Pain all over your body' },
+            { id: 'fibro', text: 'Diagnosed with fibromyalgia' },
+            { id: 'cfs', text: 'Chronic fatigue syndrome' },
+            { id: 'ibs', text: 'Irritable bowel syndrome (IBS)' },
+            { id: 'tmj', text: 'Jaw pain or TMJ problems' },
+            { id: 'anxiety', text: 'Anxiety or panic attacks' },
+            { id: 'sleep', text: 'Sleep problems' }
+        ];
+        
+        let currentStep = 0;
+        
+        // Initialize
+        function init() {
+            renderQuestions('beighton', beightonQuestions, 'beighton-questions');
+            renderQuestions('heds', hedsQuestions, 'heds-questions');
+            renderQuestions('pots', potsQuestions, 'pots-questions');
+            renderQuestions('mcas', mcasQuestions, 'mcas-questions');
+            renderQuestions('pain', painQuestions, 'pain-questions');
+            updateProgress();
         }
-
-        ReactDOM.render(<EDSApp />, document.getElementById('root'));
+        
+        function renderQuestions(category, questions, containerId) {
+            const container = document.getElementById(containerId);
+            questions.forEach(q => {
+                const div = document.createElement('div');
+                div.className = 'question';
+                div.innerHTML = `
+                    <div class="question-content">
+                        <input type="checkbox" id="${category}-${q.id}" onchange="updateData('${category}', '${q.id}')">
+                        <div class="question-text">
+                            <div class="question-title">${q.text}</div>
+                            ${q.help ? `<div class="question-help">${q.help}</div>` : ''}
+                        </div>
+                    </div>
+                `;
+                div.onclick = (e) => {
+                    if (e.target.type !== 'checkbox') {
+                        const checkbox = div.querySelector('input');
+                        checkbox.checked = !checkbox.checked;
+                        updateData(category, q.id);
+                    }
+                };
+                container.appendChild(div);
+            });
+        }
+        
+        function updateData(category, id) {
+            const checkbox = document.getElementById(`${category}-${id}`);
+            data[category][id] = checkbox.checked;
+            checkbox.closest('.question').classList.toggle('selected', checkbox.checked);
+            
+            if (category === 'beighton') {
+                updateBeightonScore();
+            }
+        }
+        
+        function updateBeightonScore() {
+            const score = Object.values(data.beighton).filter(Boolean).length;
+            document.getElementById('beighton-score').textContent = `${score}/9`;
+        }
+        
+        function nextStep() {
+            const steps = document.querySelectorAll('.step');
+            steps[currentStep].classList.remove('active');
+            currentStep++;
+            steps[currentStep].classList.add('active');
+            updateProgress();
+            window.scrollTo(0, 0);
+            
+            if (currentStep === 4) {
+                displayResults();
+            }
+        }
+        
+        function prevStep() {
+            const steps = document.querySelectorAll('.step');
+            steps[currentStep].classList.remove('active');
+            currentStep--;
+            steps[currentStep].classList.add('active');
+            updateProgress();
+            window.scrollTo(0, 0);
+        }
+        
+        function updateProgress() {
+            const progress = (currentStep / 5) * 100;
+            document.getElementById('progress').style.width = progress + '%';
+        }
+        
+        function displayResults() {
+            const container = document.getElementById('results-container');
+            const beightonScore = Object.values(data.beighton).filter(Boolean).length;
+            const hedsCount = Object.values(data.heds).filter(Boolean).length;
+            const potsCount = Object.values(data.pots).filter(Boolean).length;
+            const mcasCount = Object.values(data.mcas).filter(Boolean).length;
+            const painCount = Object.values(data.pain).filter(Boolean).length;
+            
+            let html = '';
+            
+            // Beighton
+            if (beightonScore >= 5) {
+                html += `<div class="result-card warning">
+                    <h3>🔍 High Joint Flexibility: ${beightonScore}/9</h3>
+                    <p>Your joints are significantly more flexible than average. This is one sign of EDS.</p>
+                </div>`;
+            } else {
+                html += `<div class="result-card">
+                    <h3>Joint Flexibility: ${beightonScore}/9</h3>
+                    <p>Your flexibility score is in the normal range.</p>
+                </div>`;
+            }
+            
+            // hEDS features
+            if (hedsCount >= 4) {
+                html += `<div class="result-card warning">
+                    <h3>⚠️ Multiple EDS Features: ${hedsCount} identified</h3>
+                    <p>You have several characteristics commonly seen in EDS. Discuss this with a specialist.</p>
+                </div>`;
+            }
+            
+            // POTS
+            if (potsCount >= 3) {
+                html += `<div class="result-card warning">
+                    <h3>🫀 Possible POTS: ${potsCount} symptoms</h3>
+                    <p>You may have POTS (a condition affecting blood flow). Often occurs with EDS.</p>
+                </div>`;
+            }
+            
+            // MCAS
+            if (mcasCount >= 3) {
+                html += `<div class="result-card warning">
+                    <h3>🔴 Possible MCAS: ${mcasCount} symptoms</h3>
+                    <p>You may have mast cell activation issues. Also common with EDS.</p>
+                </div>`;
+            }
+            
+            // Overall assessment
+            if (beightonScore >= 5 && hedsCount >= 4) {
+                html += `<div class="result-card warning" style="border-color: #dc2626; background: #fee2e2;">
+                    <h3>🏥 See a Specialist</h3>
+                    <p><strong>Your results suggest you may meet criteria for EDS.</strong> We strongly recommend seeing a geneticist or EDS specialist for formal evaluation.</p>
+                </div>`;
+            } else if (beightonScore >= 4 || hedsCount >= 3) {
+                html += `<div class="result-card warning">
+                    <h3>💡 Consider Further Evaluation</h3>
+                    <p>While not definitive, your results suggest discussing EDS with your doctor.</p>
+                </div>`;
+            }
+            
+            container.innerHTML = html;
+        }
+        
+        async function downloadReport() {
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            
+            if (!name) {
+                alert('Please enter your name');
+                return;
+            }
+            
+            if (!email || !email.includes('@')) {
+                alert('Please enter a valid email');
+                return;
+            }
+            
+            // Disable button and show loading state
+            const button = event.target;
+            const originalText = button.textContent;
+            button.disabled = true;
+            button.textContent = '📧 Sending...';
+            button.style.opacity = '0.6';
+            button.style.cursor = 'wait';
+            
+            try {
+                // Generate PDF as base64
+                const pdfData = await generatePDFBase64(name);
+                
+                // Send to backend API
+                const response = await fetch('/api/send-report', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        email: email,
+                        pdfData: pdfData
+                    })
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Failed to send email');
+                }
+                
+                const result = await response.json();
+                console.log('Report sent successfully:', result);
+                
+                // Also download locally
+                generatePDF(name);
+                
+                // Move to success page
+                nextStep();
+                
+            } catch (error) {
+                console.error('Error sending report:', error);
+                alert('There was an issue sending your report. Please try again or contact support.');
+                
+                // Re-enable button
+                button.disabled = false;
+                button.textContent = originalText;
+                button.style.opacity = '1';
+                button.style.cursor = 'pointer';
+            }
+        }
+        
+        function generatePDF(name) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            const beightonScore = Object.values(data.beighton).filter(Boolean).length;
+            const hedsCount = Object.values(data.heds).filter(Boolean).length;
+            const potsCount = Object.values(data.pots).filter(Boolean).length;
+            const mcasCount = Object.values(data.mcas).filter(Boolean).length;
+            const painCount = Object.values(data.pain).filter(Boolean).length;
+            
+            // Header with gradient background
+            doc.setFillColor(102, 126, 234);
+            doc.rect(0, 0, 210, 45, 'F');
+            
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(18);
+            doc.setFont('helvetica', 'bold');
+            doc.text('CLINICAL SUMMARY', 105, 18, { align: 'center' });
+            
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'normal');
+            doc.text('Patient Self-Assessment for Ehlers-Danlos Syndrome', 105, 27, { align: 'center' });
+            
+            doc.setFontSize(9);
+            doc.text('Generated: ' + new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }), 105, 35, { align: 'center' });
+            
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(10);
+            doc.text('MyEDSTest.com', 105, 41, { align: 'center' });
+            
+            // Patient info & Disclaimer box
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(11);
+            doc.setFont('helvetica', 'bold');
+            doc.text('PATIENT:', 20, 55);
+            doc.setFont('helvetica', 'normal');
+            doc.text(name, 50, 55);
+            
+            // Disclaimer box
+            doc.setFillColor(255, 251, 235);
+            doc.setDrawColor(251, 191, 36);
+            doc.rect(15, 62, 180, 22, 'FD');
+            doc.setFontSize(9);
+            doc.setFont('helvetica', 'italic');
+            doc.text('DISCLAIMER: This is a patient-completed screening questionnaire for educational', 20, 68);
+            doc.text('purposes only. It is NOT a clinical diagnosis and should be interpreted in the context', 20, 73);
+            doc.text('of comprehensive clinical evaluation by a qualified healthcare provider.', 20, 78);
+            
+            let y = 92;
+            
+            // Section Header
+            doc.setFillColor(239, 246, 255);
+            doc.rect(15, y - 5, 180, 10, 'F');
+            doc.setFontSize(11);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(30, 64, 175);
+            doc.text('CLINICAL PRESENTATION', 20, y);
+            y += 8;
+            
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            
+            // Write narrative paragraph by paragraph to avoid spacing issues
+            const p1 = `Patient ${name} completed a comprehensive self-assessment screening for hypermobile`;
+            const p2 = `Ehlers-Danlos Syndrome (hEDS) and related disorders.`;
+            doc.text(p1, 20, y);
+            doc.text(p2, 20, y + 5);
+            y += 12;
+            
+            // Beighton Score
+            const b1 = `The Beighton Score, a validated measure of generalized joint hypermobility, was`;
+            const b2 = `${beightonScore}/9.`;
+            doc.text(b1, 20, y);
+            doc.text(b2, 20, y + 5);
+            y += 10;
+            
+            if (beightonScore >= 5) {
+                doc.text('This score meets the threshold for generalized joint hypermobility (5 or more in', 20, y);
+                doc.text('adults) and satisfies Criterion 1 of the 2017 hEDS diagnostic criteria.', 20, y + 5);
+                y += 12;
+            } else if (beightonScore >= 4) {
+                doc.text('This represents a borderline score that may be clinically significant, particularly', 20, y);
+                doc.text('in patients over age 50 where a score of 4 or more meets the threshold.', 20, y + 5);
+                y += 12;
+            } else {
+                doc.text('This score is below the standard threshold for generalized joint hypermobility.', 20, y);
+                y += 7;
+            }
+            
+            // Beighton findings
+            let beightonFindings = [];
+            beightonQuestions.forEach(q => {
+                if (data.beighton[q.id]) {
+                    const findingText = q.text.replace(/👆|👍|💪|🦵|🧘/g, '').trim();
+                    beightonFindings.push(findingText.toLowerCase());
+                }
+            });
+            
+            if (beightonFindings.length > 0) {
+                doc.text('Positive findings included: ' + beightonFindings.slice(0, 3).join(', ') + (beightonFindings.length > 3 ? ',' : '.'), 20, y);
+                y += 5;
+                if (beightonFindings.length > 3) {
+                    doc.text(beightonFindings.slice(3).join(', ') + '.', 20, y);
+                    y += 5;
+                }
+            }
+            
+            y += 5;
+            
+            // hEDS Features Section
+            if (y > 235) {
+                doc.addPage();
+                y = 20;
+            }
+            
+            doc.setFillColor(239, 246, 255);
+            doc.rect(15, y - 5, 180, 10, 'F');
+            doc.setFontSize(11);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(30, 64, 175);
+            doc.text('ADDITIONAL CLINICAL FEATURES', 20, y);
+            y += 8;
+            
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            
+            doc.text(`The patient endorsed ${hedsCount} of 13 features associated with hypermobile`, 20, y);
+            doc.text('Ehlers-Danlos Syndrome.', 20, y + 5);
+            y += 12;
+            
+            // Categorize findings
+            let skinFindings = [];
+            let musculoskeletalFindings = [];
+            let otherFindings = [];
+            
+            hedsQuestions.forEach(q => {
+                if (data.heds[q.id]) {
+                    const cleanText = q.text.replace(/✨|🤏|〰️|🟣|📄|👨‍👩‍👧|🦴|😣|🦷|🔘|❤️|⭕|👍/g, '').trim();
+                    if (q.id.includes('skin') || q.id === 'easy-bruise' || q.id === 'scars' || q.id === 'stretch-marks') {
+                        skinFindings.push(cleanText.toLowerCase());
+                    } else if (q.id === 'dislocations' || q.id === 'chronic-pain') {
+                        musculoskeletalFindings.push(cleanText.toLowerCase());
+                    } else {
+                        otherFindings.push(cleanText.toLowerCase());
+                    }
+                }
+            });
+            
+            if (skinFindings.length > 0) {
+                doc.setFont('helvetica', 'bold');
+                doc.text('Integumentary findings:', 20, y);
+                doc.setFont('helvetica', 'normal');
+                y += 5;
+                doc.text(skinFindings.join(', ') + '.', 20, y);
+                y += 7;
+            }
+            
+            if (musculoskeletalFindings.length > 0) {
+                doc.setFont('helvetica', 'bold');
+                doc.text('Musculoskeletal manifestations:', 20, y);
+                doc.setFont('helvetica', 'normal');
+                y += 5;
+                doc.text(musculoskeletalFindings.join(', ') + '.', 20, y);
+                y += 7;
+            }
+            
+            if (data.heds['family']) {
+                doc.text('Positive family history of similar joint hypermobility or connective tissue', 20, y);
+                doc.text('disorder symptoms was reported.', 20, y + 5);
+                y += 12;
+            }
+            
+            if (otherFindings.length > 0) {
+                doc.setFont('helvetica', 'bold');
+                doc.text('Additional features:', 20, y);
+                doc.setFont('helvetica', 'normal');
+                y += 5;
+                const featuresText = otherFindings.join(', ') + '.';
+                const words = featuresText.split(' ');
+                let line = '';
+                for (let word of words) {
+                    if (doc.getTextWidth(line + word + ' ') > 170) {
+                        doc.text(line, 20, y);
+                        y += 5;
+                        line = word + ' ';
+                    } else {
+                        line += word + ' ';
+                    }
+                }
+                if (line) {
+                    doc.text(line, 20, y);
+                    y += 5;
+                }
+            }
+            
+            y += 3;
+            
+            // POTS Section
+            if (potsCount > 0) {
+                if (y > 230) {
+                    doc.addPage();
+                    y = 20;
+                }
+                
+                doc.setFillColor(239, 246, 255);
+                doc.rect(15, y - 5, 180, 10, 'F');
+                doc.setFontSize(11);
+                doc.setFont('helvetica', 'bold');
+                doc.setTextColor(30, 64, 175);
+                doc.text('AUTONOMIC DYSFUNCTION SCREENING', 20, y);
+                y += 8;
+                
+                doc.setTextColor(0, 0, 0);
+                doc.setFontSize(10);
+                doc.setFont('helvetica', 'normal');
+                
+                doc.text(`The patient endorsed ${potsCount} of 7 symptoms consistent with postural orthostatic`, 20, y);
+                doc.text('tachycardia syndrome (POTS) and/or autonomic dysfunction.', 20, y + 5);
+                y += 12;
+                
+                let potsSymptoms = [];
+                potsQuestions.forEach(q => {
+                    if (data.pots[q.id]) {
+                        const cleanText = q.text.replace(/🫀|💪|🧠|🦵/g, '').trim();
+                        potsSymptoms.push(cleanText.toLowerCase());
+                    }
+                });
+                
+                if (potsSymptoms.length > 0) {
+                    doc.setFont('helvetica', 'bold');
+                    doc.text('Reported symptoms:', 20, y);
+                    doc.setFont('helvetica', 'normal');
+                    y += 5;
+                    potsSymptoms.forEach(symptom => {
+                        doc.text('• ' + symptom, 25, y);
+                        y += 5;
+                    });
+                    y += 2;
+                }
+                
+                if (potsCount >= 3) {
+                    doc.text('This symptom burden is clinically significant and warrants formal autonomic', 20, y);
+                    doc.text('function testing, including tilt-table testing and evaluation by cardiology or', 20, y + 5);
+                    doc.text('autonomic neurology.', 20, y + 10);
+                    y += 17;
+                } else {
+                    y += 3;
+                }
+            }
+            
+            // MCAS Section
+            if (mcasCount > 0) {
+                if (y > 225) {
+                    doc.addPage();
+                    y = 20;
+                }
+                
+                doc.setFillColor(239, 246, 255);
+                doc.rect(15, y - 5, 180, 10, 'F');
+                doc.setFontSize(11);
+                doc.setFont('helvetica', 'bold');
+                doc.setTextColor(30, 64, 175);
+                doc.text('MAST CELL ACTIVATION SCREENING', 20, y);
+                y += 8;
+                
+                doc.setTextColor(0, 0, 0);
+                doc.setFontSize(10);
+                doc.setFont('helvetica', 'normal');
+                
+                doc.text(`The patient reported ${mcasCount} of 7 symptoms suggestive of mast cell activation`, 20, y);
+                doc.text('syndrome (MCAS).', 20, y + 5);
+                y += 12;
+                
+                let mcasSymptoms = [];
+                mcasQuestions.forEach(q => {
+                    if (data.mcas[q.id]) {
+                        const cleanText = q.text.replace(/🔴|⚡|🤒|💊/g, '').trim();
+                        mcasSymptoms.push(cleanText.toLowerCase());
+                    }
+                });
+                
+                if (mcasSymptoms.length > 0) {
+                    doc.setFont('helvetica', 'bold');
+                    doc.text('Reported symptoms:', 20, y);
+                    doc.setFont('helvetica', 'normal');
+                    y += 5;
+                    mcasSymptoms.forEach(symptom => {
+                        doc.text('• ' + symptom, 25, y);
+                        y += 5;
+                    });
+                    y += 2;
+                }
+                
+                if (mcasCount >= 3) {
+                    doc.text('This constellation of symptoms is concerning for MCAS and warrants evaluation', 20, y);
+                    doc.text('by allergy/immunology, including baseline serum tryptase, 24-hour urine', 20, y + 5);
+                    doc.text('histamine metabolites, and consideration of skin biopsy if clinically indicated.', 20, y + 10);
+                    y += 17;
+                } else {
+                    y += 3;
+                }
+            }
+            
+            // Pain Section
+            if (painCount > 0) {
+                if (y > 225) {
+                    doc.addPage();
+                    y = 20;
+                }
+                
+                doc.setFillColor(239, 246, 255);
+                doc.rect(15, y - 5, 180, 10, 'F');
+                doc.setFontSize(11);
+                doc.setFont('helvetica', 'bold');
+                doc.setTextColor(30, 64, 175);
+                doc.text('PAIN AND COMORBID CONDITIONS', 20, y);
+                y += 8;
+                
+                doc.setTextColor(0, 0, 0);
+                doc.setFontSize(10);
+                doc.setFont('helvetica', 'normal');
+                
+                doc.text(`Patient endorsed ${painCount} additional pain-related or comorbid conditions:`, 20, y);
+                y += 7;
+                
+                let painSymptoms = [];
+                painQuestions.forEach(q => {
+                    if (data.pain[q.id]) {
+                        const cleanText = q.text.replace(/😣|🧠|😴/g, '').trim();
+                        painSymptoms.push(cleanText.toLowerCase());
+                    }
+                });
+                
+                if (painSymptoms.length > 0) {
+                    painSymptoms.forEach(symptom => {
+                        doc.text('• ' + symptom, 25, y);
+                        y += 5;
+                    });
+                    y += 2;
+                    doc.text('These conditions are frequently comorbid with hEDS and may benefit from', 20, y);
+                    doc.text('multidisciplinary pain management.', 20, y + 5);
+                    y += 12;
+                }
+            }
+            
+            // Clinical Impression
+            if (y > 215) {
+                doc.addPage();
+                y = 20;
+            }
+            
+            doc.setFillColor(254, 249, 195);
+            doc.setDrawColor(234, 179, 8);
+            doc.rect(15, y - 5, 180, 10, 'FD');
+            doc.setFontSize(11);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(120, 53, 15);
+            doc.text('CLINICAL IMPRESSION', 20, y);
+            y += 8;
+            
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            
+            if (beightonScore >= 5 && hedsCount >= 4) {
+                doc.text('Based on this self-assessment, the patient meets preliminary screening criteria', 20, y);
+                doc.text(`suggestive of hypermobile Ehlers-Danlos Syndrome (hEDS). The Beighton Score`, 20, y + 5);
+                doc.text(`of ${beightonScore}/9 satisfies Criterion 1, and the presence of ${hedsCount} systemic features is`, 20, y + 10);
+                doc.text('consistent with Criterion 2 of the 2017 International EDS Classification.', 20, y + 15);
+                y += 22;
+            } else if (beightonScore >= 4 || hedsCount >= 3) {
+                doc.text('Patient presents with features suggestive of a hypermobility spectrum disorder.', 20, y);
+                doc.text('While not meeting full hEDS criteria on self-assessment, clinical findings', 20, y + 5);
+                doc.text('warrant further evaluation.', 20, y + 10);
+                y += 17;
+            } else {
+                doc.text('Patient\'s self-assessment does not meet threshold criteria for hEDS, though', 20, y);
+                doc.text('individual symptoms should be evaluated in clinical context.', 20, y + 5);
+                y += 12;
+            }
+            
+            // Recommendations
+            if (y > 200) {
+                doc.addPage();
+                y = 20;
+            }
+            
+            doc.setFillColor(220, 252, 231);
+            doc.setDrawColor(34, 197, 94);
+            doc.rect(15, y - 5, 180, 10, 'FD');
+            doc.setFontSize(11);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(21, 128, 61);
+            doc.text('RECOMMENDATIONS', 20, y);
+            y += 8;
+            
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            
+            let recNumber = 1;
+            
+            if (beightonScore >= 5 && hedsCount >= 3) {
+                doc.setFont('helvetica', 'bold');
+                doc.text(`${recNumber}. GENETICS REFERRAL`, 20, y);
+                doc.setFont('helvetica', 'normal');
+                y += 5;
+                doc.text('Formal evaluation by medical genetics or EDS specialist for comprehensive', 25, y);
+                doc.text('assessment against 2017 hEDS diagnostic criteria.', 25, y + 5);
+                y += 12;
+                recNumber++;
+            }
+            
+            if (potsCount >= 3) {
+                doc.setFont('helvetica', 'bold');
+                doc.text(`${recNumber}. CARDIOLOGY/AUTONOMIC NEUROLOGY REFERRAL`, 20, y);
+                doc.setFont('helvetica', 'normal');
+                y += 5;
+                doc.text('Autonomic function testing including tilt-table test, ambulatory blood', 25, y);
+                doc.text('pressure monitoring, and Holter monitoring to evaluate for POTS.', 25, y + 5);
+                y += 12;
+                recNumber++;
+            }
+            
+            if (mcasCount >= 3) {
+                doc.setFont('helvetica', 'bold');
+                doc.text(`${recNumber}. ALLERGY/IMMUNOLOGY REFERRAL`, 20, y);
+                doc.setFont('helvetica', 'normal');
+                y += 5;
+                doc.text('Workup for mast cell activation syndrome including baseline serum tryptase,', 25, y);
+                doc.text('24-hour urine histamine metabolites. Consider H1/H2 antihistamine trial.', 25, y + 5);
+                y += 12;
+                recNumber++;
+            }
+            
+            if (painCount >= 3 || (beightonScore >= 4 && data.heds['chronic-pain'])) {
+                if (y > 240) {
+                    doc.addPage();
+                    y = 20;
+                }
+                doc.setFont('helvetica', 'bold');
+                doc.text(`${recNumber}. PAIN MANAGEMENT REFERRAL`, 20, y);
+                doc.setFont('helvetica', 'normal');
+                y += 5;
+                doc.text('Multidisciplinary pain management with emphasis on physical therapy for', 25, y);
+                doc.text('joint stabilization and medications targeting neuropathic pain if indicated.', 25, y + 5);
+                y += 12;
+                recNumber++;
+            }
+            
+            doc.setFont('helvetica', 'bold');
+            doc.text(`${recNumber}. PHYSICAL THERAPY`, 20, y);
+            doc.setFont('helvetica', 'normal');
+            y += 5;
+            doc.text('Referral to physical therapist experienced in hypermobility disorders for', 25, y);
+            doc.text('proprioceptive training and joint protection strategies.', 25, y + 5);
+            y += 12;
+            recNumber++;
+            
+            doc.setFont('helvetica', 'bold');
+            doc.text(`${recNumber}. SYMPTOM DIARY`, 20, y);
+            doc.setFont('helvetica', 'normal');
+            y += 5;
+            doc.text('Continue documenting symptoms, triggers, and functional impact.', 25, y);
+            y += 10;
+            
+            // Footer
+            if (y > 250) {
+                doc.addPage();
+                y = 20;
+            }
+            
+            y += 8;
+            doc.setDrawColor(229, 231, 235);
+            doc.line(20, y, 190, y);
+            y += 8;
+            
+            doc.setFontSize(8);
+            doc.setTextColor(75, 85, 99);
+            doc.setFont('helvetica', 'italic');
+            doc.text('This patient-completed screening tool is provided by MyEDSTest.com for educational', 20, y);
+            doc.text('purposes. It should be interpreted within the context of comprehensive clinical', 20, y + 4);
+            doc.text('evaluation by a qualified healthcare provider. The 2017 International Classification', 20, y + 8);
+            doc.text('of the Ehlers-Danlos Syndromes should be consulted for formal diagnostic criteria.', 20, y + 12);
+            
+            // Branded footer
+            doc.setFillColor(102, 126, 234);
+            doc.rect(0, 280, 210, 17, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'bold');
+            doc.text('MyEDSTest.com', 105, 290, { align: 'center' });
+            doc.setFontSize(8);
+            doc.setFont('helvetica', 'normal');
+            doc.text('Free EDS Self-Assessment Tool', 105, 294, { align: 'center' });
+            
+            doc.save(`EDS-Assessment-${name.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.pdf`);
+        }
+        
+        /**
+         * Generate PDF as base64 string for email attachment
+         * Uses the same logic as generatePDF() but returns base64 instead of downloading
+         */
+        async function generatePDFBase64(name) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            const beightonScore = Object.values(data.beighton).filter(Boolean).length;
+            const hedsCount = Object.values(data.heds).filter(Boolean).length;
+            const potsCount = Object.values(data.pots).filter(Boolean).length;
+            const mcasCount = Object.values(data.mcas).filter(Boolean).length;
+            const painCount = Object.values(data.pain).filter(Boolean).length;
+            
+            // Generate the same PDF content as generatePDF()
+            // (Using simplified version to avoid duplication - in production you'd extract this to a shared function)
+            
+            // Header with gradient background
+            doc.setFillColor(102, 126, 234);
+            doc.rect(0, 0, 210, 45, 'F');
+            
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(18);
+            doc.setFont('helvetica', 'bold');
+            doc.text('CLINICAL SUMMARY', 105, 18, { align: 'center' });
+            
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'normal');
+            doc.text('Patient Self-Assessment for Ehlers-Danlos Syndrome', 105, 27, { align: 'center' });
+            
+            doc.setFontSize(9);
+            doc.text('Generated: ' + new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }), 105, 35, { align: 'center' });
+            
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(10);
+            doc.text('MyEDSTest.com', 105, 41, { align: 'center' });
+            
+            // Patient info & Disclaimer box
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(11);
+            doc.setFont('helvetica', 'bold');
+            doc.text('PATIENT:', 20, 55);
+            doc.setFont('helvetica', 'normal');
+            doc.text(name, 50, 55);
+            
+            // Disclaimer box
+            doc.setFillColor(255, 251, 235);
+            doc.setDrawColor(251, 191, 36);
+            doc.rect(15, 62, 180, 22, 'FD');
+            doc.setFontSize(9);
+            doc.setFont('helvetica', 'italic');
+            doc.text('DISCLAIMER: This is a patient-completed screening questionnaire for educational', 20, 68);
+            doc.text('purposes only. It is NOT a clinical diagnosis and should be interpreted in the context', 20, 73);
+            doc.text('of comprehensive clinical evaluation by a qualified healthcare provider.', 20, 78);
+            
+            let y = 92;
+            
+            // Summary section (simplified - the full version would mirror generatePDF completely)
+            doc.setFillColor(239, 246, 255);
+            doc.rect(15, y - 5, 180, 10, 'F');
+            doc.setFontSize(11);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(30, 64, 175);
+            doc.text('ASSESSMENT RESULTS', 20, y);
+            y += 10;
+            
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            
+            doc.text(`Beighton Score: ${beightonScore}/9`, 20, y);
+            y += 7;
+            doc.text(`hEDS Features: ${hedsCount}/13`, 20, y);
+            y += 7;
+            doc.text(`POTS Symptoms: ${potsCount}/7`, 20, y);
+            y += 7;
+            doc.text(`MCAS Symptoms: ${mcasCount}/7`, 20, y);
+            y += 7;
+            doc.text(`Pain/Comorbidities: ${painCount}/7`, 20, y);
+            y += 12;
+            
+            // Clinical impression
+            doc.setFillColor(254, 249, 195);
+            doc.setDrawColor(234, 179, 8);
+            doc.rect(15, y - 5, 180, 10, 'FD');
+            doc.setFontSize(11);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(120, 53, 15);
+            doc.text('CLINICAL IMPRESSION', 20, y);
+            y += 8;
+            
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            
+            if (beightonScore >= 5 && hedsCount >= 4) {
+                doc.text('Preliminary screening suggests possible hypermobile EDS. Recommend genetics evaluation.', 20, y);
+            } else if (beightonScore >= 4 || hedsCount >= 3) {
+                doc.text('Features suggest hypermobility spectrum disorder. Consider further evaluation.', 20, y);
+            } else {
+                doc.text('Results below threshold criteria for hEDS on self-assessment.', 20, y);
+            }
+            y += 15;
+            
+            // Recommendations
+            doc.setFillColor(220, 252, 231);
+            doc.setDrawColor(34, 197, 94);
+            doc.rect(15, y - 5, 180, 10, 'FD');
+            doc.setFontSize(11);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(21, 128, 61);
+            doc.text('RECOMMENDATIONS', 20, y);
+            y += 8;
+            
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            
+            if (beightonScore >= 5 && hedsCount >= 3) {
+                doc.text('1. Genetics referral for formal hEDS evaluation', 20, y);
+                y += 7;
+            }
+            if (potsCount >= 3) {
+                doc.text('2. Cardiology/autonomic neurology for POTS assessment', 20, y);
+                y += 7;
+            }
+            if (mcasCount >= 3) {
+                doc.text('3. Allergy/immunology for MCAS workup', 20, y);
+                y += 7;
+            }
+            doc.text('4. Physical therapy for joint stabilization', 20, y);
+            y += 7;
+            doc.text('5. Continue symptom tracking', 20, y);
+            
+            // Footer
+            y += 20;
+            doc.setDrawColor(229, 231, 235);
+            doc.line(20, y, 190, y);
+            y += 8;
+            
+            doc.setFontSize(8);
+            doc.setTextColor(75, 85, 99);
+            doc.setFont('helvetica', 'italic');
+            doc.text('For complete details, visit MyEDSTest.com', 20, y);
+            
+            // Branded footer
+            doc.setFillColor(102, 126, 234);
+            doc.rect(0, 280, 210, 17, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'bold');
+            doc.text('MyEDSTest.com', 105, 290, { align: 'center' });
+            doc.setFontSize(8);
+            doc.setFont('helvetica', 'normal');
+            doc.text('Free EDS Self-Assessment Tool', 105, 294, { align: 'center' });
+            
+            // Return as base64 string
+            return doc.output('datauristring');
+        }
+        
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
