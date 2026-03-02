@@ -3,8 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EDS Diagnostic Hub - Free Self-Assessment Tool</title>
-    <meta name="description" content="Free EDS diagnostic tool with Beighton Score calculator, symptom tracker, and medical summary generator">
+    <title>Free EDS Self-Assessment Test | MyEDSTest - Beighton Score & Clinical Report</title>
+    <meta name="description" content="Free 5-minute EDS assessment using official 2017 hEDS criteria. Calculate your Beighton score and get a clinical report for your doctor. No signup required.">
+    <meta name="keywords" content="EDS test, Ehlers Danlos test, Beighton score calculator, hypermobility test, EDS assessment, hEDS diagnosis">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://myedstest.com/">
+    <meta property="og:title" content="Free EDS Self-Assessment | MyEDSTest">
+    <meta property="og:description" content="Take this 5-minute test to assess if you have Ehlers-Danlos Syndrome. Get a clinical report you can bring to your doctor.">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://myedstest.com/">
+    <meta property="twitter:title" content="Free EDS Self-Assessment | MyEDSTest">
+    <meta property="twitter:description" content="Free 5-minute EDS test. Get a clinical report for your doctor.">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -136,7 +149,9 @@
                                     { id: 'home', label: 'Home', icon: Heart },
                                     { id: 'beighton', label: 'Beighton Score', icon: Activity },
                                     { id: 'symptoms', label: 'Symptom Tracker', icon: TrendingUp },
-                                    { id: 'resources', label: 'Resources', icon: Users }
+                                    { id: 'resources', label: 'Resources', icon: Users },
+                                    { id: 'blog', label: 'Blog', icon: BookOpen },
+                                    { id: 'faq', label: 'FAQ', icon: FileText }
                                 ].map(tab => (
                                     <button
                                         key={tab.id}
@@ -287,6 +302,56 @@
                                         </div>
                                         <ExternalLink className="w-5 h-5 text-purple-600" />
                                     </a>
+                                </div>
+                            </div>
+                        )}
+
+                        {activeTab === 'blog' && (
+                            <div className="bg-white rounded-lg shadow-md p-6">
+                                <h2 className="text-2xl font-bold text-gray-800 mb-4">EDS Blog & Resources</h2>
+                                <div className="space-y-4">
+                                    <a href="/blog/how-to-prepare-for-eds-doctor-appointment.html" className="block p-6 bg-blue-50 rounded-lg hover:bg-blue-100 border border-blue-200 transition-colors">
+                                        <h3 className="font-semibold text-lg text-gray-800 mb-2">How to Prepare for Your EDS Doctor Appointment</h3>
+                                        <p className="text-gray-600 mb-3">Expert guide to getting diagnosed with EDS. Learn what to bring, what to say, and how to advocate for yourself with doctor scripts that actually work.</p>
+                                        <span className="text-blue-600 font-medium flex items-center gap-2">
+                                            Read more →
+                                        </span>
+                                    </a>
+                                    <div className="bg-gray-50 p-6 rounded-lg border">
+                                        <p className="text-gray-600 text-center">More articles coming soon!</p>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {activeTab === 'faq' && (
+                            <div className="bg-white rounded-lg shadow-md p-6">
+                                <h2 className="text-2xl font-bold text-gray-800 mb-6">Frequently Asked Questions</h2>
+                                <div className="space-y-6">
+                                    <div className="border-b pb-6">
+                                        <h3 className="font-semibold text-lg text-gray-800 mb-2">What is the Beighton score?</h3>
+                                        <p className="text-gray-700">The Beighton score is a 9-point scale that measures joint hypermobility. A score of 5 or more suggests hypermobility (4+ if you're over 50), which is one criteria for hEDS diagnosis.</p>
+                                    </div>
+                                    <div className="border-b pb-6">
+                                        <h3 className="font-semibold text-lg text-gray-800 mb-2">Is this test a diagnosis?</h3>
+                                        <p className="text-gray-700">No. Only a qualified healthcare provider can diagnose EDS. This tool helps you prepare for that conversation with a structured assessment based on official criteria.</p>
+                                    </div>
+                                    <div className="border-b pb-6">
+                                        <h3 className="font-semibold text-lg text-gray-800 mb-2">How accurate is this assessment?</h3>
+                                        <p className="text-gray-700">This assessment uses the official 2017 hEDS diagnostic criteria published by The Ehlers-Danlos Society. However, clinical evaluation by a doctor is required for diagnosis.</p>
+                                    </div>
+                                    <div className="border-b pb-6">
+                                        <h3 className="font-semibold text-lg text-gray-800 mb-2">What should I do with my results?</h3>
+                                        <p className="text-gray-700">Print your results and bring them to your doctor. It provides a structured assessment that makes the conversation easier and more productive.</p>
+                                    </div>
+                                    <div className="border-b pb-6">
+                                        <h3 className="font-semibold text-lg text-gray-800 mb-2">How much does this cost?</h3>
+                                        <p className="text-gray-700">The assessment is completely free. No credit card required. No hidden fees.</p>
+                                    </div>
+                                    <div>
+                                        <h3 className="font-semibold text-lg text-gray-800 mb-2">Which type of EDS does this test for?</h3>
+                                        <p className="text-gray-700">This assessment focuses on hypermobile EDS (hEDS), the most common type. Other types (vascular, classical, etc.) require genetic testing and specialist evaluation.</p>
+                                    </div>
                                 </div>
                             </div>
                         )}
