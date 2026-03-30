@@ -1247,32 +1247,40 @@
             const button = event.target;
             const originalText = button.textContent;
             button.disabled = true;
-            button.textContent = '📧 Sending...';
+            button.textContent = '📄 Generating...';
             button.style.opacity = '0.6';
             button.style.cursor = 'wait';
             
             try {
-                const pdfData = await generatePDFBase64(name);
-                const response = await fetch('/api/send-report', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, pdfData })
-                });
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || 'Failed to send email');
-                }
+                // Always generate and download the PDF immediately — no email dependency
                 generatePDF(name);
+                
+                // Advance to success page right away
                 nextStep();
+                
+                // Try to send email in the background (non-blocking, best-effort)
+                generatePDFBase64(name).then(pdfData => {
+                    fetch('/api/send-report', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ name, email, pdfData })
+                    }).catch(() => {
+                        // Email delivery failed silently — user already has the PDF download
+                    });
+                }).catch(() => {
+                    // base64 generation failed silently
+                });
+                
             } catch (error) {
-                console.error('Error sending report:', error);
-                alert('There was an issue sending your report. Please try again or contact support.');
+                console.error('PDF generation error:', error);
+                alert('There was an issue generating your report. Please try again.');
                 button.disabled = false;
                 button.textContent = originalText;
                 button.style.opacity = '1';
                 button.style.cursor = 'pointer';
             }
         }
+        
         function generatePDF(name) {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
