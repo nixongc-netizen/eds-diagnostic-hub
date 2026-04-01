@@ -1,3 +1,21 @@
+
+
+        function showGuideContent() {
+            // Activate Master Guide tab button
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            const masterBtn = document.querySelector('button[onclick*="upsell"]');
+            if (masterBtn) masterBtn.classList.add('active');
+            
+            // Hide all other content tabs
+            ['upsell','supplements','resources','tracker'].forEach(id => {
+                const el = document.getElementById('tab-' + id);
+                if (el) el.style.display = 'none';
+            });
+            
+            // Show the unlocked guide
+            const guideEl = document.getElementById('guide-unlocked');
+            if (guideEl) guideEl.style.display = 'block';
+        }
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -460,7 +478,215 @@
             .score-number { font-size: 36px; }
             .rating-btn { width: 30px; height: 30px; font-size: 11px; }
         }
-    </style>
+    
+        /* ═══ hEDS GUIDE STYLES (post-purchase) ═══ */
+        #guide-wrapper { 
+            background: #f8fafc; 
+            border-radius: 12px; 
+            overflow: hidden;
+            margin: -8px;
+        }
+        #guide-wrapper .container { max-width: 100%; padding: 24px 20px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f8fafc; color: #1e293b; }
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+  .doc-header {
+    position: relative;
+    background: #0b1e3d;
+    overflow: hidden;
+    padding: 0;
+  }
+  .doc-header-top-bar {
+    background: #c9a84c;
+    padding: 7px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .doc-header-top-bar .date-stamp {
+    font-size: 11px;
+    font-weight: 500;
+    color: #0b1e3d;
+    opacity: 0.85;
+    letter-spacing: 0.5px;
+  }
+  .doc-header-body {
+    position: relative;
+    padding: 48px 60px 40px;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+  }
+  .doc-header-body::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse at 80% 50%, rgba(201,168,76,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse at 20% 80%, rgba(37,99,235,0.15) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .doc-header-monogram {
+    flex-shrink: 0;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 2px solid rgba(201,168,76,0.6);
+    background: rgba(201,168,76,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #c9a84c;
+    letter-spacing: -1px;
+    position: relative;
+    z-index: 1;
+  }
+  .doc-header-text {
+    flex: 1;
+    position: relative;
+    z-index: 1;
+  }
+  .doc-header-text .series-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #c9a84c;
+    margin-bottom: 10px;
+    display: block;
+  }
+  .doc-header-text h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: white;
+    line-height: 1.15;
+    margin-bottom: 6px;
+    letter-spacing: -0.5px;
+  }
+  .doc-header-text h1 em {
+    font-style: italic;
+    color: rgba(255,255,255,0.85);
+  }
+  .doc-header-text .subtitle {
+    font-family: 'Source Serif 4', serif;
+    font-size: 15px;
+    font-weight: 300;
+    font-style: italic;
+    color: rgba(255,255,255,0.65);
+    margin-bottom: 18px;
+    letter-spacing: 0.2px;
+  }
+  .doc-header-credentials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .cred-badge {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 20px;
+    letter-spacing: 0.3px;
+  }
+  .cred-badge.gold {
+    background: rgba(201,168,76,0.18);
+    color: #e8c66e;
+    border: 1px solid rgba(201,168,76,0.35);
+  }
+  .cred-badge.blue {
+    background: rgba(59,130,246,0.15);
+    color: #93c5fd;
+    border: 1px solid rgba(59,130,246,0.3);
+  }
+  .cred-badge.teal {
+    background: rgba(20,184,166,0.12);
+    color: #5eead4;
+    border: 1px solid rgba(20,184,166,0.25);
+  }
+  .doc-header-divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201,168,76,0.4) 20%, rgba(201,168,76,0.4) 80%, transparent);
+  }
+  .doc-header-footer-bar {
+    padding: 12px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    color: rgba(255,255,255,0.45);
+    letter-spacing: 0.3px;
+  }
+  .doc-header-footer-bar .regenexx-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: rgba(201,168,76,0.7);
+    font-weight: 500;
+  }
+  .doc-header-footer-bar .regenexx-badge::before {
+    content: '✦';
+    font-size: 9px;
+  }
+  body { font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f8fafc; color: #1e293b; }
+  .container { max-width: 780px; margin: 0 auto; padding: 32px 24px; }
+  .disclaimer { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 16px; border-radius: 8px; margin-bottom: 32px; font-size: 14px; line-height: 1.7; color: #78350f; }
+  .toc { background: #eff6ff; border-radius: 12px; padding: 24px; margin-bottom: 36px; }
+  .toc h2 { color: #1e40af; font-size: 18px; margin-bottom: 14px; }
+  .toc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .toc-item { font-size: 14px; color: #1d4ed8; padding: 4px 0; }
+  .section { margin-bottom: 48px; }
+  .section-header { padding: 14px 20px; border-radius: 10px; margin-bottom: 20px; }
+  .section-header h2 { font-size: 22px; }
+  .section-header .subtitle { font-size: 13px; margin-top: 4px; opacity: 0.8; }
+  .s1 { background: #dbeafe; border-left: 5px solid #2563eb; } .s1 h2 { color: #1e3a8a; } .s1 .subtitle { color: #1e40af; }
+  .s2 { background: #fce7f3; border-left: 5px solid #db2777; } .s2 h2 { color: #831843; } .s2 .subtitle { color: #9d174d; }
+  .s3 { background: #dcfce7; border-left: 5px solid #16a34a; } .s3 h2 { color: #14532d; } .s3 .subtitle { color: #166534; }
+  .s4 { background: #ffe4e6; border-left: 5px solid #f43f5e; } .s4 h2 { color: #881337; } .s4 .subtitle { color: #9f1239; }
+  .s5 { background: #d1fae5; border-left: 5px solid #10b981; } .s5 h2 { color: #064e3b; } .s5 .subtitle { color: #065f46; }
+  .s6 { background: #dbeafe; border-left: 5px solid #3b82f6; } .s6 h2 { color: #1e3a8a; } .s6 .subtitle { color: #1e40af; }
+  .s7 { background: #ede9fe; border-left: 5px solid #7c3aed; } .s7 h2 { color: #3b0764; } .s7 .subtitle { color: #5b21b6; }
+  .s8 { background: #d1fae5; border-left: 5px solid #059669; } .s8 h2 { color: #022c22; } .s8 .subtitle { color: #065f46; }
+  .card { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+  .card h3 { font-size: 17px; color: #1e293b; margin-bottom: 10px; }
+  .card h4 { font-size: 15px; margin-bottom: 8px; }
+  p { line-height: 1.8; font-size: 15px; color: #374151; margin-bottom: 10px; }
+  ul, ol { margin-left: 20px; line-height: 2; font-size: 15px; color: #374151; margin-bottom: 12px; }
+  .highlight-box { border-radius: 8px; padding: 14px 16px; margin: 12px 0; }
+  .blue-box { background: #eff6ff; } .blue-box h4 { color: #1d4ed8; }
+  .green-box { background: #f0fdf4; } .green-box h4 { color: #166534; }
+  .purple-box { background: #faf5ff; } .purple-box h4 { color: #5b21b6; }
+  .amber-box { background: #fffbeb; } .amber-box h4 { color: #92400e; }
+  .red-box { background: #fef2f2; } .red-box h4 { color: #991b1b; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .warn { background: #fef9c3; border-left: 3px solid #eab308; padding: 12px 14px; border-radius: 6px; font-size: 14px; color: #713f12; margin: 12px 0; }
+  .supp-item { display: flex; gap: 14px; align-items: flex-start; }
+  .supp-num { background: #dcfce7; border-radius: 8px; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: #166534; flex-shrink: 0; }
+  .step-badge { display: inline-block; background: #7c3aed; color: white; border-radius: 6px; padding: 3px 10px; font-size: 12px; font-weight: 600; margin-bottom: 6px; }
+  .region-card { background: white; border: 1px solid #fda4af; border-radius: 12px; padding: 18px; margin-bottom: 14px; }
+  .region-card h3 { color: #be123c; font-size: 17px; margin-bottom: 12px; border-bottom: 1px solid #fecdd3; padding-bottom: 8px; }
+  .finding { background: #fff1f2; border-radius: 8px; padding: 14px; margin-bottom: 10px; }
+  .finding h4 { color: #9f1239; font-size: 14px; margin-bottom: 6px; }
+  .finding .start { font-size: 13px; color: #6b7280; margin-top: 8px; }
+  .finding .start strong { color: #374151; }
+  .peptide-card { background: white; border: 1px solid #a7f3d0; border-radius: 12px; padding: 20px; margin-bottom: 14px; }
+  .peptide-card h3 { color: #064e3b; font-size: 18px; margin-bottom: 12px; }
+  .footer { background: linear-gradient(135deg, #1e3a5f, #2563eb); color: white; padding: 32px; text-align: center; margin-top: 48px; border-radius: 12px; }
+  .footer h3 { font-size: 18px; margin-bottom: 10px; }
+  .footer p { font-size: 13px; opacity: 0.85; line-height: 1.7; color: white; }
+  @media print { .doc-header { print-color-adjust: exact; -webkit-print-color-adjust: exact; } }
+
+        </style>
 </head>
 <body>
     <div class="container">
@@ -677,19 +903,21 @@
             <!-- Tab bar for post-results sections -->
             <div class="tab-bar">
                 <button class="tab-btn active" onclick="showPostTab('upsell', this)">🎯 Master Guide</button>
+                <button class="tab-btn" onclick="showPostTab('supplements', this)">🌿 Supplements</button>
                 <button class="tab-btn" onclick="showPostTab('resources', this)">📚 Resources</button>
                 <button class="tab-btn" onclick="showPostTab('tracker', this)">📅 Tracker</button>
             </div>
             
             <!-- UPSELL TAB -->
             <div id="tab-upsell">
-                <!-- Main Upsell Section -->
-                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 32px; border-radius: 16px; color: white; margin-bottom: 24px; text-align: center;">
-                    <h2 style="color: white; font-size: 28px; margin-bottom: 12px;">Wait! You're Not Done Yet...</h2>
-                    <p style="font-size: 18px; opacity: 0.95; margin-bottom: 20px;">You have the <strong>diagnosis</strong>. Now you need the <strong>treatment plan</strong>.</p>
-                </div>
-                
-                <div style="background: #f9fafb; border: 3px solid #667eea; border-radius: 16px; padding: 32px; margin-bottom: 24px;">
+                <!-- PURCHASED: Guide is shown via guide-unlocked div -->
+                <!-- NOT PURCHASED: Show upsell below -->
+                <div id="upsell-content">
+                    <!-- Main Upsell Section -->
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 32px; border-radius: 16px; color: white; margin-bottom: 24px; text-align: center;">
+                        <h2 style="color: white; font-size: 28px; margin-bottom: 12px;">Wait! You're Not Done Yet...</h2>
+                        <p style="font-size: 18px; opacity: 0.95; margin-bottom: 20px;">You have the <strong>diagnosis</strong>. Now you need the <strong>treatment plan</strong>.</p>
+                    </div>                <div style="background: #f9fafb; border: 3px solid #667eea; border-radius: 16px; padding: 32px; margin-bottom: 24px;">
                     <h3 style="font-size: 24px; margin-bottom: 16px; text-align: center; color: #1f2937;">🎯 The hEDS Master Guide</h3>
                     <p style="text-align: center; font-size: 18px; color: #4b5563; margin-bottom: 24px;">Everything You Need to Actually <strong>Manage</strong> Your EDS</p>
                     
@@ -712,21 +940,21 @@
                     
                     <div style="text-align: center; margin: 24px 0;">
                         <div style="display: inline-block; background: white; padding: 24px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-                            <p style="font-size: 14px; color: #6b7280; text-decoration: line-through;">Regular Price: $47</p>
-                            <p style="font-size: 48px; font-weight: bold; color: #667eea; margin: 8px 0;">$1</p>
+                            <p style="font-size: 14px; color: #6b7280; text-decoration: line-through;">Regular Price: $97</p>
+                            <p style="font-size: 48px; font-weight: bold; color: #667eea; margin: 8px 0;">$67</p>
                             <p style="font-size: 14px; color: #6b7280;">One-time payment. Instant access.</p>
                         </div>
                     </div>
                     
-                    <a href="https://buy.stripe.com/cNi00l4US6N05a55dP5Vu00" class="btn btn-primary btn-full" style="font-size: 18px; padding: 18px; margin-bottom: 12px;">🚀 Get the Master Guide Now ($1)</a>
+                    <a href="https://buy.stripe.com/cNi00l4US6N05a55dP5Vu00" class="btn btn-primary btn-full" style="font-size: 18px; padding: 18px; margin-bottom: 12px;">🚀 Get the Master Guide Now ($67)</a>
                     
                     <p style="text-align: center; font-size: 13px; color: #6b7280; margin-top: 12px;">100% Money-Back Guarantee • Instant Digital Download</p>
                 </div>
                 
-                <!-- Why $1? -->
+                <!-- Why $67? -->
                 <div style="background: #eff6ff; border-left: 4px solid #3b82f6; padding: 20px; border-radius: 8px; margin-bottom: 24px;">
-                    <h4 style="margin-bottom: 8px; color: #1e40af;">💡 Why Only $1?</h4>
-                    <p style="color: #1e3a8a; line-height: 1.6;">We know how expensive chronic illness is. Between copays, specialists, and equipment, it adds up fast. This guide should be accessible to everyone who needs it.</p>
+                    <h4 style="margin-bottom: 8px; color: #1e40af;">💡 Why $67?</h4>
+                    <p style="color: #1e3a8a; line-height: 1.6;">This guide represents physician-authored clinical content across 13 sections — POTS protocols, MCAS management, pain by body region, the Doctor Appointment Toolkit, and more. At $67, it costs less than a single specialist copay and gives you the framework to make every appointment count.</p>
                 </div>
                 
                 <!-- Social Proof -->
@@ -744,7 +972,7 @@
                     </div>
                     
                     <div style="background: #f9fafb; padding: 16px; border-radius: 8px; border-left: 4px solid #10b981;">
-                        <p style="font-style: italic; color: #374151; margin-bottom: 8px;">"Best $1 I've ever spent. Actually has actionable advice, not just 'talk to your doctor.'"</p>
+                        <p style="font-style: italic; color: #374151; margin-bottom: 8px;">"Best $67 I've ever spent. Actually has actionable advice, not just 'talk to your doctor.'"</p>
                         <p style="font-size: 13px; color: #6b7280;">- Mike R., hypermobility spectrum disorder</p>
                     </div>
                 </div>
@@ -753,15 +981,1757 @@
                 <div style="text-align: center; padding: 32px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 16px; color: white;">
                     <h3 style="color: white; margin-bottom: 12px; font-size: 24px;">Ready to Take Control of Your EDS?</h3>
                     <p style="font-size: 16px; opacity: 0.95; margin-bottom: 20px;">Join thousands of others managing their EDS with confidence.</p>
-                    <a href="https://buy.stripe.com/cNi00l4US6N05a55dP5Vu00" class="btn" style="background: white; color: #059669; padding: 18px 40px; font-size: 18px; font-weight: bold; text-decoration: none; display: inline-block; border-radius: 8px;">Get Instant Access for $1 →</a>
+                    <a href="https://buy.stripe.com/cNi00l4US6N05a55dP5Vu00" class="btn" style="background: white; color: #059669; padding: 18px 40px; font-size: 18px; font-weight: bold; text-decoration: none; display: inline-block; border-radius: 8px;">Get Instant Access for $67 →</a>
                 </div>
                 
                 <p style="text-align: center; margin-top: 24px; color: #9ca3af; font-size: 14px;">
                     <a href="#" onclick="window.location.reload(); return false;" style="color: #9ca3af; text-decoration: underline;">No thanks, I'll figure it out on my own</a>
                 </p>
+                </div>
             </div>
-            
-            <!-- RESOURCES TAB -->
+
+            <!-- GUIDE UNLOCKED (shown after purchase) -->
+            <div id="guide-unlocked" style="display:none;">
+                <!-- Purchase success banner -->
+                <div style="background: linear-gradient(135deg, #059669, #10b981); padding: 20px 24px; border-radius: 12px; color: white; margin-bottom: 20px; display: flex; align-items: center; gap: 16px;">
+                    <span style="font-size: 32px;">🎉</span>
+                    <div>
+                        <h3 style="color:white; margin-bottom:4px; font-size:18px;">Purchase Successful — Your Guide is Unlocked</h3>
+                        <p style="font-size: 14px; opacity: 0.9; margin:0;">Thank you for your purchase. The full hEDS Treatment Guide is available below. Bookmark this page to return anytime.</p>
+                    </div>
+                </div>
+                <!-- Full guide content -->
+                <div id="guide-wrapper">
+<div class="doc-header">
+
+  <!-- Main header body -->
+  <div class="doc-header-body">
+    <div class="doc-header-monogram">GN</div>
+    <div class="doc-header-text">
+      <span class="series-label">Physician-Authored Clinical Guide</span>
+      <h1>The hEDS Treatment Guide</h1>
+      <p class="subtitle">A comprehensive framework for managing Hypermobile Ehlers-Danlos Syndrome</p>
+      <div class="doc-header-credentials">
+        <span class="cred-badge gold">Gavin Nixon, D.O.</span>
+        <span class="cred-badge blue">Interventional Pain Medicine</span>
+        <span class="cred-badge teal">Regenexx Certified Provider</span>
+        <span class="cred-badge gold">Board Certified PM&amp;R</span>
+        <span class="cred-badge blue">Solo hEDS Specialist — Alaska</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="doc-header-divider"></div>
+
+  <!-- Footer bar -->
+  <div class="doc-header-footer-bar">
+    <span>Clinical Patient Guide &nbsp;·&nbsp; 2026 Edition &nbsp;·&nbsp; For educational purposes only.</span>
+    <span class="regenexx-badge">Regenexx Network Certified &nbsp;·&nbsp; myedstest.com</span>
+  </div>
+
+</div>
+
+<div class="container">
+
+  <div class="disclaimer" style="font-family:'DM Sans',sans-serif;">
+    <strong>Disclaimer:</strong> This guide is for educational purposes only. It does not replace evaluation and treatment by your own physician. All recommendations are general and may not apply to your specific situation. Always work with licensed healthcare providers before starting any new treatment. No physician-patient relationship is created by reading this guide.
+  </div>
+
+  <div class="toc">
+    <h2>Contents</h2>
+    <p style="font-size:13px;color:#6b7280;margin-bottom:12px;">15 sections — clinical treatment guide plus resources and appointment toolkit</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+
+      <div style="background:#f0f9ff;border-radius:6px;padding:8px 12px;border-left:3px solid #0284c7;">
+        <div style="font-size:12px;font-weight:600;color:#0c4a6e;margin-bottom:2px;">Genetic Testing &amp; Diagnosis</div>
+        <div style="font-size:12px;color:#374151;">No hEDS gene test exists — what to rule out</div>
+      </div>
+
+      <div style="background:#dbeafe;border-radius:6px;padding:8px 12px;border-left:3px solid #2563eb;">
+        <div style="font-size:12px;font-weight:600;color:#1e3a8a;margin-bottom:2px;">1. POTS &amp; Dysautonomia</div>
+        <div style="font-size:12px;color:#374151;">Home testing, salt/compression, stellate ganglion block</div>
+      </div>
+
+      <div style="background:#fce7f3;border-radius:6px;padding:8px 12px;border-left:3px solid #db2777;">
+        <div style="font-size:12px;font-weight:600;color:#831843;margin-bottom:2px;">2. Mast Cell &amp; Histamine (MCAS)</div>
+        <div style="font-size:12px;color:#374151;">Low-histamine diet, Xyzal + Pepcid protocol</div>
+      </div>
+
+      <div style="background:#dcfce7;border-radius:6px;padding:8px 12px;border-left:3px solid #16a34a;">
+        <div style="font-size:12px;font-weight:600;color:#14532d;margin-bottom:2px;">3. Supplements</div>
+        <div style="font-size:12px;color:#374151;">7 evidence-backed options for inflammation</div>
+      </div>
+
+      <div style="background:#ffe4e6;border-radius:6px;padding:8px 12px;border-left:3px solid #f43f5e;grid-column:1/-1;">
+        <div style="font-size:12px;font-weight:600;color:#881337;margin-bottom:2px;">4. Pain by Body Region</div>
+        <div style="font-size:12px;color:#374151;">Neck &bull; Back &bull; Shoulder &bull; Ribs &bull; Hip &bull; Knee &bull; Hands — common hEDS findings and where to start</div>
+      </div>
+
+      <div style="background:#d1fae5;border-radius:6px;padding:8px 12px;border-left:3px solid #10b981;">
+        <div style="font-size:12px;font-weight:600;color:#064e3b;margin-bottom:2px;">5. Physical Therapy Resources</div>
+        <div style="font-size:12px;color:#374151;">Muldowney protocol, finding the right PT</div>
+      </div>
+
+      <div style="background:#dbeafe;border-radius:6px;padding:8px 12px;border-left:3px solid #3b82f6;">
+        <div style="font-size:12px;font-weight:600;color:#1e3a8a;margin-bottom:2px;">6. Low Dose Naltrexone</div>
+        <div style="font-size:12px;color:#374151;">How to find a prescriber, what to expect</div>
+      </div>
+
+      <div style="background:#ede9fe;border-radius:6px;padding:8px 12px;border-left:3px solid #7c3aed;">
+        <div style="font-size:12px;font-weight:600;color:#3b0764;margin-bottom:2px;">7. Sleep &amp; Circadian Rhythm</div>
+        <div style="font-size:12px;color:#374151;">POMC, red light, 5 circadian principles</div>
+      </div>
+
+      <div style="background:#d1fae5;border-radius:6px;padding:8px 12px;border-left:3px solid #059669;">
+        <div style="font-size:12px;font-weight:600;color:#064e3b;margin-bottom:2px;">8. Peptides</div>
+        <div style="font-size:12px;color:#374151;">BPC-157, Pinealon, Epithalon</div>
+      </div>
+
+      <div style="background:#fdf4ff;border-radius:6px;padding:8px 12px;border-left:3px solid #a855f7;">
+        <div style="font-size:12px;font-weight:600;color:#4a044e;margin-bottom:2px;">9. Pacing &amp; Energy Management</div>
+        <div style="font-size:12px;color:#374151;">Push-crash cycle, HR-based pacing</div>
+      </div>
+
+      <div style="background:#ecfdf5;border-radius:6px;padding:8px 12px;border-left:3px solid #059669;">
+        <div style="font-size:12px;font-weight:600;color:#064e3b;margin-bottom:2px;">10. Nutrition for Connective Tissue</div>
+        <div style="font-size:12px;color:#374151;">Collagen synthesis nutrients, anti-inflammatory eating</div>
+      </div>
+
+      <div style="background:#fff1f2;border-radius:6px;padding:8px 12px;border-left:3px solid #e11d48;">
+        <div style="font-size:12px;font-weight:600;color:#881337;margin-bottom:2px;">11. Flare Protocol</div>
+        <div style="font-size:12px;color:#374151;">ER vs. home, flare kit, first 24 hours</div>
+      </div>
+
+      <div style="background:#fef2f2;border-radius:6px;padding:8px 12px;border-left:3px solid #dc2626;">
+        <div style="font-size:12px;font-weight:600;color:#7f1d1d;margin-bottom:2px;">12. What to Avoid</div>
+        <div style="font-size:12px;color:#374151;">Fluoroquinolones, NSAIDs in MCAS, aggressive stretching</div>
+      </div>
+
+      <div style="background:#fef9c3;border-radius:6px;padding:8px 12px;border-left:3px solid #ca8a04;grid-column:1/-1;">
+        <div style="font-size:12px;font-weight:600;color:#713f12;margin-bottom:2px;">13. Doctor Appointment Toolkit</div>
+        <div style="font-size:12px;color:#374151;">Scripts by specialist &bull; System-based presentation &bull; Managing 15-minute appointments &bull; Handling dismissal &bull; Building your care team</div>
+      </div>
+
+      <div style="background:#e0f2fe;border-radius:6px;padding:8px 12px;border-left:3px solid #0284c7;grid-column:1/-1;">
+        <div style="font-size:12px;font-weight:600;color:#0c4a6e;margin-bottom:2px;">14. Resources Hub</div>
+        <div style="font-size:12px;color:#374151;">7 expert social accounts &bull; 3 podcasts &bull; 5 books &bull; Essential websites &bull; Resources by topic</div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- SECTION 0.5: GENETIC TESTING -->
+  <div class="section" id="s-genetic">
+    <div class="section-header" style="background:#f0f9ff;border-left:5px solid #0284c7;">
+      <h2 style="color:#0c4a6e;">Genetic Testing &amp; hEDS — What You Need to Know</h2>
+      <div class="subtitle" style="color:#075985;">Why there is no test for hEDS — and what testing IS worth doing</div>
+    </div>
+
+    <div class="card">
+      <h3>The Most Important Thing to Understand</h3>
+      <p><strong>There is currently no genetic test that can diagnose hEDS.</strong> This is not a gap in testing technology — it is a reflection of the current state of the science. The gene or genes responsible for hEDS have not yet been identified. The landmark HEDGE Study, which sequenced DNA from over 1,000 hEDS patients, confirmed in 2024 that no single gene explains the condition. hEDS remains a clinical diagnosis based on the 2017 international criteria — exactly what the MyEDSTest assessment is designed to screen for.</p>
+      <div class="warn" style="margin-top:10px;">If a lab or provider is selling you a test that claims to "diagnose hEDS genetically," that claim is not currently supported by science. hEDS cannot be diagnosed by a blood test or saliva kit as of 2026.</div>
+    </div>
+
+    <div class="card">
+      <h3>Why Genetic Testing Still Matters — Ruling Out Dangerous Alternatives</h3>
+      <p>Even though hEDS has no genetic test, genetic testing is still critically important for people with suspected hEDS. The reason: there are other connective tissue disorders that look like hEDS but have identified genetic mutations — and some of them are life-threatening. Testing is how you rule them out.</p>
+      <div style="display:grid;gap:10px;margin-top:12px;">
+        <div style="background:#fff1f2;border-radius:8px;padding:14px;">
+          <h4 style="color:#9f1239;font-size:14px;margin-bottom:6px;">Vascular EDS (vEDS) — COL3A1 gene</h4>
+          <p style="font-size:14px;color:#374151;line-height:1.7;">The most dangerous EDS subtype. Characterized by spontaneous rupture of arteries and hollow organs. Can cause sudden death. Many vEDS patients have relatively mild skin and joint findings — making it easy to miss. <strong>If you have any family history of unexplained early death, aortic dissection, or arterial rupture, genetic testing to rule out vEDS is essential.</strong></p>
+        </div>
+        <div style="background:#fff7ed;border-radius:8px;padding:14px;">
+          <h4 style="color:#9a3412;font-size:14px;margin-bottom:6px;">Marfan Syndrome — FBN1 gene</h4>
+          <p style="font-size:14px;color:#374151;line-height:1.7;">Affects the aorta, eyes, and skeleton. Associated with aortic aneurysm. Often presents with hypermobility, tall stature, and long limbs. Requires cardiac surveillance if confirmed. Treatable with medication to slow aortic dilation.</p>
+        </div>
+        <div style="background:#fffbeb;border-radius:8px;padding:14px;">
+          <h4 style="color:#92400e;font-size:14px;margin-bottom:6px;">Loeys-Dietz Syndrome — TGFBR1, TGFBR2, others</h4>
+          <p style="font-size:14px;color:#374151;line-height:1.7;">An aggressive aortic disorder that can look like Marfan syndrome. High risk of aortic dissection at smaller aortic sizes than Marfan syndrome. May present with joint hypermobility, easy bruising, and bifid uvula. Requires urgent cardiac management if diagnosed.</p>
+        </div>
+        <div style="background:#ecfdf5;border-radius:8px;padding:14px;">
+          <h4 style="color:#064e3b;font-size:14px;margin-bottom:6px;">Classical EDS (cEDS) — COL5A1, COL5A2 genes</h4>
+          <p style="font-size:14px;color:#374151;line-height:1.7;">Presents with significant skin fragility, wide atrophic scars, and joint hypermobility. More severe than hEDS in terms of tissue fragility. Genetic confirmation allows for appropriate surgical precautions and family counseling.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Who Should Consider Genetic Testing</h3>
+      <ul>
+        <li>Anyone with a family history of <strong>early unexplained death, aortic dissection, or sudden arterial rupture</strong> — rule out vEDS urgently</li>
+        <li>Anyone with <strong>tall stature, unusually long limbs, lens displacement, or aortic dilation on imaging</strong> — rule out Marfan syndrome</li>
+        <li>Anyone with <strong>significant skin fragility, wide scars, or arterial aneurysms</strong> — rule out classical or vascular EDS</li>
+        <li>Anyone whose physician wants to confirm the diagnosis before major surgery</li>
+        <li>Anyone planning a family who wants genetic counseling on recurrence risk</li>
+        <li>Anyone whose symptoms are atypical or who doesn't fully meet hEDS criteria — a panel helps identify less common connective tissue disorders</li>
+      </ul>
+      <div class="warn" style="margin-top:10px;">Most straightforward hEDS presentations do not require genetic testing. Genetic testing is most valuable when there is diagnostic uncertainty or when dangerous alternative diagnoses need to be excluded.</div>
+    </div>
+
+    <div class="card">
+      <h3>Available Tests and Where to Get Them</h3>
+
+      <div style="display:grid;gap:12px;margin-top:8px;">
+        <div style="background:#eff6ff;border-radius:8px;padding:14px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+            <h4 style="color:#1d4ed8;font-size:15px;">Invitae EDS Panel</h4>
+            <span style="background:#dbeafe;color:#1e40af;padding:3px 10px;border-radius:16px;font-size:12px;font-weight:500;">~$250 self-pay</span>
+          </div>
+          <p style="font-size:14px;color:#374151;line-height:1.7;margin-bottom:6px;">Analyzes 15 genes associated with all known genetic EDS subtypes — including vascular, classical, kyphoscoliotic, arthrochalasia, and others. Ordered by a physician, saliva collection kit mailed to your home. Does not test for hEDS (no gene known) but rules out all other EDS types. CAP-accredited, CLIA-certified laboratory.</p>
+          <a href="https://www.invitae.com/providers/test-catalog/test-02313" target="_blank" style="font-size:13px;color:#1d4ed8;">invitae.com — EDS Panel</a>
+        </div>
+
+        <div style="background:#eff6ff;border-radius:8px;padding:14px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+            <h4 style="color:#1d4ed8;font-size:15px;">Invitae Connective Tissue Disorders Panel (Comprehensive)</h4>
+            <span style="background:#dbeafe;color:#1e40af;padding:3px 10px;border-radius:16px;font-size:12px;font-weight:500;">Self-pay available</span>
+          </div>
+          <p style="font-size:14px;color:#374151;line-height:1.7;margin-bottom:6px;">A broader panel covering 92 genes across a wide range of heritable connective tissue disorders — including EDS subtypes, Marfan syndrome, Loeys-Dietz, skeletal dysplasias, and more. Appropriate for atypical presentations or when a broader differential needs to be worked through.</p>
+          <a href="https://www.invitae.com/providers/test-catalog/test-434340" target="_blank" style="font-size:13px;color:#1d4ed8;">invitae.com — Connective Tissue Panel</a>
+        </div>
+
+        <div style="background:#f0fdf4;border-radius:8px;padding:14px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+            <h4 style="color:#166534;font-size:15px;">GeneDx Heritable Connective Tissue Disorders Panel</h4>
+            <span style="background:#dcfce7;color:#166534;padding:3px 10px;border-radius:16px;font-size:12px;font-weight:500;">Institutional/self-pay</span>
+          </div>
+          <p style="font-size:14px;color:#374151;line-height:1.7;margin-bottom:6px;">GeneDx is one of the most established rare disease genetic testing laboratories. Their heritable connective tissue panel is widely used in academic and specialty settings. As of 2024, insurance billing is not accepted for this panel — self-pay or institutional billing only. Often ordered through a genetics clinic or geneticist.</p>
+          <a href="https://providers.genedx.com/tests/detail/heritable-disorders-of-connective-tissue-panel-865" target="_blank" style="font-size:13px;color:#166534;">genedx.com — HDCT Panel</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>How to Access Testing</h3>
+      <p>All of these tests require a physician order. You cannot order them directly as a patient. Here is how to access them:</p>
+      <ol style="margin-left:20px;line-height:2.2;font-size:15px;color:#374151;">
+        <li><strong>Ask your primary care physician or geneticist</strong> to order the panel. Print this section and bring it to the appointment. Ask specifically: "I'd like to rule out vascular EDS and other genetic connective tissue disorders. Can you order the Invitae EDS Panel?"</li>
+        <li><strong>Request a genetics referral.</strong> A clinical geneticist is the most appropriate provider to order comprehensive connective tissue panels, interpret results, and provide genetic counseling. Use the EDS Society provider directory to find a geneticist familiar with connective tissue disorders.</li>
+        <li><strong>Telehealth genetics services.</strong> Several telehealth genetics platforms allow physician-ordered genetic testing with home saliva kit collection. One established option used by EDS clinics is the Invitae saliva kit — you pay ~$250 directly to Invitae after your physician submits the requisition.</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <h3>What a Negative Panel Means</h3>
+      <p>If your genetic panel comes back negative — no pathogenic variants found — this does not mean you don't have a connective tissue disorder. It means you don't have one of the <em>known genetic forms</em>. A negative panel in someone who clinically meets hEDS criteria is expected and normal. It supports the diagnosis of hEDS (which requires ruling out other genetic CTDs) and rules out the more dangerous subtypes. This is a good outcome.</p>
+    </div>
+
+  </div>
+
+<!-- SECTION 1 -->
+  <div class="section" id="s1">
+    <div class="section-header s1">
+      <h2>Section 1: POTS &amp; Dysautonomia</h2>
+      <div class="subtitle">Postural Orthostatic Tachycardia Syndrome</div>
+    </div>
+
+    <div class="card">
+      <h3>What is POTS?</h3>
+      <p>POTS is very common in hEDS. When you stand up, your body normally tightens blood vessels quickly so blood doesn't pool in your legs. In hEDS, connective tissue is looser — including the walls of blood vessels — so blood pools when you stand. Your heart speeds up to try to compensate. This causes dizziness, brain fog, racing heart, and fatigue that gets worse when upright.</p>
+    </div>
+
+    <div class="card">
+      <h3>Home Testing with a Heart Rate Monitor</h3>
+      <p>You can do a simple home screening test called the <strong>NASA Lean Test</strong> using a smartwatch, Fitbit, or any pulse oximeter:</p>
+      <div class="highlight-box green-box">
+        <h4>Step-by-step</h4>
+        <ol>
+          <li>Lie down flat for 10 minutes. Record your heart rate.</li>
+          <li>Stand up slowly and stay still (lean against a wall if needed).</li>
+          <li>Record your heart rate at 1, 3, 5, and 10 minutes of standing.</li>
+          <li>A heart rate increase of <strong>30+ beats per minute</strong> (or 40+ if under 19) is a positive screen.</li>
+          <li>Note symptoms: dizziness, brain fog, heart pounding, feeling faint.</li>
+        </ol>
+      </div>
+      <div class="warn"><strong>Important:</strong> A home test is a screen, not a diagnosis. A positive result means you should see a cardiologist or autonomic neurologist for a formal tilt-table test.</div>
+    </div>
+
+    <div class="card">
+      <h3>Getting a Formal Diagnosis</h3>
+      <p>Ask your primary care doctor for a referral to cardiology or neurology for a <strong>tilt-table test</strong> — the gold standard for diagnosing POTS. When you call, mention you have hEDS or suspected hEDS and want to be evaluated for dysautonomia/POTS.</p>
+    </div>
+
+    <div class="card">
+      <h3>General POTS Management Strategies</h3>
+      <p style="font-style:italic;font-size:14px;color:#6b7280;">General strategies discussed in the medical literature. Not a substitute for care with a cardiologist. Discuss with your doctor before starting.</p>
+      <div class="grid-2">
+        <div class="highlight-box blue-box">
+          <h4>Salt &amp; Fluid Loading</h4>
+          <p style="font-size:14px;">Many POTS patients benefit from 2–3 liters of water and 3,000–5,000mg sodium daily. Salt tablets (OTC) make this easier. <strong>Check with your doctor first</strong> — not appropriate for everyone.</p>
+        </div>
+        <div class="highlight-box green-box">
+          <h4>Compression Garments</h4>
+          <p style="font-size:14px;">20–30 mmHg compression stockings reduce blood pooling. Waist-high is more effective than knee-high. Put them on before getting out of bed.</p>
+        </div>
+        <div class="highlight-box purple-box">
+          <h4>Exercise — Recumbent Approach</h4>
+          <p style="font-size:14px;">Start with rowing machines, recumbent bikes, or swimming. Gradually build upright tolerance over months. One of the best long-term treatments.</p>
+        </div>
+        <div class="highlight-box amber-box">
+          <h4>Lifestyle Adjustments</h4>
+          <ul style="font-size:14px;margin-bottom:0;">
+            <li>Elevate head of bed 4–6 inches</li>
+            <li>Avoid hot showers (worsen pooling)</li>
+            <li>Eat small, frequent meals</li>
+            <li>Sit at bed edge 1–2 min before standing</li>
+            <li>Avoid prolonged standing — shift weight</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Stellate Ganglion Block for POTS and Anxiety</h3>
+      <p>The stellate ganglion is a bundle of nerves in your neck that controls part of the sympathetic ("fight-or-flight") nervous system. In POTS, the sympathetic nervous system is often overactive. A stellate ganglion block (SGB) is an injection performed by an interventional pain physician that temporarily quiets this overactive system.</p>
+      <p>Research — including military studies on PTSD — shows SGB can significantly reduce sympathetic hyperactivity. In POTS and hEDS patients, it may help with racing heart, anxiety, and the constant feeling of being "on edge." Results typically last several months to over a year.</p>
+      <div class="highlight-box green-box">
+        <h4>Who to ask</h4>
+        <p style="font-size:14px;">An interventional pain physician or anesthesiologist who performs fluoroscopy-guided or ultrasound-guided neck injections. Mention you are interested in SGB for dysautonomia/POTS.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2 -->
+  <div class="section" id="s2">
+    <div class="section-header s2">
+      <h2>Section 2: Mast Cell &amp; Histamine (MCAS)</h2>
+      <div class="subtitle">Mast Cell Activation Syndrome</div>
+    </div>
+
+    <div class="card">
+      <h3>What is MCAS?</h3>
+      <p>Mast cells are immune cells found throughout your body. In MCAS, they release histamine and other chemicals too easily — causing flushing, hives, gut problems, brain fog, and severe reactions to foods, smells, or medications. MCAS is very common in hEDS because mast cells are embedded in connective tissue.</p>
+    </div>
+
+    <div class="card">
+      <h3>The Low-Histamine Diet</h3>
+      <p>Histamine is found in high amounts in aged, fermented, and processed foods. Reducing these foods can significantly reduce MCAS symptoms.</p>
+      <div class="grid-2">
+        <div class="highlight-box red-box">
+          <h4>Avoid or limit</h4>
+          <ul style="font-size:14px;margin-bottom:0;">
+            <li>Aged cheeses</li>
+            <li>Fermented foods (kombucha, sauerkraut)</li>
+            <li>Wine, beer, champagne</li>
+            <li>Smoked or cured meats</li>
+            <li>Canned fish (tuna, sardines)</li>
+            <li>Tomatoes, spinach, avocado</li>
+            <li>Vinegar and pickled foods</li>
+            <li>Leftovers (histamine builds with time)</li>
+          </ul>
+        </div>
+        <div class="highlight-box green-box">
+          <h4>Generally well tolerated</h4>
+          <ul style="font-size:14px;margin-bottom:0;">
+            <li>Fresh meat and fish (cooked same day)</li>
+            <li>Most fresh vegetables</li>
+            <li>Rice, quinoa, millet</li>
+            <li>Fresh eggs</li>
+            <li>Coconut oil, olive oil</li>
+            <li>Fresh herbs</li>
+            <li>Most fruit (except citrus, strawberries)</li>
+          </ul>
+        </div>
+      </div>
+      <p style="font-size:13px;color:#6b7280;margin-top:8px;">Tip: Fresh is best. Histamine rises as food ages. Cook fresh and eat promptly.</p>
+    </div>
+
+    <div class="card">
+      <h3>OTC Trial: H1 + H2 Blocker Protocol</h3>
+      <p>A simple first step is a trial of over-the-counter antihistamines targeting both H1 and H2 receptors. Significant symptom improvement supports a histamine/mast cell component to your condition.</p>
+      <div class="highlight-box blue-box" style="margin-bottom:12px;">
+        <h4>H1 Blocker — Levocetirizine (Xyzal) 5mg once daily</h4>
+        <p style="font-size:14px;">Or Cetirizine (Zyrtec) 10mg once daily. Xyzal is the more potent version. Take at bedtime. Blocks H1 histamine receptors responsible for flushing, itching, and allergy-type reactions.</p>
+      </div>
+      <div class="highlight-box purple-box">
+        <h4>H2 Blocker — Famotidine (Pepcid) 20mg twice daily</h4>
+        <p style="font-size:14px;">Blocks H2 receptors in the gut and on mast cells. Combined with H1 blocker, this dual approach is standard in MCAS management. Take with food.</p>
+      </div>
+      <div class="warn"><strong>Trial for 4–6 weeks.</strong> If significant symptom relief occurs, discuss with your doctor about formal MCAS workup (serum tryptase, 24-hour urine methylhistamine). Check for drug interactions if taking other medications.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 3 -->
+  <div class="section" id="s3">
+    <div class="section-header s3">
+      <h2>Section 3: Supplements &amp; Anti-Inflammatory Support</h2>
+      <div class="subtitle">7 evidence-backed options for inflammation and recovery</div>
+    </div>
+    <div class="warn"><strong>Disclaimer:</strong> Supplements are not FDA-approved to treat or cure disease. Always check with your doctor or pharmacist for interactions with your medications before starting.</div>
+
+    <div class="card">
+      <div class="supp-item" style="margin-bottom:12px;">
+        <div class="supp-num">1</div>
+        <div>
+          <h3>Quercetin</h3>
+          <p>A natural flavonoid and mast cell stabilizer — helps prevent mast cells from releasing histamine. Also has antioxidant and anti-inflammatory effects. Especially useful if MCAS is a component.</p>
+          <p style="font-size:14px;color:#6b7280;"><strong>Typical dose:</strong> 500–1,000mg twice daily with food. Use quercetin phytosome or combine with bromelain for better absorption.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="supp-item" style="margin-bottom:12px;">
+        <div class="supp-num" style="background:#fef3c7;color:#92400e;">2</div>
+        <div>
+          <h3>Turmeric (Curcumin)</h3>
+          <p>Curcumin blocks several inflammatory pathways (including NF-kB) that drive chronic pain and inflammation. Well-studied in joint pain and inflammatory conditions.</p>
+          <p style="font-size:14px;color:#6b7280;"><strong>Typical dose:</strong> 500–1,500mg curcumin extract daily. Must be taken with black pepper (piperine) or in liposomal form to absorb properly. Standard turmeric powder absorbs poorly.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="supp-item" style="margin-bottom:12px;">
+        <div class="supp-num" style="background:#dbeafe;color:#1e40af;">3</div>
+        <div>
+          <h3>Fish Oil (Omega-3 Fatty Acids)</h3>
+          <p>EPA and DHA reduce inflammatory signaling throughout the body. Especially useful for joint pain, brain fog, and cardiovascular health. One of the best-studied supplements in existence.</p>
+          <p style="font-size:14px;color:#6b7280;"><strong>Typical dose:</strong> 2–4g combined EPA+DHA daily. Choose triglyceride-form fish oil from a reputable brand that tests for heavy metals. Take with a fatty meal.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="supp-item" style="margin-bottom:12px;">
+        <div class="supp-num" style="background:#fce7f3;color:#9d174d;">4</div>
+        <div>
+          <h3>Cold-Pressed Cacao</h3>
+          <p>Raw cacao is rich in flavonoids (especially epicatechin) that support blood vessel health, reduce inflammation, and have mood-enhancing properties. Also contains magnesium — deficient in most hEDS patients. Avoid if histamine-sensitive.</p>
+          <p style="font-size:14px;color:#6b7280;"><strong>How to use:</strong> 1–2 tablespoons of cold-pressed cacao powder in smoothies or warm drinks daily. Look for ceremonial grade or cold-pressed raw cacao.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="supp-item" style="margin-bottom:12px;">
+        <div class="supp-num" style="background:#ede9fe;color:#5b21b6;">5</div>
+        <div>
+          <h3>PEA (Palmitoylethanolamide)</h3>
+          <p>A naturally occurring fatty acid that works on mast cells and nerve cells to reduce chronic pain and inflammation. Particularly useful for nerve pain, fibromyalgia-type symptoms, and widespread hEDS pain. Well-tolerated and non-psychoactive.</p>
+          <p style="font-size:14px;color:#6b7280;"><strong>Typical dose:</strong> 600–1,200mg daily. Use micronized or ultramicronized form (PEA-m or PEA-um). May take 4–8 weeks to see full benefit.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="supp-item" style="margin-bottom:12px;">
+        <div class="supp-num" style="background:#dcfce7;color:#166534;">6</div>
+        <div>
+          <h3>Magnesium Glycinate</h3>
+          <p>Magnesium deficiency worsens muscle pain, headaches, anxiety, and poor sleep — all common in hEDS. Magnesium glycinate is the most absorbable and gentlest form on the gut. Also supports sleep when taken at night.</p>
+          <p style="font-size:14px;color:#6b7280;"><strong>Typical dose:</strong> 200–400mg elemental magnesium at bedtime. Avoid magnesium oxide — poorly absorbed and causes diarrhea.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="supp-item" style="margin-bottom:12px;">
+        <div class="supp-num" style="background:#fff7ed;color:#9a3412;">7</div>
+        <div>
+          <h3>Vitamin D3 + K2</h3>
+          <p>Critical for immune function, muscle strength, pain modulation, and mood. Deficiency is almost universal in Alaska and in patients with chronic fatigue. K2 (MK-7 form) directs calcium to bones rather than arteries.</p>
+          <p style="font-size:14px;color:#6b7280;"><strong>Typical dose:</strong> 2,000–5,000 IU D3 daily with 100mcg K2 (MK-7). Check your blood level (25-OH Vitamin D) before dosing — aim for 50–80 ng/mL.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+    <div class="card" style="background:#f0fdf4;border:1.5px solid #16a34a;">
+      <h3 style="color:#14532d;">Order These Supplements — Dr. Nixon's Dispensary</h3>
+      <p style="font-size:15px;line-height:1.8;margin-bottom:12px;">All supplements recommended in this guide are available through Dr. Nixon's Fullscript dispensary — a professional-grade supplement platform used by physicians. Products are pharmaceutical-quality, third-party tested, and dispensed through a verified practitioner account. You'll receive a discount off retail pricing.</p>
+      <div style="background:white;border-radius:8px;padding:16px;margin-bottom:12px;">
+        <h4 style="color:#166534;margin-bottom:10px;">hEDS Support Protocol — what's included:</h4>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+          <div style="font-size:13px;color:#374151;padding:4px 0;border-bottom:0.5px solid #d1fae5;">Quercetin Phytosome — mast cell stabilizer</div>
+          <div style="font-size:13px;color:#374151;padding:4px 0;border-bottom:0.5px solid #d1fae5;">Curcumin (liposomal/phytosome) — anti-inflammatory</div>
+          <div style="font-size:13px;color:#374151;padding:4px 0;border-bottom:0.5px solid #d1fae5;">Fish Oil EPA+DHA (triglyceride form) — systemic inflammation</div>
+          <div style="font-size:13px;color:#374151;padding:4px 0;border-bottom:0.5px solid #d1fae5;">Magnesium Glycinate — pain, sleep, muscle spasm</div>
+          <div style="font-size:13px;color:#374151;padding:4px 0;border-bottom:0.5px solid #d1fae5;">Vitamin D3 + K2 (MK-7) — immune, bone, mood</div>
+          <div style="font-size:13px;color:#374151;padding:4px 0;border-bottom:0.5px solid #d1fae5;">PEA Micronized — nerve pain, mast cells</div>
+          <div style="font-size:13px;color:#374151;padding:4px 0;border-bottom:0.5px solid #d1fae5;">Collagen Peptides + Vitamin C — connective tissue repair</div>
+          <div style="font-size:13px;color:#374151;padding:4px 0;border-bottom:0.5px solid #d1fae5;">Buffered Vitamin C — collagen cofactor</div>
+          <div style="font-size:13px;color:#374151;padding:4px 0;border-bottom:0.5px solid #d1fae5;">Zinc Bisglycinate — tissue repair, immune</div>
+          <div style="font-size:13px;color:#374151;padding:4px 0;border-bottom:0.5px solid #d1fae5;">L-Glutamine — gut lining integrity</div>
+          <div style="font-size:13px;color:#374151;padding:4px 0;">Zinc Carnosine (PepZin GI) — gut lining repair</div>
+          <div style="font-size:13px;color:#374151;padding:4px 0;">Electrolyte sachets — POTS / salt loading support</div>
+        </div>
+      </div>
+      <div style="text-align:center;">
+        <a href="https://us.fullscript.com/welcome/gnixon1702230193/store-start" target="_blank" style="display:inline-block;background:#16a34a;color:white;padding:14px 32px;border-radius:10px;font-size:16px;font-weight:600;text-decoration:none;">Shop the hEDS Protocol on Fullscript</a>
+        <p style="font-size:12px;color:#6b7280;margin-top:8px;">You'll receive a discount through Dr. Nixon's dispensary. All products are shipped directly to you.</p>
+      </div>
+      <p style="font-size:12px;color:#6b7280;margin-top:12px;line-height:1.6;"><em>Disclosure: Dr. Nixon earns a practitioner margin on purchases made through his Fullscript dispensary. This does not affect the price you pay — Fullscript provides a discount off retail to patients of registered practitioners. All supplement recommendations are based solely on clinical evidence and the author's professional judgment.</em></p>
+    </div>
+<!-- SECTION 4 -->
+  <div class="section" id="s4">
+    <div class="section-header s4">
+      <h2>Section 4: Pain by Body Region</h2>
+      <div class="subtitle">Common hEDS findings and where to start</div>
+    </div>
+    <p>In hEDS, pain has patterns. The same structures fail in predictable ways. Understanding what's likely causing your pain helps you ask for the right workup. <strong>All of these require evaluation by a physician for proper diagnosis and treatment planning.</strong></p>
+
+    <div class="region-card">
+      <h3>Neck Pain</h3>
+      <div class="finding">
+        <h4>Cervicogenic Headaches</h4>
+        <p>Pain that starts in the neck and radiates to the back of the head, temples, or behind the eyes. Often worse with screen use, prolonged sitting, or wrong sleep position. Caused by instability in the upper cervical (C1–C3) joints.</p>
+        <div class="start"><strong>Where to start:</strong> PT focused on cervical stabilization (not stretching). Avoid forceful neck manipulation. Ask your pain physician about cervical facet injections if PT doesn't help.</div>
+      </div>
+      <div class="finding">
+        <h4>Occipital Neuralgia</h4>
+        <p>Sharp, shooting, or electric pain at the base of the skull radiating up and over the head. Caused by irritation of the occipital nerves where they pass through tight, lax neck muscles and connective tissue. Very treatable.</p>
+        <div class="start"><strong>Where to start:</strong> Ask your pain physician about greater occipital nerve blocks. Many patients get significant relief from a simple injection. Radiofrequency ablation (RFA) can provide longer-lasting results.</div>
+      </div>
+    </div>
+
+    <div class="region-card">
+      <h3>Back Pain</h3>
+      <div class="finding">
+        <h4>Sacroiliac (SI) Joint Pain</h4>
+        <p>The SI joints connect your spine to your pelvis. In hEDS, these joints are hypermobile and unstable, causing pain in the lower back, buttock, and upper leg. Often misdiagnosed as disc herniation. Worsens with prolonged sitting, standing on one leg, or rolling over in bed.</p>
+        <div class="start"><strong>Where to start:</strong> SI joint stabilization exercises with a hypermobility-aware PT. SI joint injections for diagnosis and pain relief. Prolotherapy or PRP injections can help stabilize the joint. Ask an interventional pain physician.</div>
+      </div>
+      <div class="finding">
+        <h4>Lumbar Facet Pain</h4>
+        <p>Small joints on the back of the spine that bear excess load in hEDS. Deep, aching low back pain that is worse in the morning, after staying in one position, or with back extension (bending backward). Usually no leg pain.</p>
+        <div class="start"><strong>Where to start:</strong> Ask your pain physician about medial branch nerve blocks for diagnosis. If positive, radiofrequency ablation (RFA) can provide 12–18 months of relief. Highly effective treatment for facet pain.</div>
+      <div class="finding">
+        <h4>Disc Disease — More Common in hEDS Than Generally Recognized</h4>
+        <p>Disc degeneration, bulges, and herniations occur at higher rates in hEDS. Lax spinal ligaments allow abnormal segmental motion that accelerates disc wear. Lumbar disc problems cause lower back pain that may radiate down the leg (sciatica). Cervical disc problems cause neck pain with arm pain or numbness. A significant disc problem will show on MRI — but many hEDS patients have findings that look alarming and are actually manageable conservatively. Do not rush to surgery.</p>
+        <div class="start"><strong>Where to start:</strong> MRI of the affected spine segment. Epidural steroid injections are highly effective for disc-related nerve pain. Long-term: spinal stabilization PT and core strengthening. Disc surgery in hEDS has a higher complication and failure rate than in non-hypermobile patients — exhaust all conservative options first, and ensure your surgeon is aware of your connective tissue diagnosis.</div>
+      </div>
+      </div>
+    </div>
+
+    <div class="region-card">
+      <h3>Shoulder Pain</h3>
+      <div class="finding">
+        <h4>Shoulder Instability &amp; Rotator Cuff Strain</h4>
+        <p>Loose ligaments allow the shoulder ball to shift slightly, straining the rotator cuff muscles that work overtime to stabilize it. Clicking, pain reaching overhead, or a sense the shoulder "slips." Dislocations and subluxations are common.</p>
+        <div class="start"><strong>Where to start:</strong> PT focused on rotator cuff and scapular strengthening — not stretching. Bracing during high-demand activities. PRP injections to stabilize tendons and ligaments through an orthobiologic physician.</div>
+      </div>
+    </div>
+
+    
+    <div class="region-card">
+      <h3>Rib Pain &amp; Rib Subluxations</h3>
+      <div class="finding">
+        <h4>Costochondral &amp; Costovertebral Instability</h4>
+        <p>Rib pain is one of the most overlooked and misdiagnosed symptoms in hEDS. Ribs attach to the spine in the back (costovertebral joints) and to the sternum or cartilage in the front (costochondral joints). In hEDS, the ligaments holding these joints in place are lax, allowing ribs to shift — called a rib subluxation. This causes sharp, catching pain with deep breathing, rolling over, sneezing, coughing, reaching overhead, or sleeping on one side. It is often mistaken for heart or lung problems, pleurisy, or intercostal neuralgia.</p>
+        <p>Patients often describe feeling or hearing a "pop" followed by intense local pain that resolves when the rib moves back. The pain is usually very localized — you can point to exactly where it hurts — and worsens with pressure on the affected area.</p>
+        <div class="start"><strong>Common areas:</strong> Along the side of the ribcage (floating ribs 11–12 most mobile), under the breast near the sternum (costochondritis), and between the shoulder blades where ribs meet the thoracic spine.</div>
+      </div>
+      <div class="finding">
+        <h4>When to Seek Urgent Evaluation</h4>
+        <p>Rib pain in hEDS is usually musculoskeletal. However, always rule out cardiac, pulmonary, or aortic causes with your physician first — especially if the pain is new, severe, accompanied by shortness of breath, radiates down the arm, or is associated with swelling or bruising without injury.</p>
+        <div class="start"><strong>Once cardiac/pulmonary causes are excluded:</strong> A plain chest X-ray and/or CT can confirm rib position. Your pain physician can perform diagnostic intercostal nerve blocks or costovertebral joint injections to confirm the source.</div>
+      </div>
+      <div class="finding">
+        <h4>Referral to an hEDS-Friendly Chiropractor</h4>
+        <p>Chiropractic care in hEDS must be approached carefully. High-velocity, forceful manipulation (the classic "crack") is generally not appropriate for hypermobile patients — it can worsen instability. However, chiropractors who specialize in low-force, instrument-assisted, or soft-tissue techniques can be very helpful for rib subluxations specifically, because gently repositioning a subluxed rib is one of the most effective treatments available.</p>
+        <div class="start"><strong>What to look for in a chiropractor:</strong>
+          <ul style="margin-top:6px;margin-bottom:0;">
+            <li>Experience with EDS, hypermobility, or connective tissue disorders</li>
+            <li>Uses low-force or instrument-based techniques (Activator method, Torque Release, SOT)</li>
+            <li>Does NOT perform forceful cervical (neck) manipulation on hEDS patients</li>
+            <li>Works collaboratively with your pain physician and PT team</li>
+          </ul>
+        </div>
+        <div class="start" style="margin-top:8px;"><strong>How to find one:</strong> Search the EDS Society provider directory at <strong>ehlers-danlos.com/healthcare-professionals-directory</strong> and filter for chiropractic. You can also ask your pain physician or PT for a trusted referral — providers who already work with hEDS patients often have colleagues they recommend. When calling, ask directly: "Do you have experience treating patients with hypermobile EDS? Do you use low-force techniques?"</div>
+      </div>
+      <div class="finding">
+        <h4>Self-Management Between Appointments</h4>
+        <ul style="margin-bottom:0;">
+          <li>Avoid sleeping on the affected side — a body pillow supporting the ribcage helps</li>
+          <li>Kinesiology tape applied along the affected rib can provide support and pain relief</li>
+          <li>Avoid heavy lifting, overhead reaching, or twisting movements during a flare</li>
+          <li>Heat applied to the area can ease muscle spasm around the subluxed rib</li>
+          <li>Diaphragmatic (belly) breathing rather than chest breathing reduces mechanical stress on the ribs during recovery</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="region-card">
+      <h3>Hip Pain</h3>
+      <div class="finding">
+        <h4>Hip Labral Tears &amp; Snapping Hip</h4>
+        <p>Hypermobility causes repetitive micro-trauma that tears the hip labrum over time. Groin pain, a clicking or snapping sensation, and pain with prolonged sitting or activity. "Snapping hip" (tendons flicking over bony prominences) is also common.</p>
+        <div class="start"><strong>Where to start:</strong> Hip stabilization PT (strengthening glutes, hip external rotators). Hip joint injections for diagnosis and pain relief. PRP can help with labral healing. Avoid high-impact activity until stabilized.</div>
+      </div>
+    </div>
+
+    <div class="region-card">
+      <h3>Knee Pain</h3>
+      <div class="finding">
+        <h4>Patellofemoral Pain Syndrome</h4>
+        <p>The kneecap tracks off-center due to weak and lax supporting structures, causing pain around or behind the kneecap with stairs, squatting, sitting for long periods, or running. Knees may also hyperextend (bend backward), causing chronic strain.</p>
+        <div class="start"><strong>Where to start:</strong> PT focused on VMO (inner quad) and hip strengthening, patellar bracing or taping. Avoid deep squats and lunges initially. PRP for chronic knee pain and ligament laxity through an orthobiologic physician. Wear supportive footwear.</div>
+      </div>
+    </div>
+
+    <div class="region-card">
+      <h3>Hand &amp; Finger Pain</h3>
+      <div class="finding">
+        <h4>Small Joint Hypermobility &amp; Instability</h4>
+        <p>Finger and thumb joints that hyperextend, causing pain with gripping, typing, writing, or carrying. Fingers may swell, ache, or feel clumsy. Thumbs are especially vulnerable at the CMC joint at the base.</p>
+        <div class="start"><strong>Where to start:</strong> Occupational therapy (OT) for hand exercises and splinting. Silver ring splints are the gold standard for finger hypermobility — they allow movement while preventing hyperextension. Search "Oval-8 splints" or "Silver Ring Splint Company." Avoid tight gripping during flares.</div>
+      <div class="finding">
+        <h4>Hand &amp; Arm Numbness and Tingling</h4>
+        <p>Numbness, tingling, or "pins and needles" in the hands and arms is very common in hEDS and is often attributed to a single cause when there are actually several distinct syndromes involved. Getting the right diagnosis determines the treatment.</p>
+
+        <div style="background:#ffeaea;border-radius:6px;padding:10px;margin:8px 0;">
+          <p style="font-size:14px;font-weight:600;color:#9f1239;margin-bottom:4px;">Carpal Tunnel Syndrome (median nerve at the wrist)</p>
+          <p style="font-size:14px;color:#374151;line-height:1.7;">The most common cause. The median nerve is compressed at the wrist. In hEDS, lax wrist ligaments combined with repetitive activity (typing, phone use) make this especially common. Classic pattern: numbness and tingling in the thumb, index, and middle fingers. Worse at night and with prolonged wrist flexion. Confirmed by nerve conduction study (NCS/EMG).</p>
+          <p style="font-size:13px;color:#6b7280;margin-top:4px;"><strong>Treatment:</strong> Night splints, activity modification, corticosteroid injection into the carpal tunnel. Surgical release is highly effective if conservative measures fail — discuss hEDS healing considerations with your surgeon.</p>
+        </div>
+
+        <div style="background:#ffeaea;border-radius:6px;padding:10px;margin:8px 0;">
+          <p style="font-size:14px;font-weight:600;color:#9f1239;margin-bottom:4px;">Cervicobrachial Syndrome (neck-to-arm nerve pain)</p>
+          <p style="font-size:14px;color:#374151;line-height:1.7;">Numbness that originates in the cervical spine and radiates down the arm. Caused by nerve root compression from disc bulges, facet overgrowth, or cervical instability — all of which are more common in hEDS. Each nerve root has a predictable territory: C6 → thumb/index; C7 → middle finger; C8 → ring/little finger. Symptoms often also involve the arm and shoulder, and change with neck position — distinguishing it from carpal tunnel.</p>
+          <p style="font-size:13px;color:#6b7280;margin-top:4px;"><strong>Treatment:</strong> Cervical spine MRI to identify the level. Cervical epidural steroid injections or selective nerve root blocks are very effective for relief. Cervical stabilization PT addresses the underlying instability long-term.</p>
+        </div>
+
+        <div style="background:#ffeaea;border-radius:6px;padding:10px;margin:8px 0;">
+          <p style="font-size:14px;font-weight:600;color:#9f1239;margin-bottom:4px;">Thoracic Outlet Syndrome (brachial plexus compression)</p>
+          <p style="font-size:14px;color:#374151;line-height:1.7;">Less recognized but frequently missed. The brachial plexus is compressed between the collarbone and first rib. In hEDS, postural changes, drooping shoulders, and hypermobile ribs make this more common. Symptoms: diffuse arm heaviness, fatigue, and whole-hand or forearm numbness — worse with overhead activity or carrying loads.</p>
+          <p style="font-size:13px;color:#6b7280;margin-top:4px;"><strong>Treatment:</strong> Provocative exam tests (Adson's, EAST test) can suggest diagnosis. PT focused on posture, rib mobility, and scalene muscle lengthening is first-line. Refer to vascular or thoracic specialist for confirmation.</p>
+        </div>
+
+        <div class="start" style="margin-top:8px;"><strong>Key distinction:</strong> Thumb/index/middle numbness worse at night → carpal tunnel. Numbness following a strip down the arm that changes with neck position → cervicobrachial. Whole arm heaviness with overhead use → thoracic outlet. A nerve conduction study (NCS/EMG) and cervical MRI can sort these out definitively — ask your pain physician or neurologist.</div>
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5 -->
+  <div class="section" id="s5">
+    <div class="section-header s5">
+      <h2>Section 5: Physical Therapy Resources</h2>
+      <div class="subtitle">Finding the right PT for hypermobility</div>
+    </div>
+
+    <div class="card">
+      <h3>What to Look for in a PT</h3>
+      <p>Not all physical therapists understand hypermobility. A PT who doesn't know hEDS may hurt you by pushing you to stretch more (you're already too flexible) or loading you too aggressively. You need a PT who understands <strong>stability over flexibility.</strong></p>
+      <ul>
+        <li>Ask: "Do you have experience treating hEDS or hypermobility spectrum disorder?"</li>
+        <li>Ask: "Do you focus on stability and proprioception rather than stretching?"</li>
+        <li><strong>Red flag:</strong> A PT who gives aggressive stretching exercises</li>
+        <li><strong>Red flag:</strong> A PT who loads you heavily right away without testing your baseline</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>The Muldowney Protocol</h3>
+      <p>A structured, progressive exercise program developed specifically for hEDS and hypermobility spectrum disorder. Available as a book and through certified PTs. Search "Muldowney Protocol hEDS" — widely regarded as one of the best-structured approaches to hypermobility rehab.</p>
+    </div>
+
+    <div class="card">
+      <h3>Finding a Provider</h3>
+      <p><strong>EDS Society Directory:</strong> Visit <strong>ehlers-danlos.com/healthcare-professionals-directory</strong> to find EDS-knowledgeable PTs and physicians near you.</p>
+      <p><strong>Telehealth PT:</strong> Several hypermobility-specialist PTs offer online programs. Search "hypermobility PT telehealth." Jeannie Di Bon (Zebra Club) is commonly referenced in the hEDS community for online programs.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 6 -->
+  <div class="section" id="s6">
+    <div class="section-header s6">
+      <h2>Section 6: Low Dose Naltrexone (LDN)</h2>
+      <div class="subtitle">An emerging option for chronic pain and inflammation</div>
+    </div>
+
+    <div class="card">
+      <h3>What is LDN?</h3>
+      <p>Naltrexone is FDA-approved at high doses (50mg) for opioid and alcohol use disorder. At very low doses (1.5–4.5mg), it has a completely different effect — it briefly blocks opioid receptors, which causes the body to increase its own endorphin production and reduce neuroinflammation. This is Low Dose Naltrexone, or LDN.</p>
+      <p>LDN has been studied in fibromyalgia, Crohn's disease, MS, and other chronic inflammatory conditions with promising results. Many hEDS patients and physicians report significant improvement in pain, fatigue, and brain fog.</p>
+      <div class="highlight-box blue-box">
+        <h4>Key points</h4>
+        <ul style="font-size:14px;margin-bottom:0;">
+          <li>Requires a prescription — must be compounded (standard tablets are 50mg)</li>
+          <li>Cannot be taken with opioid pain medications</li>
+          <li>Very safe side effect profile at low doses</li>
+          <li>Takes 4–12 weeks to see full benefit</li>
+          <li>Typically $30–60/month at compounding pharmacies</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>How to Find a Prescriber</h3>
+      <p>Search <strong>ldnresearchtrust.org</strong> for a prescriber directory. You can also ask your primary care doctor or pain physician — LDN is increasingly prescribed for chronic pain. Telehealth physicians are often willing to prescribe for established chronic pain conditions.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 7 -->
+  <div class="section" id="s7">
+    <div class="section-header s7">
+      <h2>Section 7: Sleep &amp; Circadian Rhythm</h2>
+      <div class="subtitle">The foundation of fatigue recovery</div>
+    </div>
+
+    <div class="card">
+      <h3>Morning Sunlight &amp; POMC Stimulation</h3>
+      <p>Morning sunlight activates POMC (pro-opiomelanocortin) — a master hormone precursor that breaks down into alpha-MSH, ACTH, and beta-endorphin, your body's natural pain-killing and mood-regulating molecules. This is one reason sunlight has such a profound effect on pain, mood, and energy.</p>
+      <div class="highlight-box blue-box">
+        <h4>Morning Light Protocol</h4>
+        <ul style="font-size:14px;margin-bottom:0;">
+          <li>Get outdoor sunlight within 30–60 minutes of waking</li>
+          <li>10–20 minutes minimum — without sunglasses (glasses okay)</li>
+          <li>Cloudy days still work — outdoor light is 10–50x brighter than indoor light</li>
+          <li>In Alaska winters: use a 10,000 lux light therapy box for 20–30 minutes upon waking</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Red &amp; Near-Infrared (NIR) Light Therapy</h3>
+      <p>Red light (630–670nm) and near-infrared (810–850nm) penetrate tissue and are absorbed by mitochondria, stimulating ATP production, reducing inflammation, and promoting tissue repair.</p>
+      <div class="grid-2">
+        <div class="highlight-box amber-box">
+          <h4>For pain &amp; inflammation</h4>
+          <p style="font-size:14px;">Apply to painful joints for 10–15 minutes. Look for panels with both 660nm (red) and 850nm (NIR) wavelengths. Consistent use shows significant pain reduction in many patients.</p>
+        </div>
+        <div class="highlight-box purple-box">
+          <h4>For sleep — evening use</h4>
+          <p style="font-size:14px;">Red light does not suppress melatonin like blue light does. Use a red light panel for 10–15 minutes in the evening in place of bright overhead lights after sunset.</p>
+        </div>
+      </div>
+      <p style="font-size:13px;color:#6b7280;margin-top:8px;"><strong>Device note:</strong> Joovv, Mito Red Light, and similar brands. Look for at least 50 mW/cm² irradiance at 6 inches. Avoid cheap panels that don't specify wavelength output.</p>
+    </div>
+
+    <div class="card">
+      <h3>5 Circadian Sleep Principles</h3>
+      <div style="display:grid;gap:10px;margin-top:10px;">
+        <div style="background:#f8fafc;border-radius:8px;padding:12px;display:flex;gap:12px;align-items:flex-start;">
+          <div class="step-badge">1</div>
+          <div><strong>Wake same time every day</strong> — even weekends. The single most important thing for circadian rhythm. Your wake time determines when melatonin rises at night.</div>
+        </div>
+        <div style="background:#f8fafc;border-radius:8px;padding:12px;display:flex;gap:12px;align-items:flex-start;">
+          <div class="step-badge">2</div>
+          <div><strong>No screens 1 hour before bed</strong> — blue light suppresses melatonin. Switch to red/amber lighting after sunset. Blue light blocking glasses help if screen use is unavoidable.</div>
+        </div>
+        <div style="background:#f8fafc;border-radius:8px;padding:12px;display:flex;gap:12px;align-items:flex-start;">
+          <div class="step-badge">3</div>
+          <div><strong>Cool bedroom (65–68°F)</strong> — sleep onset requires core body temperature to drop. A warm shower 1–2 hours before bed paradoxically helps — the subsequent cooling triggers sleepiness.</div>
+        </div>
+        <div style="background:#f8fafc;border-radius:8px;padding:12px;display:flex;gap:12px;align-items:flex-start;">
+          <div class="step-badge">4</div>
+          <div><strong>Low histamine before bed</strong> — for MCAS patients, nighttime histamine reactions can wake you from deep sleep. Eat your last meal 3 hours before bed. Your H1 antihistamine at night also helps.</div>
+        </div>
+        <div style="background:#f8fafc;border-radius:8px;padding:12px;display:flex;gap:12px;align-items:flex-start;">
+          <div class="step-badge">5</div>
+          <div><strong>Melatonin — low dose, timed right</strong> — 0.3–1mg taken 1–2 hours before target sleep time. High doses (5–10mg) don't work better and cause next-day grogginess. Timing matters more than dose.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 8 -->
+  <div class="section" id="s8">
+    <div class="section-header s8">
+      <h2>Section 8: Peptides</h2>
+      <div class="subtitle">BPC-157, Pinealon, and Epithalon</div>
+    </div>
+    <div class="warn"><strong>Research status:</strong> These peptides are research compounds studied in scientific literature. They are not FDA-approved medications and are not available at standard pharmacies. This information is educational. Discuss with a physician familiar with peptide therapy before considering any of these.</div>
+
+    <div class="peptide-card">
+      <h3>BPC-157 (Body Protection Compound)</h3>
+      <p>BPC-157 is a synthetic peptide derived from a protein found in gastric juice. Extensively studied in animal models for accelerating healing of tendons, ligaments, muscles, and gut lining. Also appears to reduce pain sensitization and support dopamine and serotonin pathways.</p>
+      <div class="grid-2">
+        <div class="highlight-box green-box">
+          <h4>Potential benefits studied</h4>
+          <ul style="font-size:14px;margin-bottom:0;">
+            <li>Tendon and ligament healing</li>
+            <li>Gut lining repair (leaky gut)</li>
+            <li>Joint pain reduction</li>
+            <li>Nerve pain modulation</li>
+            <li>Reduced systemic inflammation</li>
+          </ul>
+        </div>
+        <div class="highlight-box blue-box">
+          <h4>Administration</h4>
+          <ul style="font-size:14px;margin-bottom:0;">
+            <li>Subcutaneous injection (most studied)</li>
+            <li>Oral capsules (gut effects)</li>
+            <li>Nasal spray</li>
+            <li>Typical dose: 250–500mcg daily</li>
+          </ul>
+        </div>
+      </div>
+      <p style="font-size:14px;color:#6b7280;margin-top:10px;">Of the three peptides listed here, BPC-157 is most relevant to hEDS due to its specific effects on connective tissue healing. Most human experience comes from clinical observation and case reports rather than large randomized trials.</p>
+    </div>
+
+    <div class="peptide-card">
+      <h3>Pinealon</h3>
+      <p>A tripeptide (Glu-Asp-Arg) derived from the pineal gland. Research suggests it may support neuroregeneration, improve cognitive function, regulate sleep-wake cycles, and have antioxidant effects in brain tissue. Works partly by modulating circadian rhythm gene expression.</p>
+      <div class="highlight-box green-box" style="margin-bottom:10px;">
+        <h4>Most relevant for hEDS patients with:</h4>
+        <ul style="font-size:14px;margin-bottom:0;">
+          <li>Significant brain fog or cognitive symptoms</li>
+          <li>Disrupted sleep-wake cycles</li>
+          <li>Fatigue unresponsive to standard approaches</li>
+        </ul>
+      </div>
+      <p style="font-size:14px;color:#6b7280;">Typical use: 5–10mg in cycles of 10–20 days, as a nasal spray or sublingual drop. Most research is from Russian biogerontology literature — limited English-language RCT data.</p>
+    </div>
+
+    <div class="peptide-card">
+      <h3>Epithalon (Epitalon)</h3>
+      <p>A tetrapeptide (Ala-Glu-Asp-Gly) developed by Professor Vladimir Khavinson. Research suggests it activates telomerase (which protects chromosome ends), regulates circadian rhythm through the melatonin pathway, and has antioxidant and immune-regulating effects.</p>
+      <div class="grid-2">
+        <div class="highlight-box green-box">
+          <h4>Research suggests benefits in</h4>
+          <ul style="font-size:14px;margin-bottom:0;">
+            <li>Sleep normalization</li>
+            <li>Antioxidant protection</li>
+            <li>Immune regulation</li>
+            <li>Cellular longevity support</li>
+          </ul>
+        </div>
+        <div class="highlight-box blue-box">
+          <h4>Typical use</h4>
+          <ul style="font-size:14px;margin-bottom:0;">
+            <li>5–10mg per day</li>
+            <li>Cycles of 10–20 days</li>
+            <li>Subcutaneous or nasal</li>
+            <li>1–2 cycles per year</li>
+          </ul>
+        </div>
+      </div>
+      <p style="font-size:14px;color:#6b7280;margin-top:10px;">Most useful for hEDS patients where sleep disruption and fatigue are primary concerns, under physician supervision as part of a broader recovery protocol.</p>
+    </div>
+  </div>
+
+  
+
+  <!-- SECTION 9: PACING & ENERGY MANAGEMENT -->
+  <div class="section" id="s9">
+    <div class="section-header" style="background:#fdf4ff;border-left:5px solid #a855f7;">
+      <h2 style="color:#4a044e;">Section 9: Pacing &amp; Energy Management</h2>
+      <div class="subtitle" style="color:#6b21a8;">Breaking the push-crash cycle</div>
+    </div>
+
+    <div class="card">
+      <h3>The Push-Crash Cycle</h3>
+      <p>On good days, hEDS patients often overdo it — catching up on everything they couldn't do during the last flare. This leads to a crash: severe fatigue, increased pain, and reduced function that wipes out the progress made. The cycle repeats, often getting worse over time.</p>
+      <p>Pacing breaks this cycle by staying within your "energy envelope" — the amount of activity your body can handle without triggering a crash. It's not about doing less forever. It's about doing the right amount consistently so your capacity can gradually grow.</p>
+    </div>
+
+    <div class="card">
+      <h3>Heart Rate-Based Pacing</h3>
+      <p>For POTS patients especially, heart rate is a direct measure of how hard your autonomic nervous system is working. Exceeding your aerobic threshold triggers sympathetic overdrive — fatigue, brain fog, and crashes. Heart rate monitoring gives you objective feedback in real time.</p>
+      <div class="highlight-box blue-box" style="margin-bottom:12px;">
+        <h4>Find your aerobic threshold (rough estimate)</h4>
+        <p style="font-size:15px;">The most commonly used formula for POTS patients: <strong>Threshold ≈ 0.6 × (220 − your age)</strong></p>
+        <p style="font-size:14px;color:#374151;margin-bottom:0;">Example: Age 35 → 220 − 35 = 185 → 0.6 × 185 = <strong>111 bpm</strong>. Try to keep your heart rate below this during all activity.</p>
+      </div>
+      <div class="highlight-box green-box">
+        <h4>Using it practically</h4>
+        <ul style="font-size:14px;margin-bottom:0;">
+          <li>Wear your smartwatch or heart rate monitor during all activity — including housework and cooking</li>
+          <li>When your HR approaches your threshold — slow down, sit, or rest immediately</li>
+          <li>Even activities that don't feel like "exercise" raise HR significantly in POTS</li>
+          <li>Gradually increase activity as your tolerance builds — add no more than 10% per week</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>The Energy Envelope</h3>
+      <p>Think of your daily energy as a battery with a fixed capacity. The goal is to consistently operate at 70–80% — never fully depleting, but never fully resting either. This keeps the envelope stable and allows it to slowly grow over time.</p>
+      <div class="grid-2">
+        <div class="highlight-box red-box">
+          <h4>What drains the battery fast</h4>
+          <ul style="font-size:14px;margin-bottom:0;">
+            <li>Upright activity (POTS)</li>
+            <li>Heat exposure</li>
+            <li>Emotional stress</li>
+            <li>Illness or infection</li>
+            <li>Poor sleep the night before</li>
+            <li>Skipping meals or dehydration</li>
+            <li>Sensory overload (crowds, noise)</li>
+          </ul>
+        </div>
+        <div class="highlight-box green-box">
+          <h4>What recharges and protects</h4>
+          <ul style="font-size:14px;margin-bottom:0;">
+            <li>Horizontal rest (lying down)</li>
+            <li>Cool environments</li>
+            <li>Consistent sleep schedule</li>
+            <li>Hydration and salt intake</li>
+            <li>Planned rest breaks during activity</li>
+            <li>Compression garments</li>
+            <li>Low-stimulation recovery time</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Practical Pacing Strategies</h3>
+      <div style="display:grid;gap:10px;margin-top:8px;">
+        <div style="background:#f8fafc;border-radius:8px;padding:12px;display:flex;gap:12px;align-items:flex-start;">
+          <div class="step-badge" style="background:#a855f7;">Plan</div>
+          <p style="font-size:14px;margin:0;"><strong>Schedule rest before you need it.</strong> Build 10–15 minute horizontal rest breaks into your day proactively — not after a crash. Pre-activity rest is as important as post-activity rest.</p>
+        </div>
+        <div style="background:#f8fafc;border-radius:8px;padding:12px;display:flex;gap:12px;align-items:flex-start;">
+          <div class="step-badge" style="background:#a855f7;">Chunk</div>
+          <p style="font-size:14px;margin:0;"><strong>Break tasks into smaller pieces.</strong> Instead of cooking a full meal, prep for 10 minutes, sit for 5, cook for 10. The total activity is the same but the HR spike is smaller and recovery is faster.</p>
+        </div>
+        <div style="background:#f8fafc;border-radius:8px;padding:12px;display:flex;gap:12px;align-items:flex-start;">
+          <div class="step-badge" style="background:#a855f7;">Track</div>
+          <p style="font-size:14px;margin:0;"><strong>Keep a simple daily log.</strong> Rate your energy (1–10) morning and evening and note what you did. Patterns emerge over 2–4 weeks showing which activities most reliably drain you.</p>
+        </div>
+        <div style="background:#f8fafc;border-radius:8px;padding:12px;display:flex;gap:12px;align-items:flex-start;">
+          <div class="step-badge" style="background:#a855f7;">Communicate</div>
+          <p style="font-size:14px;margin:0;"><strong>Tell the people around you.</strong> Energy limitation is invisible. Explaining the push-crash cycle to family, friends, or employers prevents the misunderstanding that you're fine one day and "giving up" the next.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 10: NUTRITION FOR CONNECTIVE TISSUE -->
+  <div class="section" id="s10">
+    <div class="section-header" style="background:#ecfdf5;border-left:5px solid #059669;">
+      <h2 style="color:#064e3b;">Section 10: Nutrition for Connective Tissue Repair</h2>
+      <div class="subtitle" style="color:#065f46;">Eating to support collagen synthesis and reduce inflammation</div>
+    </div>
+
+    <div class="card">
+      <h3>Why Nutrition Matters in hEDS</h3>
+      <p>In hEDS, the collagen your body produces is structurally abnormal — but the quality of collagen you make is still influenced by what you eat. Several nutrients are essential cofactors in collagen synthesis and cross-linking. Being deficient in any of them limits your body's ability to build the best connective tissue it can. Combined with an anti-inflammatory eating pattern, nutrition is one of the highest-leverage lifestyle changes in hEDS.</p>
+    </div>
+
+    <div class="card">
+      <h3>The Collagen Synthesis Nutrients</h3>
+      <div style="display:grid;gap:14px;">
+        <div class="highlight-box green-box">
+          <h4>Vitamin C — the most critical collagen cofactor</h4>
+          <p style="font-size:15px;line-height:1.8;">Vitamin C is required for hydroxylation of proline and lysine — the step that stabilizes and cross-links collagen fibers. Without adequate Vitamin C, collagen cannot form properly. hEDS patients often need higher amounts due to ongoing tissue repair demands.</p>
+          <p style="font-size:14px;color:#374151;"><strong>Food sources:</strong> Bell peppers (highest), kiwi, broccoli, guava. Avoid citrus and strawberries if histamine-sensitive. <strong>Supplement:</strong> 500–1,000mg buffered Vitamin C daily in divided doses.</p>
+        </div>
+        <div class="highlight-box blue-box">
+          <h4>Glycine &amp; Proline — the structural amino acids of collagen</h4>
+          <p style="font-size:15px;line-height:1.8;">Collagen is made primarily of glycine, proline, and hydroxyproline. Getting adequate protein — especially from collagen-rich sources — provides the raw materials your body needs.</p>
+          <p style="font-size:14px;color:#374151;"><strong>Food sources:</strong> Bone broth (highest in glycine and proline), skin-on poultry, fish with skin, egg whites, gelatin. <strong>Supplement:</strong> Hydrolyzed collagen peptides 10–15g daily combined with Vitamin C — the combination is synergistic.</p>
+        </div>
+        <div class="highlight-box amber-box">
+          <h4>Copper — the cross-linking enzyme activator</h4>
+          <p style="font-size:15px;line-height:1.8;">Copper activates lysyl oxidase, the enzyme that cross-links collagen and elastin fibers, giving them tensile strength. Copper deficiency directly weakens connective tissue and is frequently overlooked.</p>
+          <p style="font-size:14px;color:#374151;"><strong>Food sources:</strong> Beef liver (richest source), oysters, dark chocolate, cashews, lentils. <strong>Note:</strong> If supplementing zinc, balance with 1–2mg copper for every 15–30mg zinc.</p>
+        </div>
+        <div class="highlight-box purple-box">
+          <h4>Zinc — tissue repair and wound healing</h4>
+          <p style="font-size:15px;line-height:1.8;">Zinc is required for over 300 enzymatic reactions including collagen synthesis and wound healing. Deficiency is common in hEDS and worsens tissue fragility and slow recovery from injury.</p>
+          <p style="font-size:14px;color:#374151;"><strong>Food sources:</strong> Beef, oysters, pumpkin seeds, chickpeas. <strong>Supplement:</strong> 15–30mg zinc bisglycinate daily with food. Balance with copper (see above).</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Anti-Inflammatory Eating Principles</h3>
+      <div class="grid-2">
+        <div class="highlight-box green-box">
+          <h4>Emphasize</h4>
+          <ul style="font-size:14px;margin-bottom:0;">
+            <li>Fatty fish 3x/week (salmon, mackerel)</li>
+            <li>Olive oil as primary cooking fat</li>
+            <li>Colorful vegetables — diverse daily</li>
+            <li>Berries (polyphenols and antioxidants)</li>
+            <li>Grass-fed beef and lamb</li>
+            <li>Bone broth regularly</li>
+            <li>Whole food carbs (rice, sweet potato, oats)</li>
+          </ul>
+        </div>
+        <div class="highlight-box red-box">
+          <h4>Minimize</h4>
+          <ul style="font-size:14px;margin-bottom:0;">
+            <li>Seed oils (canola, soybean, corn)</li>
+            <li>Ultra-processed foods</li>
+            <li>Added sugar (drives inflammation and destabilizes mast cells)</li>
+            <li>Alcohol (worsens POTS, MCAS, and gut permeability)</li>
+            <li>Gluten (trial elimination if gut symptoms prominent)</li>
+            <li>Dairy (trial elimination if MCAS suspected)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Gut Health &amp; hEDS</h3>
+      <p>Gut issues are extremely common in hEDS — the same lax connective tissue that affects joints also affects the gut lining, increasing intestinal permeability ("leaky gut"), worsening MCAS, and driving IBS-type symptoms. Supporting gut integrity is high-leverage.</p>
+      <ul>
+        <li><strong>Bone broth</strong> — rich in glycine and gelatin, directly supports gut lining repair</li>
+        <li><strong>L-Glutamine</strong> 5–10g daily — primary fuel for intestinal epithelial cells</li>
+        <li><strong>Zinc carnosine</strong> 75mg daily — specifically studied for gut lining repair</li>
+        <li><strong>Probiotics</strong> — choose low-histamine strains if MCAS is present. Lactobacillus rhamnosus GG and Bifidobacterium longum are generally better tolerated than broad-spectrum fermented products</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 11: FLARE PROTOCOL -->
+  <div class="section" id="s11">
+    <div class="section-header" style="background:#fff1f2;border-left:5px solid #e11d48;">
+      <h2 style="color:#881337;">Section 11: Flare Protocol</h2>
+      <div class="subtitle" style="color:#9f1239;">What to do when everything gets worse</div>
+    </div>
+
+    <div class="card">
+      <h3>What is a Flare?</h3>
+      <p>A flare is a period of significantly worsened symptoms — increased pain, fatigue, joint instability, brain fog, MCAS reactions, or POTS symptoms — that goes beyond your usual baseline. Flares can last hours to weeks. Common triggers include illness, stress, hormonal changes, overexertion, weather changes, and disrupted sleep.</p>
+    </div>
+
+    <div class="card">
+      <h3>ER vs. Ride It Out</h3>
+      <div class="grid-2">
+        <div class="highlight-box red-box">
+          <h4>Go to the ER immediately for:</h4>
+          <ul style="font-size:14px;margin-bottom:0;">
+            <li>Chest pain with shortness of breath</li>
+            <li>Sudden severe tearing chest or back pain</li>
+            <li>Severe anaphylaxis — throat swelling, difficulty breathing, BP drop</li>
+            <li>Joint dislocation that won't reduce</li>
+            <li>Sudden severe headache ("worst of your life")</li>
+            <li>Fainting that doesn't resolve with lying flat</li>
+            <li>Sudden weakness, vision changes, or difficulty speaking</li>
+          </ul>
+        </div>
+        <div class="highlight-box amber-box">
+          <h4>Manage at home, follow up with doctor:</h4>
+          <ul style="font-size:14px;margin-bottom:0;">
+            <li>Worsened widespread pain without new injury</li>
+            <li>Increased fatigue and brain fog</li>
+            <li>Flare of known POTS symptoms</li>
+            <li>MCAS reaction without throat involvement</li>
+            <li>Joint subluxation that reduced on its own</li>
+            <li>Increased sensory sensitivity or anxiety</li>
+          </ul>
+        </div>
+      </div>
+      <div class="warn" style="margin-top:12px;">If you're unsure whether a symptom is an emergency, call a nurse triage line. In hEDS, symptoms that resemble typical flares can occasionally have serious causes — don't dismiss severe or new symptoms.</div>
+    </div>
+
+    <div class="card">
+      <h3>The Flare Kit — Have These Ready</h3>
+      <div class="grid-2">
+        <div class="highlight-box blue-box">
+          <h4>Medications &amp; supplements</h4>
+          <ul style="font-size:14px;margin-bottom:0;">
+            <li>H1 antihistamine (Xyzal or Zyrtec)</li>
+            <li>H2 antihistamine (Pepcid 20mg)</li>
+            <li>Electrolyte sachets (for POTS flares)</li>
+            <li>Magnesium glycinate (muscle spasm and sleep)</li>
+            <li>Acetaminophen for pain — better tolerated in MCAS than NSAIDs</li>
+            <li>All regular medications — don't let them run out</li>
+          </ul>
+        </div>
+        <div class="highlight-box green-box">
+          <h4>Physical supports</h4>
+          <ul style="font-size:14px;margin-bottom:0;">
+            <li>Compression stockings — accessible, not buried in a drawer</li>
+            <li>Heating pad for muscle and joint pain</li>
+            <li>Ice packs for acute joint inflammation</li>
+            <li>Kinesiology tape for rib or joint support</li>
+            <li>Splints for frequently subluxing joints</li>
+            <li>Body pillow for sleep positioning</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>First 24 Hours of a Flare</h3>
+      <div style="display:grid;gap:10px;margin-top:8px;">
+        <div style="background:#f8fafc;border-radius:8px;padding:12px;display:flex;gap:12px;align-items:flex-start;">
+          <div class="step-badge" style="background:#e11d48;">1</div>
+          <p style="font-size:14px;margin:0;"><strong>Stop and rest immediately.</strong> Do not push through. The sooner you rest, the shorter the flare. Going horizontal takes load off your joints and reduces POTS-mediated stress on your system.</p>
+        </div>
+        <div style="background:#f8fafc;border-radius:8px;padding:12px;display:flex;gap:12px;align-items:flex-start;">
+          <div class="step-badge" style="background:#e11d48;">2</div>
+          <p style="font-size:14px;margin:0;"><strong>Hydrate with electrolytes.</strong> Dehydration worsens every hEDS symptom. Add salt and electrolytes — not just plain water.</p>
+        </div>
+        <div style="background:#f8fafc;border-radius:8px;padding:12px;display:flex;gap:12px;align-items:flex-start;">
+          <div class="step-badge" style="background:#e11d48;">3</div>
+          <p style="font-size:14px;margin:0;"><strong>Take your antihistamines if MCAS is involved.</strong> Don't wait to see if it passes. Early antihistamine use blunts the mast cell cascade before it escalates.</p>
+        </div>
+        <div style="background:#f8fafc;border-radius:8px;padding:12px;display:flex;gap:12px;align-items:flex-start;">
+          <div class="step-badge" style="background:#e11d48;">4</div>
+          <p style="font-size:14px;margin:0;"><strong>Eat low-histamine, easy foods.</strong> Keep safe, simple options stocked for flares: rice, fresh eggs, cooked fresh chicken, plain crackers, bone broth.</p>
+        </div>
+        <div style="background:#f8fafc;border-radius:8px;padding:12px;display:flex;gap:12px;align-items:flex-start;">
+          <div class="step-badge" style="background:#e11d48;">5</div>
+          <p style="font-size:14px;margin:0;"><strong>Contact your care team if the flare is prolonged or significantly worse than usual.</strong> A flare lasting more than 5–7 days, or a flare with new or different symptoms, warrants a call to your physician.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>How to Communicate During a Flare</h3>
+      <div class="highlight-box blue-box">
+        <p style="font-size:15px;line-height:1.8;font-style:italic;">"I have hEDS and I'm in a flare. My baseline pain is [X]/10 and it's currently [X]/10. The flare started [X days ago]. My main symptoms are [joint pain / POTS / MCAS reactions]. I've tried rest, hydration, and antihistamines with limited improvement. I don't think this is an emergency but I need guidance on next steps."</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 12: WHAT TO AVOID -->
+  <div class="section" id="s12">
+    <div class="section-header" style="background:#fef2f2;border-left:5px solid #dc2626;">
+      <h2 style="color:#7f1d1d;">Section 12: What to Avoid</h2>
+      <div class="subtitle" style="color:#991b1b;">Medications, activities, and substances that can worsen hEDS</div>
+    </div>
+
+    <div class="warn">This section is for general awareness only. Never stop a prescribed medication without discussing it with your doctor first. Some of these may be appropriate in certain situations despite the general cautions listed here.</div>
+
+    <div class="card">
+      <h3>Medications to Discuss Carefully with Your Doctor</h3>
+      <div style="display:grid;gap:14px;">
+        <div class="highlight-box red-box">
+          <h4>Fluoroquinolone Antibiotics (Cipro, Levaquin, Avelox)</h4>
+          <p style="font-size:15px;line-height:1.8;">Fluoroquinolones carry an FDA Black Box Warning for tendon rupture and peripheral neuropathy. In patients with connective tissue disorders like hEDS, the risk is significantly elevated. These antibiotics inhibit collagen synthesis and can cause tendon damage — sometimes weeks after the course finishes. If a doctor prescribes a fluoroquinolone for a routine infection, ask whether an alternative (amoxicillin, doxycycline, azithromycin) can be used. In life-threatening infections where fluoroquinolones are the only option, benefit may outweigh risk — have that conversation with your physician.</p>
+        </div>
+        <div class="highlight-box red-box">
+          <h4>NSAIDs in MCAS (Ibuprofen, Naproxen, Aspirin)</h4>
+          <p style="font-size:15px;line-height:1.8;">NSAIDs can trigger or worsen MCAS reactions by shifting arachidonic acid metabolism toward leukotrienes — potent mast cell activators. Acetaminophen (Tylenol) is generally better tolerated for pain in MCAS patients. If you need anti-inflammatory effects and NSAIDs worsen your symptoms, ask your physician about COX-2 selective options.</p>
+        </div>
+        <div class="highlight-box amber-box">
+          <h4>Long-Term Opioids for Joint Pain</h4>
+          <p style="font-size:15px;line-height:1.8;">Opioids do not address the underlying instability driving hEDS pain and carry significant long-term risks including opioid-induced hyperalgesia (making pain worse over time) and hormonal disruption. Low dose naltrexone, nerve blocks, RFA, PRP, and stabilization PT address the mechanisms of hEDS pain more directly. If currently on opioids for hEDS, work with your pain physician on a comprehensive plan.</p>
+        </div>
+        <div class="highlight-box amber-box">
+          <h4>Long-Term Benzodiazepines for POTS-Related Anxiety</h4>
+          <p style="font-size:15px;line-height:1.8;">Many hEDS-POTS patients are prescribed benzodiazepines for "anxiety" when the underlying driver is sympathetic overdrive from dysautonomia. Benzos cause muscle relaxation that can worsen joint instability, and create dependence quickly. Treating the POTS addresses the anxiety more effectively.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Physical Approaches to Avoid</h3>
+      <div style="display:grid;gap:10px;">
+        <div class="highlight-box red-box">
+          <h4>High-Velocity Cervical (Neck) Manipulation</h4>
+          <p style="font-size:14px;">Forceful "cracking" of the neck is contraindicated in hEDS due to cervical instability and the risk of vertebral artery injury. Always tell any manual therapist you have hEDS before any neck treatment. Low-force techniques are safe; high-velocity thrust is not.</p>
+        </div>
+        <div class="highlight-box red-box">
+          <h4>Aggressive Stretching</h4>
+          <p style="font-size:14px;">You do not need more flexibility. Stretching hypermobile joints further damages already-lax ligaments and worsens instability. Yoga classes designed for flexibility are generally not appropriate. Restorative yoga is acceptable if you stay within a comfortable range — never push into end range.</p>
+        </div>
+        <div class="highlight-box amber-box">
+          <h4>High-Impact Exercise Before Stabilization</h4>
+          <p style="font-size:14px;">Running, jumping, HIIT, and heavy plyometrics load hypermobile joints without adequate stabilization. These are not permanently off limits — but they should only be introduced gradually after a period of stabilization work with a qualified PT.</p>
+        </div>
+        <div class="highlight-box amber-box">
+          <h4>Cervical Traction and Inversion Tables</h4>
+          <p style="font-size:14px;">These can be dangerous in hEDS due to cervical instability. Do not use without clearance from a physician who knows your imaging and understands hEDS.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Substances That Worsen POTS</h3>
+      <ul>
+        <li><strong>Alcohol</strong> — causes vasodilation and dehydration, strongly worsens blood pooling. Even small amounts can trigger significant flares.</li>
+        <li><strong>Caffeine (initially)</strong> — can worsen heart rate instability in acute POTS. Some patients tolerate small amounts once POTS is managed; others remain sensitive.</li>
+        <li><strong>Heat exposure</strong> — hot baths, saunas, hot yoga, and hot weather all cause vasodilation that significantly worsens POTS. Cool or lukewarm showers are much better tolerated.</li>
+        <li><strong>Large meals</strong> — postprandial blood pressure drop is common in POTS. Eat smaller, more frequent meals and avoid large carbohydrate loads.</li>
+      </ul>
+    </div>
+  </div>
+
+
+  
+  <!-- SECTION 13: DOCTOR APPOINTMENT TOOLKIT -->
+  <div class="section" id="s13">
+    <div class="section-header" style="background:#fef9c3;border-left:5px solid #ca8a04;">
+      <h2 style="color:#713f12;">Section 13: Doctor Appointment Toolkit</h2>
+      <div class="subtitle" style="color:#92400e;">How to be heard, understood, and taken seriously in every appointment</div>
+    </div>
+
+    <div class="card">
+      <h3>The Single Most Important Thing to Understand</h3>
+      <p>Physicians typically have 15–20 minutes per appointment. When a patient walks in with 12 symptoms across 6 body systems, a doctor's brain does not have time to form a coherent clinical picture. The appointment ends with a prescription for the loudest symptom and a follow-up in three months. The underlying condition is never addressed.</p>
+      <p>hEDS is uniquely difficult because it <em>is</em> a multi-system disorder — but that doesn't mean you have to present it that way. The most effective hEDS patients have learned to do one thing very well: <strong>organize their information so the doctor can see the pattern, not just the symptoms.</strong></p>
+      <p>Your <strong>MyEDSTest clinical summary</strong> does this for you. It takes your validated screening results — Beighton score, pain severity, fatigue index, POTS screen, MCAS screen — and presents them in the clinical language physicians already understand. Hand it to the doctor at the start of the appointment. It immediately signals that you are a prepared, organized patient and frames the conversation before it begins.</p>
+    </div>
+
+    <div class="card">
+      <h3>Before Every Appointment — The 3-Item Preparation Rule</h3>
+      <p>Walk into every appointment with exactly three things prepared. Not ten. Three.</p>
+      <div style="display:grid;gap:10px;margin-top:8px;">
+        <div style="background:#fef9c3;border-radius:8px;padding:14px;border-left:3px solid #ca8a04;">
+          <h4 style="color:#713f12;margin-bottom:6px;">1. Your MyEDSTest Summary Report</h4>
+          <p style="font-size:14px;line-height:1.8;margin:0;">Print it or have it on your phone. It presents your Beighton score, BPI pain severity and interference scores, FSS fatigue score, POTS symptom count, and MCAS symptom count in one page. Physicians recognize these instruments. Instead of saying "I have a lot of pain," you can say "my BPI severity mean is 7.2 and interference mean is 6.8" — that's a clinical statement they can act on.</p>
+        </div>
+        <div style="background:#fef9c3;border-radius:8px;padding:14px;border-left:3px solid #ca8a04;">
+          <h4 style="color:#713f12;margin-bottom:6px;">2. One Sentence That Frames the Visit</h4>
+          <p style="font-size:14px;line-height:1.8;margin:0;">Write this out before you go. Example: "I'm here today to discuss my hypermobile EDS and get a referral to [specialist] because of [specific symptom]." One goal per visit. If you go in asking about your neck, your knee, your POTS, and your gut on the same day, you'll leave with nothing addressed properly.</p>
+        </div>
+        <div style="background:#fef9c3;border-radius:8px;padding:14px;border-left:3px solid #ca8a04;">
+          <h4 style="color:#713f12;margin-bottom:6px;">3. The One Thing You Need from This Appointment</h4>
+          <p style="font-size:14px;line-height:1.8;margin:0;">A referral. A specific test order. A prescription. A documentation of a finding. Know what you need before you walk in and ask for it directly at the start: "The main thing I need from today is [X]." This prevents the appointment from ending without your actual need being met.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Presenting Your Symptoms by System</h3>
+      <p>Physicians are trained to think in body systems. When you organize your complaints by system rather than presenting them as a random list, you trigger the pattern-recognition part of a physician's clinical training. You become easier to understand and more credible.</p>
+      <p>Use this framework when summarizing your history to any new provider:</p>
+
+      <div style="display:grid;gap:10px;margin-top:12px;">
+        <div style="background:#eff6ff;border-radius:8px;padding:14px;">
+          <h4 style="color:#1d4ed8;margin-bottom:8px;">Musculoskeletal System</h4>
+          <p style="font-size:14px;line-height:1.8;margin-bottom:6px;"><em>What to report:</em> Joint hypermobility (Beighton score), subluxations/dislocations by joint, chronic pain locations and character, functional limitations.</p>
+          <p style="font-size:14px;font-style:italic;color:#374151;margin:0;">"My Beighton score is [X]/9. I have chronic pain in [list regions] rated [X]/10 average severity. I have recurring subluxations in [joints]. My pain significantly interferes with [sleep/work/activity] — my BPI interference mean is [X]/10."</p>
+        </div>
+        <div style="background:#f0fdf4;border-radius:8px;padding:14px;">
+          <h4 style="color:#166534;margin-bottom:8px;">Autonomic / Cardiovascular System</h4>
+          <p style="font-size:14px;line-height:1.8;margin-bottom:6px;"><em>What to report:</em> POTS symptoms, heart rate on standing (if measured), fainting or near-fainting history, temperature dysregulation.</p>
+          <p style="font-size:14px;font-style:italic;color:#374151;margin:0;">"I have [X]/8 POTS screening criteria. On home NASA lean testing my heart rate increased [X] bpm on standing. I experience [dizziness / brain fog / palpitations] when upright, relieved by lying down."</p>
+        </div>
+        <div style="background:#fce7f3;border-radius:8px;padding:14px;">
+          <h4 style="color:#9d174d;margin-bottom:8px;">Immune / Mast Cell System</h4>
+          <p style="font-size:14px;line-height:1.8;margin-bottom:6px;"><em>What to report:</em> MCAS symptoms, food and chemical triggers, response to antihistamines, any prior allergy testing.</p>
+          <p style="font-size:14px;font-style:italic;color:#374151;margin:0;">"I have [X]/7 MCAS screening criteria including [flushing / hives / gut reactions / chemical sensitivity]. I had [partial / significant] response to combined H1 and H2 antihistamines over a 6-week trial."</p>
+        </div>
+        <div style="background:#fdf4ff;border-radius:8px;padding:14px;">
+          <h4 style="color:#6b21a8;margin-bottom:8px;">Neurological / Fatigue System</h4>
+          <p style="font-size:14px;line-height:1.8;margin-bottom:6px;"><em>What to report:</em> Brain fog severity and triggers, headache patterns, peripheral neuropathy symptoms, fatigue (FSS score), sleep quality.</p>
+          <p style="font-size:14px;font-style:italic;color:#374151;margin:0;">"My FSS mean score is [X]/7, which is [above/below] the clinical significance threshold of 4.0. I experience [brain fog / headaches / numbness and tingling] that significantly impacts [daily function / work / driving]."</p>
+        </div>
+        <div style="background:#fff7ed;border-radius:8px;padding:14px;">
+          <h4 style="color:#9a3412;margin-bottom:8px;">Gastrointestinal System</h4>
+          <p style="font-size:14px;line-height:1.8;margin-bottom:6px;"><em>What to report:</em> IBS-type symptoms, gut motility problems, nausea, food intolerances, reflux.</p>
+          <p style="font-size:14px;font-style:italic;color:#374151;margin:0;">"I have significant gastrointestinal symptoms including [list]. These are consistent with the gut connective tissue involvement and MCAS component of hEDS. I'd like to understand whether a gastroenterology referral is appropriate."</p>
+        </div>
+      </div>
+      <div class="warn" style="margin-top:12px;"><strong>Practice this before your appointment.</strong> Say it out loud at home. It feels unnatural at first — but organized, concise patients get dramatically better care. You are not being difficult; you are making the physician's job easier.</div>
+    </div>
+
+    <div class="card">
+      <h3>Scripts by Specialist</h3>
+
+      <div class="highlight-box blue-box" style="margin-bottom:12px;">
+        <h4>Primary Care — Requesting Referrals</h4>
+        <p style="font-size:15px;line-height:1.8;font-style:italic;">"I've done a structured self-assessment using the 2017 international hEDS diagnostic criteria and validated instruments. My Beighton Score is [X]/9, my BPI pain severity mean is [X]/10, my FSS fatigue score is [X]/7, and I have [X]/8 POTS screening criteria. I'd like referrals to a rheumatologist or geneticist for formal hEDS evaluation, and a cardiologist for POTS workup. I've prepared a one-page clinical summary if that would be helpful."</p>
+      </div>
+
+      <div class="highlight-box blue-box" style="margin-bottom:12px;">
+        <h4>Cardiologist — POTS Evaluation</h4>
+        <p style="font-size:15px;line-height:1.8;font-style:italic;">"I have suspected or confirmed hEDS — POTS is present in approximately 40% of hEDS patients. I have [X]/8 POTS symptoms on a validated screening tool, including [dizziness on standing / racing heart / brain fog]. My home NASA lean test showed a heart rate increase of [X] bpm on standing. I'm requesting a formal tilt-table test to evaluate for POTS and guidance on treatment options."</p>
+      </div>
+
+      <div class="highlight-box blue-box" style="margin-bottom:12px;">
+        <h4>Interventional Pain Physician — First Visit</h4>
+        <p style="font-size:15px;line-height:1.8;font-style:italic;">"I have hypermobile EDS with chronic pain primarily in [neck / back / joints — be specific]. My BPI pain severity average is [X]/10 and interference average is [X]/10. I'm not seeking opioid medications. I'm here to understand my options for injection-based treatments — specifically [SI joint injections / facet blocks / occipital nerve blocks / RFA]. I'd also like to discuss low dose naltrexone and whether I'm a candidate for orthobiologic treatments like PRP."</p>
+      </div>
+
+      <div class="highlight-box blue-box" style="margin-bottom:12px;">
+        <h4>Allergist / Immunologist — MCAS Evaluation</h4>
+        <p style="font-size:15px;line-height:1.8;font-style:italic;">"I have [X]/7 MCAS screening criteria, including [flushing / reactions to foods or chemicals / gut symptoms / urticaria]. Over a 6-week trial of combined levocetirizine 5mg and famotidine 20mg twice daily, I had [partial / significant] symptom improvement. I'd like a formal MCAS evaluation including serum tryptase baseline and 24-hour urine N-methylhistamine."</p>
+      </div>
+
+      <div class="highlight-box blue-box" style="margin-bottom:12px;">
+        <h4>Rheumatologist — hEDS Confirmation</h4>
+        <p style="font-size:15px;line-height:1.8;font-style:italic;">"I'm being evaluated for hypermobile EDS using the 2017 international diagnostic criteria. I have a Beighton score of [X]/9, [X] connective tissue systemic features on Criterion 2, and I've been told I meet Criterion 3 with a family history of hypermobility. I'm not expecting a genetic test — I understand hEDS doesn't have one yet. I'd like a clinical evaluation to confirm or refine the diagnosis and discuss management."</p>
+      </div>
+
+      <div class="highlight-box blue-box">
+        <h4>Any Specialist — Requesting a Specific Treatment or Test</h4>
+        <p style="font-size:15px;line-height:1.8;font-style:italic;">"I've researched [treatment/test] in the context of hEDS and I believe it may be relevant to my presentation. I understand it may not be your standard protocol, but I'd value your clinical opinion on whether it's appropriate for my specific case. If you feel it's not indicated, can you help me understand the reasoning so I can make the most informed decision possible?"</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Managing a 15-Minute Appointment Effectively</h3>
+      <div style="display:grid;gap:10px;margin-top:8px;">
+        <div style="background:#f8fafc;border-radius:8px;padding:12px;display:flex;gap:12px;align-items:flex-start;">
+          <div class="step-badge" style="background:#ca8a04;">Start</div>
+          <p style="font-size:14px;margin:0;"><strong>Hand over your MyEDSTest summary immediately.</strong> Before the doctor asks "so what brings you in today" — hand them the summary and say: "I've prepared a clinical summary to help organize my history. The main thing I need today is [X]." You've just used the first 30 seconds to set the agenda.</p>
+        </div>
+        <div style="background:#f8fafc;border-radius:8px;padding:12px;display:flex;gap:12px;align-items:flex-start;">
+          <div class="step-badge" style="background:#ca8a04;">Middle</div>
+          <p style="font-size:14px;margin:0;"><strong>Stick to one system per visit whenever possible.</strong> If you're at a pain visit, stay on pain. If you're at a cardiology visit, stay on POTS. Trying to address every system in a 15-minute visit guarantees nothing is fully addressed. Book separate follow-ups for separate systems.</p>
+        </div>
+        <div style="background:#f8fafc;border-radius:8px;padding:12px;display:flex;gap:12px;align-items:flex-start;">
+          <div class="step-badge" style="background:#ca8a04;">End</div>
+          <p style="font-size:14px;margin:0;"><strong>Before the doctor leaves, confirm the plan.</strong> "Before we finish — can I confirm what we decided today? You're ordering [test], sending a referral to [specialist], and I should follow up in [timeframe]. Is that correct?" This prevents the common situation where the visit felt productive but nothing actually got ordered.</p>
+        </div>
+        <div style="background:#f8fafc;border-radius:8px;padding:12px;display:flex;gap:12px;align-items:flex-start;">
+          <div class="step-badge" style="background:#ca8a04;">After</div>
+          <p style="font-size:14px;margin:0;"><strong>Check your patient portal within 48 hours.</strong> Confirm that referrals were actually sent, lab orders are in the system, and notes accurately reflect what was discussed. Errors in medical records happen frequently — you are your own best advocate for catching them.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>How to Handle Dismissal</h3>
+      <p>If a doctor dismisses your symptoms, tells you it's anxiety, or says "you look fine" — you have options. Your response depends on how much you want to preserve the relationship with this provider.</p>
+
+      <div class="highlight-box amber-box" style="margin-bottom:12px;">
+        <h4>Option 1 — Engage and redirect (preserves relationship)</h4>
+        <p style="font-size:15px;line-height:1.8;font-style:italic;">"I appreciate that anxiety can cause some of these symptoms. I want to make sure we've ruled out a connective tissue disorder first — the pattern of my symptoms across multiple systems is consistent with hEDS. Can we document in my chart that hEDS was considered and your clinical reasoning for ruling it out? I want to be a good partner in my own care."</p>
+        <p style="font-size:14px;color:#374151;margin-top:6px;">Asking for documentation creates accountability. Physicians are less likely to dismiss documented concerns without a clear rationale.</p>
+      </div>
+
+      <div class="highlight-box amber-box" style="margin-bottom:12px;">
+        <h4>Option 2 — Request a referral anyway</h4>
+        <p style="font-size:15px;line-height:1.8;font-style:italic;">"I understand you may not think this is EDS. I respect your clinical judgment. I'd still like a referral to rheumatology for a second opinion — I want to hear a specialist's perspective before we close the door on this. Is that something you can arrange?"</p>
+      </div>
+
+      <div class="highlight-box green-box">
+        <h4>Option 3 — Find a new provider</h4>
+        <p style="font-size:15px;line-height:1.8;">Seeking a second opinion or finding a new provider is not "doctor shopping" — it is your right as a patient. Providers who understand complex connective tissue disorders exist. Use the <strong>EDS Society healthcare directory</strong> at ehlers-danlos.com/healthcare-professionals-directory. Telehealth has made it possible to access EDS-knowledgeable physicians across the country without leaving your home.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Building Your Long-Term Care Team</h3>
+      <p>hEDS requires a team, not a single physician. The goal is to build a group of providers who each own one piece of your care and communicate with each other. This takes time to assemble — but once in place, it transforms your experience with the medical system.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;">
+        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:14px;">
+          <h4 style="font-size:14px;color:#1e293b;margin-bottom:6px;">Primary Care Physician</h4>
+          <p style="font-size:13px;color:#374151;line-height:1.6;">Coordinates your care, orders labs, manages referrals, and serves as the central hub. Find one who understands or is willing to learn about hEDS.</p>
+        </div>
+        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:14px;">
+          <h4 style="font-size:14px;color:#1e293b;margin-bottom:6px;">Interventional Pain Physician</h4>
+          <p style="font-size:13px;color:#374151;line-height:1.6;">Manages pain with injections, nerve blocks, RFA, and orthobiologics. The most impactful specialist for day-to-day hEDS pain management.</p>
+        </div>
+        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:14px;">
+          <h4 style="font-size:14px;color:#1e293b;margin-bottom:6px;">Cardiologist or Autonomic Specialist</h4>
+          <p style="font-size:13px;color:#374151;line-height:1.6;">Evaluates and manages POTS. Ask specifically for someone who sees dysautonomia patients — not all cardiologists are familiar with POTS in hEDS.</p>
+        </div>
+        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:14px;">
+          <h4 style="font-size:14px;color:#1e293b;margin-bottom:6px;">Hypermobility-Trained PT</h4>
+          <p style="font-size:13px;color:#374151;line-height:1.6;">Manages joint stabilization, strength, and pacing. The most important ongoing provider for functional improvement. See Section 5 for how to find one.</p>
+        </div>
+        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:14px;">
+          <h4 style="font-size:14px;color:#1e293b;margin-bottom:6px;">Allergist / Immunologist</h4>
+          <p style="font-size:13px;color:#374151;line-height:1.6;">Evaluates and manages MCAS. Not all allergists see MCAS — ask specifically when booking whether they have experience with mast cell activation.</p>
+        </div>
+        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:14px;">
+          <h4 style="font-size:14px;color:#1e293b;margin-bottom:6px;">Rheumatologist or Geneticist</h4>
+          <p style="font-size:13px;color:#374151;line-height:1.6;">Provides formal diagnosis and rules out other connective tissue disorders (Marfan syndrome, vEDS). Important for documentation, especially for disability or insurance purposes.</p>
+        </div>
+      </div>
+      <div class="highlight-box green-box" style="margin-top:14px;">
+        <h4>Start here</h4>
+        <p style="font-size:14px;">You don't need all of these at once. Start with a primary care physician willing to coordinate, one referral to the specialist most relevant to your dominant symptoms, and one hypermobility-aware PT. Build from there.</p>
+      </div>
+    </div>
+
+  </div>
+
+
+  
+  <!-- SECTION 14: RESOURCES HUB -->
+  <div class="section" id="s14">
+    <div class="section-header" style="background:#e0f2fe;border-left:5px solid #0284c7;">
+      <h2 style="color:#0c4a6e;">Section 14: Resources Hub</h2>
+      <div class="subtitle" style="color:#075985;">The living library — updated as the field evolves</div>
+    </div>
+
+    <div class="card">
+      <p style="font-size:15px;line-height:1.8;">This section is your permanent reference. Bookmark it, return to it, and use it to prepare for every specialist visit. All links and resources below have been vetted and curated by the author. This guide is a living document — resources will be updated as new leaders emerge and new research changes practice.</p>
+    </div>
+
+    <!-- FOLLOW THE EXPERTS -->
+    <div class="card">
+      <h3>Follow the Experts — Social Media</h3>
+      <p style="font-size:14px;color:#6b7280;margin-bottom:16px;">The hEDS field moves fast and most leading clinicians share education directly on social media — often before it reaches published literature. These five accounts are vetted, credentialed, and consistently produce high-quality clinical content. Follow all of them.</p>
+
+      <div style="display:grid;gap:14px;">
+
+        <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:12px;padding:18px;display:flex;gap:16px;align-items:flex-start;">
+          <div style="background:#0284c7;color:white;border-radius:10px;width:48px;height:48px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;font-weight:700;">1</div>
+          <div>
+            <h4 style="color:#0c4a6e;font-size:16px;margin-bottom:4px;">Dr. Linda Bluestein, MD — <span style="font-weight:400;color:#0284c7;">@hypermobilitymd</span></h4>
+            <p style="font-size:14px;color:#374151;line-height:1.7;margin-bottom:6px;">Board-certified anesthesiologist and integrative pain medicine specialist. Mayo Clinic trained. Host of the Bendy Bodies Podcast — the world's most listened-to medical podcast about hEDS. 58K+ Instagram followers. She has lived experience with hypermobility and treats patients with hEDS, HSD, and MCAS in her private practice. Her content is physician-level but explained in plain language.</p>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">
+              <a href="https://www.instagram.com/hypermobilitymd/" target="_blank" style="background:#e0f2fe;color:#0284c7;padding:4px 12px;border-radius:20px;font-size:13px;text-decoration:none;font-weight:500;">Instagram @hypermobilitymd</a>
+              <a href="https://www.tiktok.com/@hypermobilitymd" target="_blank" style="background:#e0f2fe;color:#0284c7;padding:4px 12px;border-radius:20px;font-size:13px;text-decoration:none;font-weight:500;">TikTok @hypermobilitymd</a>
+              <a href="https://www.hypermobilitymd.com" target="_blank" style="background:#f1f5f9;color:#475569;padding:4px 12px;border-radius:20px;font-size:13px;text-decoration:none;">hypermobilitymd.com</a>
+            </div>
+            <p style="font-size:13px;color:#6b7280;margin-top:6px;"><strong>Best for:</strong> hEDS diagnosis, MCAS, POTS, treatment options, navigating the medical system</p>
+          </div>
+        </div>
+
+        <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:18px;display:flex;gap:16px;align-items:flex-start;">
+          <div style="background:#16a34a;color:white;border-radius:10px;width:48px;height:48px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;font-weight:700;">2</div>
+          <div>
+            <h4 style="color:#14532d;font-size:16px;margin-bottom:4px;">Jeannie Di Bon — <span style="font-weight:400;color:#16a34a;">@jeannie_di</span></h4>
+            <p style="font-size:14px;color:#374151;line-height:1.7;margin-bottom:6px;">International movement therapist with lived experience of hEDS, MCAS, POTS, and CFS. Creator of the Integral Movement Method (IMM) — the only peer-reviewed movement therapy system designed specifically for hypermobility. Founder of The Zebra Club app. Author of <em>Hypermobility Without Tears</em>. Endorsed by leading hEDS specialists including Dr. Leslie Russek. 24K+ Instagram followers.</p>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">
+              <a href="https://www.instagram.com/jeannie_di/" target="_blank" style="background:#dcfce7;color:#16a34a;padding:4px 12px;border-radius:20px;font-size:13px;text-decoration:none;font-weight:500;">Instagram @jeannie_di</a>
+              <a href="https://www.jeanniedibon.com" target="_blank" style="background:#f1f5f9;color:#475569;padding:4px 12px;border-radius:20px;font-size:13px;text-decoration:none;">jeanniedibon.com</a>
+              <a href="https://www.jeanniedibon.com/zebra-club" target="_blank" style="background:#f1f5f9;color:#475569;padding:4px 12px;border-radius:20px;font-size:13px;text-decoration:none;">The Zebra Club App</a>
+            </div>
+            <p style="font-size:13px;color:#6b7280;margin-top:6px;"><strong>Best for:</strong> Safe exercise, movement therapy, daily function with hEDS, stability-first approach</p>
+          </div>
+        </div>
+
+        <div style="background:#fdf4ff;border:1px solid #e9d5ff;border-radius:12px;padding:18px;display:flex;gap:16px;align-items:flex-start;">
+          <div style="background:#7c3aed;color:white;border-radius:10px;width:48px;height:48px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;font-weight:700;">3</div>
+          <div>
+            <h4 style="color:#4c1d95;font-size:16px;margin-bottom:4px;">Lilian Holm, PT, DPT — <span style="font-weight:400;color:#7c3aed;">@hypermobilitydoctor</span></h4>
+            <p style="font-size:14px;color:#374151;line-height:1.7;margin-bottom:6px;">Doctor of Physical Therapy with over 27 years of experience specializing in hypermobility spectrum disorders and hEDS. Based in the Chicago area. Offers online physical therapy and health coaching for hypermobile patients across the country. Her content focuses on the biomechanics of hypermobility — specifically, why standard PT advice often backfires and what to do instead. 35K+ Instagram followers.</p>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">
+              <a href="https://www.instagram.com/hypermobilitydoctor/" target="_blank" style="background:#ede9fe;color:#7c3aed;padding:4px 12px;border-radius:20px;font-size:13px;text-decoration:none;font-weight:500;">Instagram @hypermobilitydoctor</a>
+              <a href="https://www.lilianholm.com" target="_blank" style="background:#f1f5f9;color:#475569;padding:4px 12px;border-radius:20px;font-size:13px;text-decoration:none;">lilianholm.com</a>
+            </div>
+            <p style="font-size:13px;color:#6b7280;margin-top:6px;"><strong>Best for:</strong> Physical therapy for hypermobility, why common PT advice fails in hEDS, online PT consultations</p>
+          </div>
+        </div>
+
+        <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:18px;display:flex;gap:16px;align-items:flex-start;">
+          <div style="background:#1d4ed8;color:white;border-radius:10px;width:48px;height:48px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;font-weight:700;">4</div>
+          <div>
+            <h4 style="color:#1e3a8a;font-size:16px;margin-bottom:4px;">Dysautonomia International — <span style="font-weight:400;color:#1d4ed8;">@dysautonomiaintl</span></h4>
+            <p style="font-size:14px;color:#374151;line-height:1.7;margin-bottom:6px;">The leading nonprofit organization for autonomic nervous system disorders including POTS. Their Instagram and content arm shares physician-reviewed, current information on POTS treatment, new research, and how to find autonomic specialists. Run by a medical advisory board of leading dysautonomia physicians. 50K+ Instagram followers. Their website has the most comprehensive POTS physician directory available.</p>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">
+              <a href="https://www.instagram.com/dysautonomiaintl/" target="_blank" style="background:#dbeafe;color:#1d4ed8;padding:4px 12px;border-radius:20px;font-size:13px;text-decoration:none;font-weight:500;">Instagram @dysautonomiaintl</a>
+              <a href="https://www.dysautonomiainternational.org" target="_blank" style="background:#f1f5f9;color:#475569;padding:4px 12px;border-radius:20px;font-size:13px;text-decoration:none;">dysautonomiainternational.org</a>
+            </div>
+            <p style="font-size:13px;color:#6b7280;margin-top:6px;"><strong>Best for:</strong> POTS education, research updates, finding autonomic specialists, understanding test results</p>
+          </div>
+        </div>
+
+        <div style="background:#fff1f2;border:1px solid #fecdd3;border-radius:12px;padding:18px;display:flex;gap:16px;align-items:flex-start;">
+          <div style="background:#e11d48;color:white;border-radius:10px;width:48px;height:48px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;font-weight:700;">5</div>
+          <div>
+            <h4 style="color:#881337;font-size:16px;margin-bottom:4px;">The Ehlers-Danlos Society — <span style="font-weight:400;color:#e11d48;">@ehlersdanlossociety</span></h4>
+            <p style="font-size:14px;color:#374151;line-height:1.7;margin-bottom:6px;">The global governing body for EDS and HSD research, advocacy, and education. Their social media and website are the authoritative source for diagnostic criteria, research updates, and provider directories. Recommended resources on their website are vetted by a medical advisory board of international EDS specialists. When in doubt about any hEDS information you find online, check if the EDS Society has addressed it.</p>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">
+              <a href="https://www.instagram.com/ehlersdanlossociety/" target="_blank" style="background:#ffe4e6;color:#e11d48;padding:4px 12px;border-radius:20px;font-size:13px;text-decoration:none;font-weight:500;">Instagram @ehlersdanlossociety</a>
+              <a href="https://www.ehlers-danlos.com" target="_blank" style="background:#f1f5f9;color:#475569;padding:4px 12px;border-radius:20px;font-size:13px;text-decoration:none;">ehlers-danlos.com</a>
+              <a href="https://www.ehlers-danlos.com/healthcare-professionals-directory" target="_blank" style="background:#f1f5f9;color:#475569;padding:4px 12px;border-radius:20px;font-size:13px;text-decoration:none;">Provider Directory</a>
+            </div>
+            <p style="font-size:13px;color:#6b7280;margin-top:6px;"><strong>Best for:</strong> Official diagnostic criteria, finding EDS-trained providers, research updates, advocacy</p>
+          </div>
+        </div>
+
+
+        <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:18px;display:flex;gap:16px;align-items:flex-start;">
+          <div style="background:#ea580c;color:white;border-radius:10px;width:48px;height:48px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;font-weight:700;">6</div>
+          <div>
+            <h4 style="color:#7c2d12;font-size:16px;margin-bottom:4px;">Dr. Zachary Spiritos, MD MPH — <span style="font-weight:400;color:#ea580c;">@drzacspiritos</span></h4>
+            <p style="font-size:14px;color:#374151;line-height:1.7;margin-bottom:6px;">Board-certified neurogastroenterologist, Duke-trained, co-founder of EverBetter Medicine. Specializes in the GI complications of hEDS — gut dysmotility, SIBO, visceral hypersensitivity, IBS, MCAS-related GI symptoms, and the gut-brain connection in dysautonomia. One of the most accessible and prolific physicians in the hEDS space on social media. 201K+ Instagram followers. Featured guest on Bendy Bodies Podcast Episode 153: "Why Do Some GI Problems Hide from Every Test?"</p>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">
+              <a href="https://www.instagram.com/drzacspiritos/" target="_blank" style="background:#ffedd5;color:#ea580c;padding:4px 12px;border-radius:20px;font-size:13px;text-decoration:none;font-weight:500;">Instagram @drzacspiritos</a>
+              <a href="https://www.tiktok.com/@dr.zac.spiritos" target="_blank" style="background:#ffedd5;color:#ea580c;padding:4px 12px;border-radius:20px;font-size:13px;text-decoration:none;font-weight:500;">TikTok @dr.zac.spiritos</a>
+              <a href="https://everbettermedicine.health" target="_blank" style="background:#f1f5f9;color:#475569;padding:4px 12px;border-radius:20px;font-size:13px;text-decoration:none;">everbettermedicine.health</a>
+            </div>
+            <p style="font-size:13px;color:#6b7280;margin-top:6px;"><strong>Best for:</strong> GI symptoms in hEDS, MCAS gut involvement, SIBO, gut dysmotility, brain-gut connection, digestive health with POTS</p>
+          </div>
+        </div>
+
+        <div style="background:#f0fdf4;border:1px solid #a7f3d0;border-radius:12px;padding:18px;display:flex;gap:16px;align-items:flex-start;">
+          <div style="background:#059669;color:white;border-radius:10px;width:48px;height:48px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;font-weight:700;">7</div>
+          <div>
+            <h4 style="color:#064e3b;font-size:16px;margin-bottom:4px;">Dr. Pradeep Chopra, MD — <span style="font-weight:400;color:#059669;">painri.com</span></h4>
+            <p style="font-size:14px;color:#374151;line-height:1.7;margin-bottom:6px;">Harvard-trained, double board-certified in Pain Medicine and Anesthesiology. Assistant Clinical Professor at Brown University. Director of the Center for Complex Conditions in Pawtucket, RI. One of the most respected hEDS specialists in the world — Dr. Linda Bluestein's mentor and the physician credited with helping shape modern approaches to EDS pain management. Has appeared on Bendy Bodies Podcast multiple times covering diagnosis, GI pain, and the real-world management of complex hEDS cases. Former Chairman of the EDS International Pain Consortium. Lifetime Achievement Award from the Dysautonomia Support Network. Dr. Chopra does not maintain a large personal social media presence — his influence is best accessed through his Bendy Bodies episodes and his clinic website.</p>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">
+              <a href="https://www.painri.com" target="_blank" style="background:#d1fae5;color:#059669;padding:4px 12px;border-radius:20px;font-size:13px;text-decoration:none;font-weight:500;">painri.com — Center for Complex Conditions</a>
+              <a href="https://www.bendybodiespodcast.com/guests/zachary-spiritos/" target="_blank" style="background:#f1f5f9;color:#475569;padding:4px 12px;border-radius:20px;font-size:13px;text-decoration:none;">Bendy Bodies Episodes</a>
+            </div>
+            <p style="font-size:13px;color:#6b7280;margin-top:6px;"><strong>Best for:</strong> EDS pain management, CRPS, complex multi-system cases, surgical risk in hEDS, central sensitization, LDN for chronic pain</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- PODCASTS -->
+    <div class="card">
+      <h3>Podcasts</h3>
+      <div style="display:grid;gap:12px;margin-top:8px;">
+
+        <div style="background:#f8fafc;border-radius:10px;padding:16px;display:flex;gap:14px;align-items:flex-start;">
+          <div style="background:#667eea;color:white;border-radius:8px;padding:8px 12px;font-size:13px;font-weight:600;white-space:nowrap;flex-shrink:0;">POTS · hEDS · MCAS</div>
+          <div>
+            <h4 style="color:#1e293b;font-size:15px;margin-bottom:4px;">Bendy Bodies with Dr. Linda Bluestein</h4>
+            <p style="font-size:14px;color:#374151;line-height:1.7;margin-bottom:6px;">The world's #1 medical podcast for hypermobility. Ranked top 2% globally. Weekly episodes with leading specialists covering every aspect of hEDS, POTS, and MCAS. Both patients and clinicians listen. If you are going to listen to one podcast, this is it.</p>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">
+              <a href="https://www.bendybodiespodcast.com" target="_blank" style="background:#e0e7ff;color:#3730a3;padding:3px 10px;border-radius:16px;font-size:12px;text-decoration:none;">bendybodiespodcast.com</a>
+              <a href="https://podcasts.apple.com/us/podcast/bendy-bodies-with-dr-linda-bluestein/id1500589216" target="_blank" style="background:#f1f5f9;color:#475569;padding:3px 10px;border-radius:16px;font-size:12px;text-decoration:none;">Apple Podcasts</a>
+              <a href="https://www.youtube.com/@BendyBodiesPodcast" target="_blank" style="background:#f1f5f9;color:#475569;padding:3px 10px;border-radius:16px;font-size:12px;text-decoration:none;">YouTube</a>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:#f8fafc;border-radius:10px;padding:16px;display:flex;gap:14px;align-items:flex-start;">
+          <div style="background:#0284c7;color:white;border-radius:8px;padding:8px 12px;font-size:13px;font-weight:600;white-space:nowrap;flex-shrink:0;">POTS · Dysautonomia</div>
+          <div>
+            <h4 style="color:#1e293b;font-size:15px;margin-bottom:4px;">The POTScast — Standing Up to POTS</h4>
+            <p style="font-size:14px;color:#374151;line-height:1.7;margin-bottom:6px;">Biweekly episodes featuring leading POTS physicians and patient stories. The first Tuesday of every month covers MCAS. Run by Standing Up to POTS, a patient advocacy organization with a medical advisory board. Excellent complement to Bendy Bodies for those with significant dysautonomia.</p>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">
+              <a href="https://www.standinguptopots.org/potscast" target="_blank" style="background:#e0f2fe;color:#0284c7;padding:3px 10px;border-radius:16px;font-size:12px;text-decoration:none;">standinguptopots.org/potscast</a>
+              <a href="https://podcasts.apple.com/bh/podcast/the-potscast/id1566225807" target="_blank" style="background:#f1f5f9;color:#475569;padding:3px 10px;border-radius:16px;font-size:12px;text-decoration:none;">Apple Podcasts</a>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:#f8fafc;border-radius:10px;padding:16px;display:flex;gap:14px;align-items:flex-start;">
+          <div style="background:#059669;color:white;border-radius:8px;padding:8px 12px;font-size:13px;font-weight:600;white-space:nowrap;flex-shrink:0;">hEDS · HSD</div>
+          <div>
+            <h4 style="color:#1e293b;font-size:15px;margin-bottom:4px;">EDS Unplugged</h4>
+            <p style="font-size:14px;color:#374151;line-height:1.7;margin-bottom:6px;">Patient-focused podcast with a community feel. Co-hosted by Cassandra Campbell, an EDS advocate and coach. Covers the lived experience of hEDS — managing relationships, work, daily life, and the emotional journey of chronic illness alongside the clinical side.</p>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">
+              <a href="https://www.edsunplugged.com" target="_blank" style="background:#d1fae5;color:#059669;padding:3px 10px;border-radius:16px;font-size:12px;text-decoration:none;">edsunplugged.com</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- BOOKS -->
+    <div class="card">
+      <h3>Books</h3>
+      <div style="display:grid;gap:12px;margin-top:8px;">
+
+        <div style="background:#f8fafc;border-radius:10px;padding:16px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+            <h4 style="color:#1e293b;font-size:15px;"><em>Disjointed: Navigating the Diagnosis and Management of hEDS and HSD</em></h4>
+            <span style="background:#dcfce7;color:#166534;padding:3px 10px;border-radius:16px;font-size:12px;white-space:nowrap;">★ 4.6/5 · 338 ratings</span>
+          </div>
+          <p style="font-size:14px;color:#6b7280;margin-bottom:6px;">Edited by Diana Jovin. Written by 27 specialist physicians across every discipline that touches hEDS. The most comprehensive clinical and patient resource on hEDS available. Both patients and physicians read this. The gold standard reference book for hEDS.</p>
+          <p style="font-size:13px;color:#374151;"><strong>Best for:</strong> Comprehensive overview, understanding your diagnosis, educating your doctors. Available on Amazon.</p>
+        </div>
+
+        <div style="background:#f8fafc;border-radius:10px;padding:16px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+            <h4 style="color:#1e293b;font-size:15px;"><em>Living Life to the Fullest with EDS</em></h4>
+            <span style="background:#dbeafe;color:#1d4ed8;padding:3px 10px;border-radius:16px;font-size:12px;white-space:nowrap;">Physical Therapy Protocol</span>
+          </div>
+          <p style="font-size:14px;color:#6b7280;margin-bottom:6px;">By Kevin Muldowney, PT. The book version of the Muldowney Protocol — the most widely cited, evidence-based PT program developed specifically for hEDS. Written by a physical therapist who has specialized in EDS since 2005. If you are doing PT for hEDS, this book is the foundation.</p>
+          <p style="font-size:13px;color:#374151;"><strong>Best for:</strong> Physical therapy guidance, exercise progression, understanding the Muldowney Protocol. Available on Amazon.</p>
+        </div>
+
+        <div style="background:#f8fafc;border-radius:10px;padding:16px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+            <h4 style="color:#1e293b;font-size:15px;"><em>Hypermobility Without Tears</em></h4>
+            <span style="background:#ede9fe;color:#5b21b6;padding:3px 10px;border-radius:16px;font-size:12px;white-space:nowrap;">Movement Therapy</span>
+          </div>
+          <p style="font-size:14px;color:#6b7280;margin-bottom:6px;">By Jeannie Di Bon. A step-by-step movement guide for hEDS written by a movement therapist with lived experience. Practical, compassionate, and focused on day-to-day function. Companion to The Zebra Club app.</p>
+          <p style="font-size:13px;color:#374151;"><strong>Best for:</strong> Learning to move safely, reducing daily pain, accessible home exercise guide. Available on Amazon and at jeanniedibon.com.</p>
+        </div>
+
+        <div style="background:#f8fafc;border-radius:10px;padding:16px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+            <h4 style="color:#1e293b;font-size:15px;"><em>The Trifecta Passport: Tools for MCAS, POTS, and EDS</em></h4>
+            <span style="background:#fce7f3;color:#9d174d;padding:3px 10px;border-radius:16px;font-size:12px;white-space:nowrap;">MCAS · POTS · EDS</span>
+          </div>
+          <p style="font-size:14px;color:#6b7280;margin-bottom:6px;">Specifically addresses the overlap of all three conditions that commonly present together. A practical workbook-style resource for managing the trifecta. Useful for those dealing with complex multi-system presentations.</p>
+          <p style="font-size:13px;color:#374151;"><strong>Best for:</strong> Managing MCAS + POTS + hEDS overlap. Available on Amazon.</p>
+        </div>
+
+        <div style="background:#f8fafc;border-radius:10px;padding:16px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+            <h4 style="color:#1e293b;font-size:15px;"><em>Never Bet Against Occam: Mast Cell Activation Disease</em></h4>
+            <span style="background:#fef3c7;color:#92400e;padding:3px 10px;border-radius:16px;font-size:12px;white-space:nowrap;">MCAS Deep Dive</span>
+          </div>
+          <p style="font-size:14px;color:#6b7280;margin-bottom:6px;">By Dr. Lawrence Afrin, MD — one of the world's leading MCAS researchers and physicians. Written for both patients and physicians. The most detailed and clinically accurate book available on MCAS. Dense reading but invaluable for those with significant mast cell involvement.</p>
+          <p style="font-size:13px;color:#374151;"><strong>Best for:</strong> Deep understanding of MCAS, educating physicians who are unfamiliar, complex cases. Available on Amazon.</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- WEBSITES & DIRECTORIES -->
+    <div class="card">
+      <h3>Essential Websites &amp; Directories</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px;">
+
+        <div style="background:#f0f9ff;border-radius:8px;padding:14px;">
+          <h4 style="color:#0c4a6e;font-size:14px;margin-bottom:6px;"><a href="https://www.ehlers-danlos.com" target="_blank" style="color:#0284c7;">ehlers-danlos.com</a></h4>
+          <p style="font-size:13px;color:#374151;line-height:1.6;">Official EDS Society site. Provider directory, diagnostic criteria, research updates, patient resources. Start here for everything official.</p>
+        </div>
+
+        <div style="background:#f0fdf4;border-radius:8px;padding:14px;">
+          <h4 style="color:#14532d;font-size:14px;margin-bottom:6px;"><a href="https://www.dysautonomiainternational.org" target="_blank" style="color:#16a34a;">dysautonomiainternational.org</a></h4>
+          <p style="font-size:13px;color:#374151;line-height:1.6;">Gold standard POTS and dysautonomia information. Physician directory. Research updates. Use their POTS info pages to educate cardiologists unfamiliar with the condition.</p>
+        </div>
+
+        <div style="background:#fef9c3;border-radius:8px;padding:14px;">
+          <h4 style="color:#713f12;font-size:14px;margin-bottom:6px;"><a href="https://www.standinguptopots.org" target="_blank" style="color:#ca8a04;">standinguptopots.org</a></h4>
+          <p style="font-size:13px;color:#374151;line-height:1.6;">Patient advocacy organization for POTS. Physician finding tool, treatment guides, community support. Also produces The POTScast podcast.</p>
+        </div>
+
+        <div style="background:#fdf4ff;border-radius:8px;padding:14px;">
+          <h4 style="color:#4c1d95;font-size:14px;margin-bottom:6px;"><a href="https://www.jeanniedibon.com/zebra-club" target="_blank" style="color:#7c3aed;">thezebraclub.com</a></h4>
+          <p style="font-size:13px;color:#374151;line-height:1.6;">Jeannie Di Bon's online movement therapy app. Hundreds of hypermobility-safe exercise videos, community support, live events with EDS specialists. Monthly subscription.</p>
+        </div>
+
+        <div style="background:#eff6ff;border-radius:8px;padding:14px;">
+          <h4 style="color:#1e3a8a;font-size:14px;margin-bottom:6px;"><a href="https://www.ldnresearchtrust.org" target="_blank" style="color:#1d4ed8;">ldnresearchtrust.org</a></h4>
+          <p style="font-size:13px;color:#374151;line-height:1.6;">Low Dose Naltrexone research trust. Prescriber directory, research library, patient resources. Use the prescriber finder to locate an LDN-prescribing physician near you.</p>
+        </div>
+
+        <div style="background:#ecfdf5;border-radius:8px;padding:14px;">
+          <h4 style="color:#064e3b;font-size:14px;margin-bottom:6px;"><a href="https://www.regenexx.com" target="_blank" style="color:#059669;">regenexx.com</a></h4>
+          <p style="font-size:13px;color:#374151;line-height:1.6;">Directory of Regenexx-certified orthobiologic physicians. For PRP and stem cell treatment for joint instability and ligament laxity — one of the most relevant interventions for hEDS joint pain.</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- RESOURCES BY SECTION -->
+    <div class="card">
+      <h3>Resources by Topic — Quick Reference</h3>
+      <div style="display:grid;gap:8px;margin-top:8px;">
+
+        <div style="background:#dbeafe;border-radius:8px;padding:12px;display:flex;gap:12px;align-items:flex-start;">
+          <div style="font-size:13px;font-weight:600;color:#1e40af;white-space:nowrap;min-width:100px;">POTS / Dysautonomia</div>
+          <div style="font-size:13px;color:#374151;line-height:1.7;">Dysautonomia International (dysautonomiainternational.org) · Standing Up to POTS (standinguptopots.org) · The POTScast · Bendy Bodies episode: "POTS and Hypermobility" · Dr. Linda Bluestein @hypermobilitymd</div>
+        </div>
+
+        <div style="background:#fce7f3;border-radius:8px;padding:12px;display:flex;gap:12px;align-items:flex-start;">
+          <div style="font-size:13px;font-weight:600;color:#9d174d;white-space:nowrap;min-width:100px;">MCAS / Histamine</div>
+          <div style="font-size:13px;color:#374151;line-height:1.7;"><em>Never Bet Against Occam</em> by Dr. Lawrence Afrin · The Trifecta Passport · Bendy Bodies episode: "MCAS with Dr. Lawrence Afrin" · mastcell451.com (patient resource run by MCAS specialists)</div>
+        </div>
+
+        <div style="background:#dcfce7;border-radius:8px;padding:12px;display:flex;gap:12px;align-items:flex-start;">
+          <div style="font-size:13px;font-weight:600;color:#166534;white-space:nowrap;min-width:100px;">Physical Therapy</div>
+          <div style="font-size:13px;color:#374151;line-height:1.7;"><em>Living Life to the Fullest with EDS</em> (Muldowney) · The Zebra Club App (jeanniedibon.com) · @hypermobilitydoctor (Lilian Holm PT) · EDS Society PT Directory (ehlers-danlos.com) · Muldowney PT Protocol videos on YouTube</div>
+        </div>
+
+        <div style="background:#fef9c3;border-radius:8px;padding:12px;display:flex;gap:12px;align-items:flex-start;">
+          <div style="font-size:13px;font-weight:600;color:#713f12;white-space:nowrap;min-width:100px;">Pain Management</div>
+          <div style="font-size:13px;color:#374151;line-height:1.7;">LDN Research Trust (ldnresearchtrust.org) · Regenexx provider directory (regenexx.com) · <em>Disjointed</em> (pain management chapters) · Bendy Bodies episodes on pain neuroscience</div>
+        </div>
+
+        <div style="background:#ede9fe;border-radius:8px;padding:12px;display:flex;gap:12px;align-items:flex-start;">
+          <div style="font-size:13px;font-weight:600;color:#5b21b6;white-space:nowrap;min-width:100px;">Sleep / Fatigue</div>
+          <div style="font-size:13px;color:#374151;line-height:1.7;">The Zebra Club (sleep and energy management modules) · Huberman Lab Podcast (Andrew Huberman, PhD) — episodes on circadian rhythm and light · Bendy Bodies episodes on fatigue and ME/CFS in hEDS</div>
+        </div>
+
+        <div style="background:#fff1f2;border-radius:8px;padding:12px;display:flex;gap:12px;align-items:flex-start;">
+          <div style="font-size:13px;font-weight:600;color:#9f1239;white-space:nowrap;min-width:100px;">Finding Providers</div>
+          <div style="font-size:13px;color:#374151;line-height:1.7;">EDS Society Healthcare Directory (ehlers-danlos.com/healthcare-professionals-directory) · Dysautonomia International physician finder · LDN Research Trust prescriber directory · Regenexx.com provider locator</div>
+        </div>
+
+        <div style="background:#ecfdf5;border-radius:8px;padding:12px;display:flex;gap:12px;align-items:flex-start;">
+          <div style="font-size:13px;font-weight:600;color:#065f46;white-space:nowrap;min-width:100px;">Complete Guide</div>
+          <div style="font-size:13px;color:#374151;line-height:1.7;"><em>Disjointed</em> by Diana Jovin — the single best comprehensive reference for patients and physicians. Bring it to your specialist appointments. Your doctors may not have read it; yours has.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- NOTE ON QUALITY -->
+    <div class="warn">
+      <strong>A note on social media and misinformation:</strong> The hEDS community is large and active online, but not all information is accurate. Stick to accounts run by credentialed clinicians or verified medical organizations. When in doubt about a claim, check the EDS Society website or ask your physician. The five accounts listed above are specifically selected because they are run by board-certified physicians, doctoral-level physical therapists, or established nonprofit organizations — not patient advocates without clinical credentials, however well-intentioned.
+    </div>
+
+  </div>
+
+
+  <div class="footer" style="font-family:'DM Sans',sans-serif;">
+    <h3>You have a complete roadmap and a curated expert community.</h3>
+    <p>The most important step is finding the right physician team — a pain physician familiar with hEDS, a cardiologist for POTS evaluation, and a hypermobility-aware PT. Use this guide as your preparation for those conversations.</p>
+    <p style="margin-top:12px;font-size:12px;opacity:0.75;">Written by Gavin Nixon, D.O. &bull; Interventional Pain Medicine &bull; Regenexx Certified Provider<br>This guide is for educational purposes only and does not establish a physician-patient relationship.</p>
+  </div>
+
+</div>
+                </div>
+            </div>
+
+            <!-- FULLSCRIPT SUPPLEMENT STORE - FREE ACCESS -->
+            <div id="tab-supplements" style="display:none;">
+                <!-- Section Header -->
+                <div style="background: linear-gradient(135deg, #166534 0%, #15803d 100%); padding: 28px; border-radius: 16px; color: white; margin-bottom: 24px; text-align: center;">
+                    <h2 style="color: white; font-size: 26px; margin-bottom: 8px;">🌿 hEDS Supplement Protocol</h2>
+                    <p style="font-size: 16px; opacity: 0.95;">Physician-curated supplements for inflammation, connective tissue, and MCAS support</p>
+                    <p style="font-size: 13px; opacity: 0.8; margin-top: 6px;">By Gavin Nixon, D.O. — Interventional Pain Medicine</p>
+                </div>
+
+                <!-- What and Why -->
+                <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 24px; margin-bottom: 20px;">
+                    <h3 style="color: #1f2937; margin-bottom: 14px; font-size: 18px;">Why professional-grade supplements matter</h3>
+                    <p style="color: #374151; line-height: 1.8; margin-bottom: 12px;">The supplement industry is largely unregulated. What's on the label often doesn't match what's in the bottle. The products in this protocol are sourced from brands that undergo third-party testing for potency, purity, and contaminants — the same brands used in physician practices.</p>
+                    <p style="color: #374151; line-height: 1.8;">These are available through Dr. Nixon's Fullscript dispensary — a professional supplement platform. You'll receive a <strong>discount off retail pricing</strong> automatically applied at checkout.</p>
+                </div>
+
+                <!-- Protocol Grid -->
+                <div style="background: #f0fdf4; border: 2px solid #16a34a; border-radius: 12px; padding: 24px; margin-bottom: 20px;">
+                    <h3 style="color: #14532d; margin-bottom: 16px; font-size: 18px; text-align: center;">The hEDS Support Protocol — What's Included</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
+                        <div style="background: white; border-radius: 8px; padding: 12px; border-left: 3px solid #16a34a;">
+                            <p style="font-weight: 600; font-size: 14px; color: #14532d; margin-bottom: 3px;">Quercetin Phytosome</p>
+                            <p style="font-size: 13px; color: #6b7280;">Natural mast cell stabilizer — blocks histamine release at the source</p>
+                        </div>
+                        <div style="background: white; border-radius: 8px; padding: 12px; border-left: 3px solid #16a34a;">
+                            <p style="font-weight: 600; font-size: 14px; color: #14532d; margin-bottom: 3px;">Curcumin (Liposomal)</p>
+                            <p style="font-size: 13px; color: #6b7280;">Blocks NF-kB inflammatory pathways — chronic pain and joint inflammation</p>
+                        </div>
+                        <div style="background: white; border-radius: 8px; padding: 12px; border-left: 3px solid #16a34a;">
+                            <p style="font-weight: 600; font-size: 14px; color: #14532d; margin-bottom: 3px;">Fish Oil EPA+DHA</p>
+                            <p style="font-size: 13px; color: #6b7280;">Triglyceride-form omega-3s — systemic inflammation, joint pain, brain fog</p>
+                        </div>
+                        <div style="background: white; border-radius: 8px; padding: 12px; border-left: 3px solid #16a34a;">
+                            <p style="font-weight: 600; font-size: 14px; color: #14532d; margin-bottom: 3px;">Magnesium Glycinate</p>
+                            <p style="font-size: 13px; color: #6b7280;">Muscle spasm, headaches, sleep, anxiety — deficiency nearly universal in hEDS</p>
+                        </div>
+                        <div style="background: white; border-radius: 8px; padding: 12px; border-left: 3px solid #16a34a;">
+                            <p style="font-weight: 600; font-size: 14px; color: #14532d; margin-bottom: 3px;">Vitamin D3 + K2</p>
+                            <p style="font-size: 13px; color: #6b7280;">Immune function, muscle strength, pain modulation — critical in Alaska</p>
+                        </div>
+                        <div style="background: white; border-radius: 8px; padding: 12px; border-left: 3px solid #16a34a;">
+                            <p style="font-weight: 600; font-size: 14px; color: #14532d; margin-bottom: 3px;">PEA (Micronized)</p>
+                            <p style="font-size: 13px; color: #6b7280;">Nerve pain, widespread hEDS pain — works on mast cells and pain nerves</p>
+                        </div>
+                        <div style="background: white; border-radius: 8px; padding: 12px; border-left: 3px solid #16a34a;">
+                            <p style="font-weight: 600; font-size: 14px; color: #14532d; margin-bottom: 3px;">Collagen Peptides + Vitamin C</p>
+                            <p style="font-size: 13px; color: #6b7280;">Raw materials for connective tissue repair — synergistic combination</p>
+                        </div>
+                        <div style="background: white; border-radius: 8px; padding: 12px; border-left: 3px solid #16a34a;">
+                            <p style="font-weight: 600; font-size: 14px; color: #14532d; margin-bottom: 3px;">Zinc Bisglycinate</p>
+                            <p style="font-size: 13px; color: #6b7280;">Tissue repair, wound healing, collagen synthesis — commonly deficient</p>
+                        </div>
+                        <div style="background: white; border-radius: 8px; padding: 12px; border-left: 3px solid #16a34a;">
+                            <p style="font-weight: 600; font-size: 14px; color: #14532d; margin-bottom: 3px;">L-Glutamine</p>
+                            <p style="font-size: 13px; color: #6b7280;">Gut lining integrity — leaky gut is common in hEDS, worsens MCAS</p>
+                        </div>
+                        <div style="background: white; border-radius: 8px; padding: 12px; border-left: 3px solid #16a34a;">
+                            <p style="font-weight: 600; font-size: 14px; color: #14532d; margin-bottom: 3px;">Zinc Carnosine (PepZin GI)</p>
+                            <p style="font-size: 13px; color: #6b7280;">Clinically studied for gut lining repair — specific to intestinal epithelium</p>
+                        </div>
+                        <div style="background: white; border-radius: 8px; padding: 12px; border-left: 3px solid #16a34a; grid-column: 1 / -1;">
+                            <p style="font-weight: 600; font-size: 14px; color: #14532d; margin-bottom: 3px;">Electrolytes (POTS Support)</p>
+                            <p style="font-size: 13px; color: #6b7280;">Salt loading support for POTS and dysautonomia — works with compression and fluid intake</p>
+                        </div>
+                    </div>
+
+                    <!-- CTA Button -->
+                    <div style="text-align: center;">
+                        <a href="https://us.fullscript.com/welcome/gnixon1702230193/store-start" target="_blank" style="display: inline-block; background: #16a34a; color: white; padding: 18px 40px; border-radius: 12px; font-size: 18px; font-weight: 700; text-decoration: none; margin-bottom: 10px;">
+                            🛒 Shop the hEDS Protocol on Fullscript
+                        </a>
+                        <p style="font-size: 13px; color: #6b7280; margin-top: 8px;">Free to access — no account required to browse. Discount applied automatically at checkout.</p>
+                    </div>
+                </div>
+
+                <!-- Disclaimer -->
+                <div style="background: #f9fafb; border-radius: 8px; padding: 16px; margin-bottom: 20px;">
+                    <p style="font-size: 12px; color: #9ca3af; line-height: 1.7; text-align: center;">
+                        <strong>Disclosure:</strong> Dr. Nixon earns a practitioner margin on purchases made through his Fullscript dispensary. This does not increase your cost — Fullscript provides a discount off retail to patients of registered practitioners. All supplement recommendations are based solely on clinical evidence and professional judgment. These statements have not been evaluated by the FDA. These products are not intended to diagnose, treat, cure, or prevent any disease.
+                    </p>
+                </div>
+
+                <!-- Upsell Bridge -->
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 24px; border-radius: 12px; color: white; text-align: center;">
+                    <p style="font-size: 15px; margin-bottom: 14px; opacity: 0.95;">Want the full clinical guide explaining <em>why</em> each of these supplements works, what doses to use, and how to combine them with injection therapy, LDN, and the Doctor Appointment Toolkit?</p>
+                    <a href="https://buy.stripe.com/cNi00l4US6N05a55dP5Vu00" style="display: inline-block; background: white; color: #667eea; padding: 14px 32px; border-radius: 8px; font-size: 16px; font-weight: 700; text-decoration: none;">
+                        Get the Full hEDS Treatment Guide — $67 →
+                    </a>
+                </div>
+            </div>
+
+<!-- RESOURCES TAB -->
             <div id="tab-resources" style="display:none;">
                 <h3 style="margin-bottom: 16px; font-size: 20px;">📚 EDS &amp; HSD Resources</h3>
                 <div id="resource-filter" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;"></div>
@@ -925,6 +2895,26 @@
         const TOTAL_STEPS = 9; // 0-8
         
         function init() {
+            // ── Purchase detection ──────────────────────────────────────────
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('purchased') === 'true') {
+                localStorage.setItem('heds_purchased', '1');
+                // Clean up URL without reload
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+            const hasPurchased = localStorage.getItem('heds_purchased') === '1';
+            
+            // If returning purchaser, skip to guide tab immediately
+            if (hasPurchased) {
+                // Jump to step 8 and show guide
+                document.querySelectorAll('.step').forEach((s,i) => {
+                    s.classList.toggle('active', i === 8);
+                });
+                document.getElementById('progress-bar').style.display = 'none';
+                document.getElementById('nav-buttons').style.display = 'none';
+                showGuideContent();
+            }
+
             renderCheckboxQuestions('beighton', beightonQuestions, 'beighton-questions');
             renderCheckboxQuestions('heds', hedsQuestions, 'heds-questions');
             renderBPIItems(bpiSevItems, 'bpi-sev-questions', 'bpiSev', 0, 10, updateBpiSevAvg);
@@ -1075,7 +3065,19 @@
         function showPostTab(tabId, btn) {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            ['upsell', 'resources', 'tracker'].forEach(id => {
+            const hasPurchased = localStorage.getItem('heds_purchased') === '1';
+            
+            // If clicking Master Guide tab and purchased, show the guide
+            if (tabId === 'upsell' && hasPurchased) {
+                showGuideContent();
+                return;
+            }
+            
+            // Hide guide-unlocked when switching away from guide
+            const guideEl = document.getElementById('guide-unlocked');
+            if (guideEl) guideEl.style.display = 'none';
+            
+            ['upsell', 'supplements', 'resources', 'tracker'].forEach(id => {
                 const el = document.getElementById('tab-' + id);
                 if (el) el.style.display = id === tabId ? 'block' : 'none';
             });
@@ -1257,6 +3259,11 @@
                 
                 // Advance to success page right away
                 nextStep();
+                
+                // If already purchased, show guide immediately
+                if (localStorage.getItem('heds_purchased') === '1') {
+                    setTimeout(showGuideContent, 100);
+                }
                 
                 // Try to send email in the background (non-blocking, best-effort)
                 generatePDFBase64(name).then(pdfData => {
