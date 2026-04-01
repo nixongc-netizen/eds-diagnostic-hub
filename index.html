@@ -6,11 +6,18 @@
             const masterBtn = document.querySelector('button[onclick*="upsell"]');
             if (masterBtn) masterBtn.classList.add('active');
             
-            // Hide all other content tabs
-            ['upsell','supplements','resources','tracker'].forEach(id => {
+            // Hide non-upsell tabs
+            ['supplements','resources','tracker'].forEach(id => {
                 const el = document.getElementById('tab-' + id);
                 if (el) el.style.display = 'none';
             });
+            
+            // Keep tab-upsell visible (guide-unlocked lives inside it)
+            // but hide the upsell paywall content
+            const tabUpsell = document.getElementById('tab-upsell');
+            if (tabUpsell) tabUpsell.style.display = 'block';
+            const upsellContent = document.getElementById('upsell-content');
+            if (upsellContent) upsellContent.style.display = 'none';
             
             // Show the unlocked guide
             const guideEl = document.getElementById('guide-unlocked');
