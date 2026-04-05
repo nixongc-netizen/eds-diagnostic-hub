@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Gravity Sickness Protocol — Dr. Gavin Nixon, D.O.</title>
+<meta name="description" content="A physician-authored protocol for managing POTS, dizziness, and dysautonomia in hypermobile Ehlers-Danlos Syndrome. Created by an interventional pain physician.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FAFAF7;
+    --bg-warm: #F5F3EE;
+    --bg-accent: #EDE9E0;
+    --text: #1A1A1A;
+    --text-secondary: #4A4A45;
+    --text-muted: #7A7A72;
+    --accent: #B44D2D;
+    --accent-light: #D4683F;
+    --accent-bg: #FDF5F1;
+    --accent-border: #E8C4B2;
+    --teal: #1A6B5A;
+    --teal-light: #E8F5F0;
+    --teal-border: #A8D5C8;
+    --blue-deep: #1E3A5F;
+    --border: #DDD9D0;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+    --serif: 'Instrument Serif', Georgia, serif;
+    --sans: 'DM Sans', -apple-system, sans-serif;
+    --radius: 10px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container { max-width: 720px; margin: 0 auto; padding: 0 24px; }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(180deg, #1E3A5F 0%, #162D4A 100%);
+    color: white;
+    padding: 80px 24px 72px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 80px;
+    background: linear-gradient(180deg, transparent, rgba(0,0,0,0.15));
+    pointer-events: none;
+  }
+  .hero-inner { max-width: 720px; margin: 0 auto; position: relative; z-index: 1; }
+  .hero-label {
+    display: inline-block;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 100px;
+    padding: 6px 18px;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 28px;
+    font-weight: 500;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(36px, 6vw, 52px);
+    line-height: 1.15;
+    font-weight: 400;
+    margin-bottom: 20px;
+    letter-spacing: -0.5px;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: #F0A67A;
+  }
+  .hero-sub {
+    font-size: 18px;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.8);
+    max-width: 560px;
+    margin-bottom: 36px;
+  }
+  .hero-author {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-top: 28px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+  }
+  .hero-author-badge {
+    width: 48px; height: 48px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--serif);
+    font-size: 18px;
+    color: #F0A67A;
+  }
+  .hero-author-name { font-weight: 600; font-size: 15px; }
+  .hero-author-title { font-size: 13px; color: rgba(255,255,255,0.6); }
+
+  /* ── PROBLEM SECTION ── */
+  .problem {
+    padding: 72px 24px;
+    background: var(--bg);
+  }
+  .section-label {
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+  .section-heading {
+    font-family: var(--serif);
+    font-size: clamp(28px, 4.5vw, 38px);
+    line-height: 1.25;
+    color: var(--text);
+    margin-bottom: 20px;
+    font-weight: 400;
+  }
+  .section-body {
+    font-size: 16px;
+    color: var(--text-secondary);
+    line-height: 1.85;
+    margin-bottom: 16px;
+  }
+
+  .symptom-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 32px 0;
+  }
+  @media (max-width: 520px) { .symptom-grid { grid-template-columns: 1fr; } }
+  .symptom-item {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    box-shadow: var(--shadow-sm);
+  }
+  .symptom-item strong {
+    display: block;
+    font-size: 14px;
+    color: var(--accent);
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+
+  /* ── AGITATE ── */
+  .agitate {
+    padding: 64px 24px;
+    background: var(--bg-warm);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .pull-quote {
+    font-family: var(--serif);
+    font-size: clamp(20px, 3.5vw, 26px);
+    line-height: 1.5;
+    color: var(--text);
+    margin: 32px 0;
+    padding-left: 24px;
+    border-left: 3px solid var(--accent);
+    font-style: italic;
+  }
+
+  /* ── SOLUTION ── */
+  .solution {
+    padding: 72px 24px;
+    background: var(--bg);
+  }
+  .protocol-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 32px;
+    margin: 28px 0;
+    box-shadow: var(--shadow-md);
+  }
+  .protocol-card h3 {
+    font-family: var(--serif);
+    font-size: 22px;
+    color: var(--text);
+    margin-bottom: 16px;
+    font-weight: 400;
+  }
+  .protocol-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .protocol-list li {
+    padding: 12px 0;
+    border-bottom: 1px solid #F0EDE6;
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .protocol-list li:last-child { border-bottom: none; }
+  .protocol-list .check {
+    width: 22px; height: 22px;
+    background: var(--teal-light);
+    border: 1px solid var(--teal-border);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: var(--teal);
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  /* ── AUTHORITY ── */
+  .authority {
+    padding: 64px 24px;
+    background: var(--bg-warm);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .credential-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 24px 0;
+  }
+  .credential-tag {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 8px 16px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* ── WHAT'S INSIDE ── */
+  .contents {
+    padding: 72px 24px;
+    background: var(--bg);
+  }
+  .contents-grid {
+    display: grid;
+    gap: 14px;
+    margin: 32px 0;
+  }
+  .contents-item {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    box-shadow: var(--shadow-sm);
+  }
+  .contents-item h4 {
+    font-size: 16px;
+    color: var(--text);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .contents-item p {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  .contents-item .tag {
+    display: inline-block;
+    background: var(--teal-light);
+    color: var(--teal);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 100px;
+    margin-bottom: 8px;
+    letter-spacing: 0.3px;
+  }
+
+  /* ── CTA SECTION ── */
+  .cta-section {
+    padding: 72px 24px;
+    background: linear-gradient(180deg, #1E3A5F 0%, #162D4A 100%);
+    color: white;
+    text-align: center;
+  }
+  .cta-section .section-heading { color: white; }
+  .cta-price {
+    font-family: var(--serif);
+    font-size: 56px;
+    color: #F0A67A;
+    margin: 24px 0 8px;
+    font-weight: 400;
+  }
+  .cta-price-note {
+    font-size: 14px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 32px;
+  }
+  .cta-button {
+    display: inline-block;
+    background: #D4683F;
+    color: white;
+    padding: 18px 48px;
+    border-radius: 10px;
+    font-size: 17px;
+    font-weight: 600;
+    text-decoration: none;
+    font-family: var(--sans);
+    transition: background 0.2s, transform 0.15s;
+    border: none;
+    cursor: pointer;
+    letter-spacing: 0.2px;
+  }
+  .cta-button:hover { background: #BE5A34; transform: translateY(-1px); }
+  .cta-guarantee {
+    margin-top: 20px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+  }
+  .cta-sub {
+    font-size: 16px;
+    color: rgba(255,255,255,0.7);
+    max-width: 480px;
+    margin: 0 auto 24px;
+    line-height: 1.7;
+  }
+
+  /* ── SUPPLEMENT UPSELL ── */
+  .upsell {
+    padding: 64px 24px;
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+  }
+  .upsell-card {
+    background: var(--teal-light);
+    border: 1px solid var(--teal-border);
+    border-radius: 14px;
+    padding: 32px;
+  }
+  .upsell-card h3 {
+    font-family: var(--serif);
+    font-size: 22px;
+    color: var(--teal);
+    margin-bottom: 12px;
+    font-weight: 400;
+  }
+  .upsell-card p {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+  .upsell-link {
+    display: inline-block;
+    background: var(--teal);
+    color: white;
+    padding: 14px 32px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .upsell-link:hover { background: #155A4B; }
+  .upsell-disclosure {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 16px;
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  /* ── FAQ ── */
+  .faq {
+    padding: 64px 24px;
+    background: var(--bg-warm);
+    border-top: 1px solid var(--border);
+  }
+  .faq-item {
+    border-bottom: 1px solid var(--border);
+    padding: 20px 0;
+  }
+  .faq-item:first-of-type { border-top: 1px solid var(--border); }
+  .faq-q {
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .faq-a {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    padding: 48px 24px;
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+  .footer p {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    max-width: 560px;
+    margin: 0 auto;
+  }
+  .footer a { color: var(--accent); text-decoration: none; }
+
+  /* ── ASSESSMENT BANNER ── */
+  .assessment-banner {
+    padding: 48px 24px;
+    background: var(--accent-bg);
+    border-top: 1px solid var(--accent-border);
+    border-bottom: 1px solid var(--accent-border);
+    text-align: center;
+  }
+  .assessment-banner p {
+    font-size: 16px;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+    line-height: 1.7;
+  }
+  .assessment-link {
+    display: inline-block;
+    background: white;
+    border: 1.5px solid var(--accent);
+    color: var(--accent);
+    padding: 14px 32px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+  }
+  .assessment-link:hover { background: var(--accent); color: white; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════ HERO ═══════════════════════ -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">Physician-Authored POTS &amp; Dysautonomia Protocol</div>
+    <h1>You're not anxious.<br>You have <em>Gravity Sickness.</em></h1>
+    <p class="hero-sub">The dizziness, the racing heart, the brain fog when you stand up — it's not in your head. Your body is fighting gravity with faulty connective tissue. This is the protocol to take back your upright life.</p>
+    <div class="hero-author">
+      <div class="hero-author-badge">GN</div>
+      <div>
+        <div class="hero-author-name">Gavin Nixon, D.O.</div>
+        <div class="hero-author-title">Interventional Pain Medicine &bull; Regenexx Certified Provider</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ PROBLEM ═══════════════════════ -->
+<section class="problem">
+  <div class="container">
+    <div class="section-label">The problem</div>
+    <h2 class="section-heading">Standing up shouldn't feel like a medical event.</h2>
+    <p class="section-body">You stand up from the couch and the room tilts. Your heart pounds like you just sprinted. Your vision narrows. Your brain goes offline. You sit back down and pretend nothing happened — because the last doctor told you it was anxiety.</p>
+    <p class="section-body">This isn't anxiety. This is <strong>Gravity Sickness</strong> — the experience of a nervous system that can't regulate blood flow against gravity because the connective tissue holding your blood vessels open is structurally different.</p>
+
+    <div class="symptom-grid">
+      <div class="symptom-item">
+        <strong>The stand-up crash</strong>
+        Dizziness, vision graying, or near-fainting within seconds of standing
+      </div>
+      <div class="symptom-item">
+        <strong>The racing heart</strong>
+        Heart rate spikes 30+ beats per minute just from being upright
+      </div>
+      <div class="symptom-item">
+        <strong>The afternoon collapse</strong>
+        Crushing fatigue and brain fog that peaks after hours of being vertical
+      </div>
+      <div class="symptom-item">
+        <strong>The shower dread</strong>
+        Hot showers trigger lightheadedness, nausea, or the feeling you might pass out
+      </div>
+      <div class="symptom-item">
+        <strong>The grocery store wall</strong>
+        Standing in line or walking through stores becomes impossible without sitting down
+      </div>
+      <div class="symptom-item">
+        <strong>The invisible disability</strong>
+        You look fine. You're not fine. Nobody understands why you can't just "push through it."
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ AGITATE ═══════════════════════ -->
+<section class="agitate">
+  <div class="container">
+    <div class="section-label">The cost of being dismissed</div>
+    <h2 class="section-heading">Every day without a plan is a day your world gets smaller.</h2>
+    <p class="section-body">POTS — Postural Orthostatic Tachycardia Syndrome — affects an estimated 1–3 million Americans. In people with hypermobile Ehlers-Danlos Syndrome, the rate is closer to 50%. And yet the average POTS patient sees 7 doctors over 4 years before receiving a diagnosis.</p>
+
+    <div class="pull-quote">Your blood vessels are made of connective tissue. In hEDS, that tissue is lax. When you stand, blood pools in your legs instead of reaching your brain. Your heart rate spikes to compensate. This isn't a mystery — it's physics.</div>
+
+    <p class="section-body">While you wait for a diagnosis, your world contracts. You stop cooking. You stop shopping. You stop exercising. You stop leaving the house on bad days. The longer this goes unnamed and unmanaged, the more your autonomic nervous system deconditions — and the harder it gets to recover.</p>
+    <p class="section-body">You don't need another doctor to tell you it's anxiety. You need a protocol written by a physician who understands the mechanics of why your body fights gravity — and exactly what to do about it.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════ SOLUTION ═══════════════════════ -->
+<section class="solution">
+  <div class="container">
+    <div class="section-label">The solution</div>
+    <h2 class="section-heading">The Gravity Sickness Protocol</h2>
+    <p class="section-body">A physician-authored, step-by-step protocol for managing POTS and dysautonomia in the context of hypermobile connective tissue — written by an interventional pain physician who treats these patients, not a wellness influencer who Googled the symptoms.</p>
+
+    <div class="protocol-card">
+      <h3>What's inside this protocol</h3>
+      <ul class="protocol-list">
+        <li><span class="check">✓</span> <span><strong>The NASA Lean Test walkthrough</strong> — screen yourself at home with a smartwatch or pulse oximeter, step by step, with interpretation guidance and when to escalate to a tilt-table test</span></li>
+        <li><span class="check">✓</span> <span><strong>Salt and fluid loading protocol</strong> — the specific amounts, types, and timing that actually work, including why most patients are under-dosing and how to approach this safely</span></li>
+        <li><span class="check">✓</span> <span><strong>Compression strategy</strong> — which compression garments work, which don't, the mmHg ratings that matter, and how to layer them with your daily routine</span></li>
+        <li><span class="check">✓</span> <span><strong>The recumbent exercise ladder</strong> — a progressive exercise program designed for bodies that can't tolerate upright activity yet, from Day 1 through full upright tolerance</span></li>
+        <li><span class="check">✓</span> <span><strong>Heart rate-based pacing</strong> — how to calculate your aerobic threshold, use a smartwatch to pace all daily activity, and avoid the crash cycle that makes POTS progressively worse</span></li>
+        <li><span class="check">✓</span> <span><strong>The stellate ganglion block</strong> — how an injection in the neck can quiet the overactive fight-or-flight system driving your symptoms, who performs it, and what to expect</span></li>
+        <li><span class="check">✓</span> <span><strong>Specialist scripts</strong> — word-for-word language for your cardiologist, your PCP, and your insurance company so you stop getting dismissed and start getting evaluated</span></li>
+        <li><span class="check">✓</span> <span><strong>The POTS flare protocol</strong> — exactly what to do in the first 24 hours of a crash, what to have in your flare kit, and when to go to the ER vs. ride it out</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ WHAT'S INSIDE DETAIL ═══════════════════════ -->
+<section class="contents">
+  <div class="container">
+    <div class="section-label">Section breakdown</div>
+    <h2 class="section-heading">8 sections. Zero filler.</h2>
+    <p class="section-body">Every section gives you something you can act on today — not vague advice to "stay hydrated" or "talk to your doctor."</p>
+
+    <div class="contents-grid">
+      <div class="contents-item">
+        <div class="tag">Diagnosis</div>
+        <h4>Home screening &amp; tilt-table test</h4>
+        <p>Perform the NASA Lean Test at home with exact timing, positions, and heart rate thresholds. Know whether your result warrants a formal tilt-table evaluation — and how to ask for one.</p>
+      </div>
+      <div class="contents-item">
+        <div class="tag">Daily management</div>
+        <h4>Salt, fluid, and electrolyte protocol</h4>
+        <p>The specific daily sodium target (3,000–5,000mg), why plain water isn't enough, which electrolyte products actually deliver, and how to dose throughout the day without GI distress.</p>
+      </div>
+      <div class="contents-item">
+        <div class="tag">Daily management</div>
+        <h4>Compression garment strategy</h4>
+        <p>Waist-high vs. knee-high, medical-grade vs. athletic, the 20–30mmHg threshold that matters, and how to put them on before you stand up — the detail most guides skip.</p>
+      </div>
+      <div class="contents-item">
+        <div class="tag">Exercise</div>
+        <h4>Recumbent exercise progression</h4>
+        <p>A week-by-week ladder starting from horizontal exercises through seated, recumbent bike, rowing, and ultimately upright activity. Designed for bodies that crash after 5 minutes of standing.</p>
+      </div>
+      <div class="contents-item">
+        <div class="tag">Pacing</div>
+        <h4>Heart rate monitoring &amp; activity budgeting</h4>
+        <p>Calculate your aerobic threshold, track it with a smartwatch during all activity — including cooking and showering — and learn the 10% weekly progression rule.</p>
+      </div>
+      <div class="contents-item">
+        <div class="tag">Advanced</div>
+        <h4>Stellate ganglion block for POTS</h4>
+        <p>How this injection quiets the overactive sympathetic nervous system driving your heart rate spikes, anxiety, and fight-or-flight overdrive. Who performs it, what to expect, and how to find a provider.</p>
+      </div>
+      <div class="contents-item">
+        <div class="tag">Advocacy</div>
+        <h4>Specialist scripts &amp; appointment toolkit</h4>
+        <p>Word-for-word scripts for your cardiologist, PCP, and insurance prior authorization. How to present POTS symptoms in clinical language that gets you taken seriously.</p>
+      </div>
+      <div class="contents-item">
+        <div class="tag">Crisis</div>
+        <h4>POTS flare protocol &amp; flare kit</h4>
+        <p>The exact steps for the first 24 hours of a crash. What to stock in your flare kit. ER vs. home management decision framework. How to communicate with providers during a crisis.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ AUTHORITY ═══════════════════════ -->
+<section class="authority">
+  <div class="container">
+    <div class="section-label">Why this is different</div>
+    <h2 class="section-heading">Written by a physician who treats this — not a wellness account that posts about it.</h2>
+    <p class="section-body">Every POTS guide on the internet was written by a patient advocate, a nurse, or a health coach. This is the only POTS protocol for hEDS patients written by a board-certified interventional pain physician who performs the procedures described in the guide.</p>
+
+    <div class="credential-bar">
+      <span class="credential-tag">Doctor of Osteopathic Medicine (D.O.)</span>
+      <span class="credential-tag">Interventional Pain Medicine</span>
+      <span class="credential-tag">PM&amp;R Board Certified</span>
+      <span class="credential-tag">Regenexx Certified Provider</span>
+      <span class="credential-tag">Sole Orthobiologic Provider in Alaska</span>
+    </div>
+
+    <p class="section-body">Dr. Nixon doesn't just write about stellate ganglion blocks — he performs them. He doesn't just recommend PRP for ligament laxity — he's the only certified provider in the state. The difference between a physician-authored protocol and a patient-authored blog post is the difference between being told what worked for one person and understanding the mechanism of why your body does what it does.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════ CTA ═══════════════════════ -->
+<section class="cta-section">
+  <div class="container">
+    <h2 class="section-heading">Stop fighting gravity without a plan.</h2>
+    <p class="cta-sub">The Gravity Sickness Protocol gives you the physician-authored roadmap that should have come with your diagnosis — but didn't.</p>
+    <div class="cta-price">$47</div>
+    <div class="cta-price-note">One-time purchase &bull; Instant digital download &bull; PDF format</div>
+    <a href="#" class="cta-button">Get the Gravity Sickness Protocol</a>
+    <p class="cta-guarantee">30-day satisfaction guarantee. If it doesn't change how you manage your POTS, email for a full refund.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════ ASSESSMENT CROSS-SELL ═══════════════════════ -->
+<section class="assessment-banner">
+  <div class="container">
+    <p><strong>Not sure if you have POTS or hEDS?</strong> Take the free clinical screening assessment — validated instruments, physician-designed, with a downloadable clinical report you can bring to your next appointment.</p>
+    <a href="https://myedstest.com" class="assessment-link">Take the Free hEDS Assessment →</a>
+  </div>
+</section>
+
+<!-- ═══════════════════════ SUPPLEMENT UPSELL ═══════════════════════ -->
+<section class="upsell">
+  <div class="container">
+    <div class="upsell-card">
+      <h3>The Gravity Sickness supplement stack</h3>
+      <p>The electrolyte sachets, magnesium glycinate, and compression-support supplements referenced in this protocol are available through Dr. Nixon's Fullscript dispensary — pharmaceutical-grade, third-party tested, shipped directly to you at a practitioner discount.</p>
+      <a href="https://us.fullscript.com/welcome/gnixon1702230193/store-start" target="_blank" class="upsell-link">Shop the POTS Protocol Stack</a>
+      <p class="upsell-disclosure">Disclosure: Dr. Nixon earns a practitioner margin on purchases made through his Fullscript dispensary. This does not affect the price you pay. All supplement recommendations are based solely on clinical evidence and professional judgment.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ FAQ ═══════════════════════ -->
+<section class="faq">
+  <div class="container">
+    <h2 class="section-heading">Common questions</h2>
+    <div class="faq-item">
+      <div class="faq-q">Do I need a POTS diagnosis to use this protocol?</div>
+      <div class="faq-a">No. This protocol includes the home screening test (NASA Lean Test) that helps you determine whether POTS evaluation is warranted. If you experience dizziness, racing heart, or fatigue when upright — this is for you whether you have a diagnosis yet or not.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Is this the same content as the hEDS Treatment Guide?</div>
+      <div class="faq-a">The Gravity Sickness Protocol goes significantly deeper on POTS and dysautonomia than the broader hEDS Treatment Guide. It includes the full recumbent exercise ladder, detailed compression strategy, heart rate pacing methodology, and specialist scripts that aren't in the general guide. If POTS is your primary issue, this is the focused resource.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Will this replace seeing a cardiologist?</div>
+      <div class="faq-a">No — and it's not designed to. This protocol prepares you to get the most out of your cardiology evaluation. It gives you the screening data, the clinical language, and the specific questions to ask so your appointment is productive rather than dismissive.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">What format is it delivered in?</div>
+      <div class="faq-a">Instant digital download in PDF format. Designed to be read on any device and printed for appointments. You'll receive it immediately after purchase.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">What if it doesn't help me?</div>
+      <div class="faq-a">Full 30-day refund guarantee. If the protocol doesn't change how you understand or manage your symptoms, email for a complete refund. No questions.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ FOOTER ═══════════════════════ -->
+<footer class="footer">
+  <p><strong>The Gravity Sickness Protocol</strong> &bull; Written by Gavin Nixon, D.O.<br>Interventional Pain Medicine &bull; Regenexx Certified Provider</p>
+  <p style="margin-top:16px;">This protocol is for educational purposes only and does not establish a physician-patient relationship. Always work with licensed healthcare providers before starting any new treatment. Individual results vary.</p>
+  <p style="margin-top:16px;"><a href="https://myedstest.com">MyEDSTest.com</a> &bull; Free hEDS Clinical Assessment</p>
+</footer>
+
+</body>
+</html>
