@@ -3365,18 +3365,16 @@ function showGuideContent() {
                     setTimeout(showGuideContent, 100);
                 }
                 
-                // Try to send email in the background (non-blocking, best-effort)
-                generatePDFBase64(name).then(pdfData => {
+                // If email provided, send report copy in background (non-blocking)
+                if (email && email.includes('@')) {
                     fetch('/api/send-report', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ name, email, pdfData })
+                        body: JSON.stringify({ name, email })
                     }).catch(() => {
-                        // Email delivery failed silently — user already has the PDF download
+                        // Silent fail — user already has the PDF download
                     });
-                }).catch(() => {
-                    // base64 generation failed silently
-                });
+                }
                 
             } catch (error) {
                 console.error('PDF generation error:', error);
