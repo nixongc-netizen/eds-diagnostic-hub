@@ -3389,402 +3389,297 @@ function showGuideContent() {
         function generatePDF(name) {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF({ unit: 'mm', format: 'letter' });
-
             const PW = 215.9, PH = 279.4;
-            const ML = 19, MR = 19, CW = PW - ML - MR;
-            let y = 0;
-            let pageNum = 1;
+            const ML = 18, MR = 18, CW = PW - ML - MR;
+            let y = 0, pageNum = 1;
 
             // ── Scores ────────────────────────────────────────────────────
-            const beightonScore = Object.values(data.beighton).filter(Boolean).length;
-            const hedsCount     = Object.values(data.heds).filter(Boolean).length;
-            const potsCount     = Object.values(data.pots).filter(Boolean).length;
-            const mcasCount     = Object.values(data.mcas).filter(Boolean).length;
-            const bpiSevAvg     = getAvg(data.bpiSev, bpiSevItems.map(i => i.id));
-            const bpiIntAvg     = getAvg(data.bpiInt, bpiIntItems.map(i => i.id));
-            const fssVals       = fssItems.map(i => data.fss[i.id]).filter(v => v != null);
-            const fssMean       = fssVals.length ? (fssVals.reduce((a,b)=>a+b,0)/fssVals.length).toFixed(2) : null;
-            const dateStr       = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+            const beightonScore = beightonQuestions.filter(q => data.beighton[q.id]).length;
+            const hedsCount     = hedsQuestions.filter(q => data.heds[q.id]).length;
+            // Use only the first 7 pots questions and first 7 mcas questions for screening counts
+            const potsScreenIds = ['dizzy','racing','fainting','fatigue','brain-fog','pooling','exercise'];
+            const mcasScreenIds = ['flushing','hives','itching','gi','allergies','anaphylaxis','headaches'];
+            const potsCount = potsScreenIds.filter(id => data.pots[id]).length;
+            const mcasCount = mcasScreenIds.filter(id => data.mcas[id]).length;
+
+            // BPI
+            const bpiSevKeys = ['bpi_worst','bpi_least','bpi_average','bpi_now'];
+            const bpiIntKeys = ['bpi_ga','bpi_mood','bpi_walk','bpi_work','bpi_rel','bpi_slp','bpi_enj'];
+            const bpiSevVals = bpiSevKeys.map(k => data.bpiSev[k]).filter(v => v != null);
+            const bpiIntVals = bpiIntKeys.map(k => data.bpiInt[k]).filter(v => v != null);
+            const bpiSevAvg = bpiSevVals.length ? (bpiSevVals.reduce((a,b)=>a+b,0)/bpiSevVals.length).toFixed(1) : null;
+            const bpiIntAvg = bpiIntVals.length ? (bpiIntVals.reduce((a,b)=>a+b,0)/bpiIntVals.length).toFixed(1) : null;
+
+            // FSS — only first 9 fss items
+            const fssKeys = ['fss1','fss2','fss3','fss4','fss5','fss6','fss7','fss8','fss9'];
+            const fssVals = fssKeys.map(k => data.fss[k]).filter(v => v != null);
+            const fssMean = fssVals.length ? (fssVals.reduce((a,b)=>a+b,0)/fssVals.length).toFixed(2) : null;
+
+            const dateStr = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+
+            // ── Colors ────────────────────────────────────────────────────
+            const NAVY=[11,30,61], GOLD=[184,151,42], BLACK=[20,20,20];
+            const DGRAY=[80,90,105], LGRAY=[245,246,248], RULE=[210,213,218];
+            const GREEN=[26,107,58], RED=[155,0,0], AMBER=[180,94,0];
+            const LTBLUE=[235,240,255];
 
             // ── Helpers ───────────────────────────────────────────────────
-            const NAVY  = [11,30,61], GOLD=[184,151,42], BLACK=[20,20,20];
-            const DGRAY = [80,90,105], LGRAY=[245,246,248], RULE=[210,213,218];
-            const GREEN = [26,107,58],  AMBER=[180,94,0],   RED=[155,0,0];
-            const LTBLUE= [235,240,255];
-
-            function setFont(style, size, color){
-                doc.setFont('helvetica', style);
-                doc.setFontSize(size);
-                doc.setTextColor(...(color||BLACK));
-            }
-
+            function sf(style, size, color){ doc.setFont('helvetica',style); doc.setFontSize(size); doc.setTextColor(...(color||BLACK)); }
             function checkPage(need){
-                if(y + need > PH - 14){
-                    addFooter();
-                    doc.addPage();
-                    pageNum++;
-                    y = 22;
-                }
+                if(y + need > PH - 12){ addFooter(); doc.addPage(); pageNum++; y = 18; }
             }
-
             function addFooter(){
-                const pg = pageNum;
-                doc.setFillColor(...NAVY);
-                doc.rect(0, PH-11, PW, 11, 'F');
-                setFont('normal', 6.5, [255,255,255]);
-                doc.text('MyEDSTest.com  \u2022  Patient Self-Assessment Tool \u2014 For Educational Purposes Only', ML, PH-5);
-                doc.text(`Page ${pg}`, PW-MR, PH-5, {align:'right'});
+                doc.setFillColor(...NAVY); doc.rect(0,PH-10,PW,10,'F');
+                sf('normal',6.5,[255,255,255]);
+                doc.text('MyEDSTest.com  \u2022  Patient Self-Assessment Tool \u2014 For Educational Purposes Only', ML, PH-4);
+                doc.text(`Page ${pageNum}`, PW-MR, PH-4, {align:'right'});
             }
-
-            function sectionTitle(title){
-                checkPage(12);
-                y += 2;
-                setFont('bold', 7, GOLD);
-                doc.text(title.toUpperCase(), ML, y);
-                y += 1.5;
-                doc.setDrawColor(...GOLD);
-                doc.setLineWidth(0.5);
-                doc.line(ML, y, PW-MR, y);
-                y += 5;
-                setFont('normal', 8.5, BLACK);
+            function secTitle(t){
+                checkPage(10); y+=1;
+                sf('bold',7,GOLD); doc.text(t.toUpperCase(), ML, y); y+=1.5;
+                doc.setDrawColor(...GOLD); doc.setLineWidth(0.5); doc.line(ML,y,PW-MR,y); y+=4;
             }
-
             function para(text, indent){
                 const ind = indent||0;
-                setFont('normal', 8.5, BLACK);
-                const lines = doc.splitTextToSize(text, CW - ind);
-                lines.forEach(line => {
-                    checkPage(5.5);
-                    doc.text(line, ML+ind, y);
-                    y += 4.8;
-                });
+                sf('normal',7.5,BLACK);
+                const lines = doc.splitTextToSize(text, CW-ind);
+                lines.forEach(line => { checkPage(4.5); doc.text(line, ML+ind, y); y+=4; });
             }
+            function sev(v){ return parseFloat(v)>=7?'severe':parseFloat(v)>=4?'moderate':'mild'; }
 
-            function subHead(text){
-                checkPage(8);
-                setFont('bold', 8.5, BLACK);
-                doc.text(text, ML, y);
-                y += 5.5;
+            // ── Positive findings as inline text (no bullets) ─────────────
+            function posFindings(qArr, dataObj, emojiRe){
+                return qArr.filter(q=>dataObj[q.id]).map(q=>q.text.replace(emojiRe,'').trim()).join('; ') || 'none endorsed';
             }
-
-            function bullet(text, sub){
-                const ind = sub ? 9 : 4;
-                const mark = sub ? '\u2013' : '\u2022';
-                setFont('normal', 8, BLACK);
-                const lines = doc.splitTextToSize(text, CW - ind - 2);
-                checkPage(5);
-                doc.text(mark, ML+ind-2.5, y);
-                lines.forEach((line, i) => {
-                    checkPage(5);
-                    doc.text(line, ML+ind, y);
-                    y += 4.5;
-                });
-            }
-
-            function sevLabel(v){ return v>=7?'severe':v>=4?'moderate':'mild'; }
+            const beightonEmoji = /👆|👍|💪|🦵|🧘/g;
+            const hedsEmoji = /✨|🤏|〰️|🟣|📄|👨‍👩‍👧|🦴|😣|🦷|🔘|❤️|⭕|👍/g;
 
             // ══════════════════════════════════════════════════════════════
             // HEADER
             // ══════════════════════════════════════════════════════════════
-            doc.setFillColor(...NAVY);
-            doc.rect(0, 0, PW, 29, 'F');
-            doc.setFillColor(...GOLD);
-            doc.rect(0, 29, PW, 1.5, 'F');
+            doc.setFillColor(...NAVY); doc.rect(0,0,PW,28,'F');
+            doc.setFillColor(...GOLD); doc.rect(0,28,PW,1.5,'F');
+            sf('bold',12,[255,255,255]); doc.text('CLINICAL SELF-ASSESSMENT SUMMARY', ML, 10);
+            sf('normal',7,[184,200,220]);
+            doc.text('Hypermobile Ehlers-Danlos Syndrome (hEDS) \u2014 Validated Screening Instruments', ML, 17);
+            doc.text('Prepared via MyEDSTest.com  \u2022  Gavin Nixon, D.O., Interventional Pain Medicine & PM&R', ML, 23);
+            y = 33;
 
-            setFont('bold', 13, [255,255,255]);
-            doc.text('CLINICAL SELF-ASSESSMENT SUMMARY', ML, 11);
-            setFont('normal', 7.5, [184,200,220]);
-            doc.text('Hypermobile Ehlers-Danlos Syndrome (hEDS) \u2014 Validated Screening Instruments', ML, 18);
-            doc.text('Prepared via MyEDSTest.com  \u2022  Gavin Nixon, D.O., Interventional Pain Medicine & PM&R', ML, 24);
+            // Patient block
+            doc.setFillColor(...LGRAY); doc.rect(ML,y,CW,15,'F');
+            sf('bold',7,NAVY); doc.text('PATIENT:', ML+2, y+5);
+            sf('normal',7,BLACK); doc.text(name, ML+20, y+5);
+            sf('bold',7,NAVY); doc.text('DATE:', ML+2, y+11);
+            sf('normal',7,BLACK); doc.text(dateStr, ML+14, y+11);
+            const mid = ML+CW*0.5;
+            sf('bold',7,NAVY); doc.text('INSTRUMENTS:', mid, y+5);
+            sf('normal',7,BLACK); doc.text('2017 hEDS Criteria, BPI-SF, FSS-9', mid+28, y+5);
+            sf('bold',7,NAVY); doc.text('ASSESSED BY:', mid, y+11);
+            sf('normal',7,BLACK); doc.text('Patient self-report', mid+27, y+11);
+            y += 19;
 
-            y = 35;
-
-            // ── Patient info block ────────────────────────────────────────
-            doc.setFillColor(...LGRAY);
-            doc.rect(ML, y, CW, 17, 'F');
-            setFont('bold', 7.5, NAVY);
-            doc.text('PATIENT:', ML+2, y+6);
-            setFont('normal', 7.5, BLACK);
-            doc.text(name, ML+22, y+6);
-            setFont('bold', 7.5, NAVY);
-            doc.text('DATE OF ASSESSMENT:', ML+2, y+13);
-            setFont('normal', 7.5, BLACK);
-            doc.text(dateStr, ML+46, y+13);
-
-            const mid = ML + CW*0.5 + 2;
-            setFont('bold', 7.5, NAVY);
-            doc.text('INSTRUMENT(S):', mid, y+6);
-            setFont('normal', 7.5, BLACK);
-            doc.text('2017 hEDS Criteria, BPI-SF, FSS-9', mid+30, y+6);
-            setFont('bold', 7.5, NAVY);
-            doc.text('ASSESSED BY:', mid, y+13);
-            setFont('normal', 7.5, BLACK);
-            doc.text('Patient self-report', mid+27, y+13);
-
-            y += 21;
-
-            // ── Disclaimer ────────────────────────────────────────────────
-            doc.setFillColor(255,249,219);
-            doc.setDrawColor(200,160,50);
-            doc.setLineWidth(0.4);
-            doc.rect(ML, y, CW, 11, 'FD');
-            setFont('italic', 7, [100,75,10]);
-            doc.text('DISCLAIMER: This document is a patient-completed screening tool intended to assist clinical evaluation. It does not constitute a diagnosis.', ML+2, y+4.5);
-            doc.text('All findings require interpretation in the context of a comprehensive physician examination and clinical history.', ML+2, y+8.5);
-            y += 16;
+            // Disclaimer
+            doc.setFillColor(255,249,219); doc.setDrawColor(200,160,50); doc.setLineWidth(0.4);
+            doc.rect(ML,y,CW,9,'FD');
+            sf('italic',6.5,[100,75,10]);
+            doc.text('DISCLAIMER: Patient-completed screening tool — does not constitute a diagnosis. All findings require physician interpretation.', ML+2, y+5.5);
+            y += 13;
 
             // ══════════════════════════════════════════════════════════════
             // S1 — REASON FOR REFERRAL
             // ══════════════════════════════════════════════════════════════
-            sectionTitle('Reason for Referral / Clinical Context');
+            secTitle('Reason for Referral / Clinical Context');
             para(`${name} presents with a self-completed screening assessment for hypermobile Ehlers-Danlos Syndrome (hEDS), a heritable connective tissue disorder characterized by generalized joint hypermobility, systemic connective tissue features, and associated autonomic and mast cell dysfunction. This summary is presented to facilitate clinical evaluation and specialist referral.`);
-            y += 2;
-            para('Assessment instruments: Beighton Score (2017 hEDS Criterion 1), systemic features checklist (Criterion 2), Brief Pain Inventory-Short Form (BPI-SF) for pain severity and functional interference, and Fatigue Severity Scale (FSS-9).');
-            y += 5;
+            y+=1;
+            para('Instruments: Beighton Score (2017 hEDS Criterion 1), systemic features checklist (Criterion 2), Brief Pain Inventory-SF (BPI-SF), and Fatigue Severity Scale (FSS-9).');
+            y+=4;
 
             // ══════════════════════════════════════════════════════════════
             // S2 — CLINICAL FINDINGS
             // ══════════════════════════════════════════════════════════════
-            sectionTitle('Clinical Findings');
+            secTitle('Clinical Findings');
 
             // Beighton
-            subHead('Joint Hypermobility \u2014 Beighton Score');
-            const bInterp = beightonScore>=5
-                ? `${beightonScore}/9 \u2014 meets the Criterion 1 threshold (\u22655 required for adults under 50)`
-                : beightonScore===4
-                    ? `${beightonScore}/9 \u2014 borderline (threshold \u22655; may meet criteria if over 50)`
-                    : `${beightonScore}/9 \u2014 below the standard adult threshold of 5`;
-            para(`Beighton Score: ${bInterp}. The following maneuvers were positive on self-assessment:`, 3);
-            const posBeighton = beightonQuestions.filter(q=>data.beighton[q.id]).map(q=>q.text.replace(/👆|👍|💪|🦵|🧘/g,'').trim());
-            posBeighton.forEach(f => bullet(f, true));
-            y += 3;
+            checkPage(18);
+            sf('bold',7.5,BLACK); doc.text('Joint Hypermobility \u2014 Beighton Score', ML, y); y+=4.5;
+            const bInterp = beightonScore>=5 ? `${beightonScore}/9 \u2014 meets Criterion 1 threshold (\u22655 required for adults under 50)` : beightonScore===4 ? `${beightonScore}/9 \u2014 borderline (threshold \u22655)` : `${beightonScore}/9 \u2014 below standard adult threshold`;
+            para(`Score: ${bInterp}. Positive maneuvers: ${posFindings(beightonQuestions, data.beighton, beightonEmoji)}.`, 3);
+            y+=2;
 
-            // Systemic Features
-            subHead('Systemic Connective Tissue Features \u2014 Criterion 2');
-            const hInterp = hedsCount>=5
-                ? `${hedsCount}/13 \u2014 meets Criterion 2 threshold (\u22655 required)`
-                : hedsCount>=3
-                    ? `${hedsCount}/13 \u2014 partial feature burden; below threshold of 5 but clinically notable`
-                    : `${hedsCount}/13 \u2014 low systemic feature burden`;
-            para(`The patient endorses ${hInterp}. Endorsed features:`, 3);
-            const posHeds = hedsQuestions.filter(q=>data.heds[q.id]).map(q=>q.text.replace(/✨|🤏|〰️|🟣|📄|👨‍👩‍👧|🦴|😣|🦷|🔘|❤️|⭕|👍/g,'').trim());
-            posHeds.forEach(f => bullet(f, true));
-            y += 3;
+            // Systemic features
+            checkPage(14);
+            sf('bold',7.5,BLACK); doc.text('Systemic Connective Tissue Features \u2014 Criterion 2', ML, y); y+=4.5;
+            const hInterp = hedsCount>=5 ? `${hedsCount}/13 \u2014 meets Criterion 2 threshold (\u22655 required)` : hedsCount>=3 ? `${hedsCount}/13 \u2014 partial burden, below threshold` : `${hedsCount}/13 \u2014 low feature burden`;
+            para(`${hInterp}. Endorsed: ${posFindings(hedsQuestions, data.heds, hedsEmoji)}.`, 3);
+            y+=2;
 
             // BPI
-            if(bpiSevAvg !== null || bpiIntAvg !== null){
-                subHead('Pain Assessment \u2014 Brief Pain Inventory (BPI-SF)');
-                if(bpiSevAvg !== null){
-                    para(`Pain severity subscale mean: ${bpiSevAvg}/10 (${sevLabel(parseFloat(bpiSevAvg))}). Worst: ${data.bpiSev.bpi_worst??'\u2014'}/10; Least: ${data.bpiSev.bpi_least??'\u2014'}/10; Average: ${data.bpiSev.bpi_average??'\u2014'}/10; Current: ${data.bpiSev.bpi_now??'\u2014'}/10.`, 3);
+            if(bpiSevAvg!==null || bpiIntAvg!==null){
+                checkPage(18);
+                sf('bold',7.5,BLACK); doc.text('Pain Assessment \u2014 Brief Pain Inventory (BPI-SF)', ML, y); y+=4.5;
+                if(bpiSevAvg!==null){
+                    const bsv = data.bpiSev;
+                    para(`Severity subscale mean: ${bpiSevAvg}/10 (${sev(bpiSevAvg)}). Worst: ${bsv.bpi_worst??'\u2014'}/10; least: ${bsv.bpi_least??'\u2014'}/10; average: ${bsv.bpi_average??'\u2014'}/10; current: ${bsv.bpi_now??'\u2014'}/10.`, 3);
                 }
-                if(bpiIntAvg !== null){
-                    para(`Pain interference subscale mean: ${bpiIntAvg}/10 (${sevLabel(parseFloat(bpiIntAvg))}). Pain substantially affects general activity (${data.bpiInt.bpi_ga??'\u2014'}/10), sleep (${data.bpiInt.bpi_slp??'\u2014'}/10), normal work (${data.bpiInt.bpi_work??'\u2014'}/10), and enjoyment of life (${data.bpiInt.bpi_enj??'\u2014'}/10).`, 3);
+                if(bpiIntAvg!==null){
+                    const bi = data.bpiInt;
+                    para(`Interference subscale mean: ${bpiIntAvg}/10 (${sev(bpiIntAvg)}). Pain affects: general activity (${bi.bpi_ga??'\u2014'}/10), sleep (${bi.bpi_slp??'\u2014'}/10), work (${bi.bpi_work??'\u2014'}/10), enjoyment of life (${bi.bpi_enj??'\u2014'}/10).`, 3);
                 }
-                y += 3;
+                y+=2;
             }
 
             // FSS
-            if(fssMean !== null){
-                subHead('Fatigue \u2014 Fatigue Severity Scale (FSS-9)');
-                const fLabel = parseFloat(fssMean)>=4
-                    ? `clinically significant fatigue (FSS mean ${fssMean}/7, threshold \u22654.0)`
-                    : `fatigue below the clinical threshold (FSS mean ${fssMean}/7)`;
-                para(`The patient reports ${fLabel}. Fatigue in hEDS commonly reflects autonomic dysfunction, poor sleep architecture, and chronic pain-related exhaustion rather than primary mood disorder.`, 3);
-                y += 3;
+            if(fssMean!==null){
+                checkPage(12);
+                sf('bold',7.5,BLACK); doc.text('Fatigue \u2014 Fatigue Severity Scale (FSS-9)', ML, y); y+=4.5;
+                const fLabel = parseFloat(fssMean)>=4 ? `clinically significant fatigue (FSS mean ${fssMean}/7, threshold \u22654.0)` : `fatigue below clinical threshold (FSS mean ${fssMean}/7)`;
+                para(`${fLabel}. Fatigue in hEDS commonly reflects autonomic dysfunction, poor sleep, and chronic pain rather than primary mood disorder.`, 3);
+                y+=2;
             }
 
             // POTS
-            if(potsCount > 0){
-                subHead('Autonomic Dysfunction \u2014 POTS Symptom Screening');
-                const pInterp = potsCount>=4
-                    ? `${potsCount}/7 criteria \u2014 strongly suggestive of orthostatic intolerance or POTS`
-                    : potsCount>=2
-                        ? `${potsCount}/7 criteria \u2014 moderate symptom burden consistent with dysautonomia`
-                        : `${potsCount}/7 criteria \u2014 low-level autonomic symptoms`;
-                para(`Patient endorses ${pInterp}. POTS is present in an estimated 30\u201350% of hEDS patients, mediated by connective tissue laxity of venous walls impairing venous return on standing. Endorsed symptoms:`, 3);
-                const potsPos = potsQuestions.filter(q=>data.pots[q.id]);
-                potsPos.forEach(q => bullet(q.text.replace(/🫀|❤️|🧠|😵|🌡️|💧|🫁/g,'').trim(), true));
-                y += 3;
+            if(potsCount>0){
+                checkPage(12);
+                sf('bold',7.5,BLACK); doc.text('Autonomic Dysfunction \u2014 POTS Symptom Screening', ML, y); y+=4.5;
+                const pInterp = potsCount>=5 ? `${potsCount}/7 \u2014 strongly suggestive of orthostatic intolerance/POTS` : potsCount>=3 ? `${potsCount}/7 \u2014 moderate dysautonomia symptom burden` : `${potsCount}/7 \u2014 low-level autonomic symptoms`;
+                para(`${pInterp}. POTS is present in ~30\u201350% of hEDS patients via connective tissue laxity of venous walls impairing venous return on standing.`, 3);
+                y+=2;
             }
 
             // MCAS
-            if(mcasCount > 0){
-                subHead('Mast Cell Activation \u2014 MCAS Symptom Screening');
-                const mInterp = mcasCount>=4
-                    ? `${mcasCount}/7 criteria \u2014 strongly consistent with mast cell activation syndrome`
-                    : mcasCount>=2
-                        ? `${mcasCount}/7 criteria \u2014 notable mast cell symptom burden`
-                        : `${mcasCount}/7 criteria`;
-                para(`Patient endorses ${mInterp}. MCAS co-occurs with hEDS in an estimated 17\u201330% of cases. The triad of hEDS, POTS, and MCAS is a recognized clinical phenotype. Endorsed symptoms:`, 3);
-                const mcasPos = mcasQuestions.filter(q=>data.mcas[q.id]);
-                mcasPos.forEach(q => bullet(q.text.replace(/🔴|🌸|🤢|🧠|💨|💊|⚡/g,'').trim(), true));
-                y += 3;
+            if(mcasCount>0){
+                checkPage(12);
+                sf('bold',7.5,BLACK); doc.text('Mast Cell Activation \u2014 MCAS Symptom Screening', ML, y); y+=4.5;
+                const mInterp = mcasCount>=5 ? `${mcasCount}/7 \u2014 strongly consistent with MCAS` : mcasCount>=3 ? `${mcasCount}/7 \u2014 notable mast cell symptom burden` : `${mcasCount}/7 \u2014 low-level mast cell symptoms`;
+                para(`${mInterp}. MCAS co-occurs with hEDS in ~17\u201330% of cases. The hEDS-POTS-MCAS triad is a recognized clinical phenotype.`, 3);
+                y+=2;
             }
+
+            y+=2;
 
             // ══════════════════════════════════════════════════════════════
             // S3 — ASSESSMENT TABLE
             // ══════════════════════════════════════════════════════════════
-            sectionTitle('Assessment Summary');
+            secTitle('Assessment Summary');
 
             const rows = [
-                ['Beighton Score (Joint Hypermobility)', `${beightonScore} / 9`, beightonScore>=5?'Criterion 1 MET':beightonScore===4?'Borderline':'Below threshold', beightonScore>=5?GREEN:beightonScore===4?AMBER:RED],
-                ['Systemic Features \u2014 Criterion 2', `${hedsCount} / 13`, hedsCount>=5?'Criterion 2 MET':hedsCount>=3?'Partial':'Below threshold', hedsCount>=5?GREEN:hedsCount>=3?AMBER:RED],
-                ...(bpiSevAvg?[['BPI Pain Severity Mean', `${bpiSevAvg} / 10`, parseFloat(bpiSevAvg)>=7?'Severe':parseFloat(bpiSevAvg)>=4?'Moderate':'Mild', parseFloat(bpiSevAvg)>=7?RED:parseFloat(bpiSevAvg)>=4?AMBER:GREEN]]:[]),
-                ...(bpiIntAvg?[['BPI Pain Interference Mean', `${bpiIntAvg} / 10`, parseFloat(bpiIntAvg)>=7?'Severe':parseFloat(bpiIntAvg)>=4?'Moderate':'Mild', parseFloat(bpiIntAvg)>=7?RED:parseFloat(bpiIntAvg)>=4?AMBER:GREEN]]:[]),
-                ...(fssMean?[['FSS-9 Fatigue Mean', `${fssMean} / 7.0`, parseFloat(fssMean)>=4?'Clinically Significant (\u22654.0)':'Below Threshold', parseFloat(fssMean)>=4?RED:GREEN]]:[]),
-                ...(potsCount>0?[['POTS Symptom Screen', `${potsCount} / 7`, potsCount>=4?'Strongly Positive':potsCount>=2?'Positive':'Low Burden', potsCount>=4?RED:potsCount>=2?AMBER:BLACK]]:[]),
-                ...(mcasCount>0?[['MCAS Symptom Screen', `${mcasCount} / 7`, mcasCount>=4?'Strongly Positive':mcasCount>=2?'Positive':'Low Burden', mcasCount>=4?RED:mcasCount>=2?AMBER:BLACK]]:[]),
+                ['Beighton Score (Joint Hypermobility)', `${beightonScore}/9`, beightonScore>=5?'Criterion 1 MET':beightonScore===4?'Borderline':'Below threshold', beightonScore>=5?GREEN:beightonScore===4?AMBER:RED],
+                ['Systemic Features \u2014 Criterion 2', `${hedsCount}/13`, hedsCount>=5?'Criterion 2 MET':hedsCount>=3?'Partial':'Below threshold', hedsCount>=5?GREEN:hedsCount>=3?AMBER:RED],
+                ...(bpiSevAvg?[['BPI Pain Severity Mean', `${bpiSevAvg}/10`, parseFloat(bpiSevAvg)>=7?'Severe':parseFloat(bpiSevAvg)>=4?'Moderate':'Mild', parseFloat(bpiSevAvg)>=7?RED:parseFloat(bpiSevAvg)>=4?AMBER:GREEN]]:[]),
+                ...(bpiIntAvg?[['BPI Pain Interference Mean', `${bpiIntAvg}/10`, parseFloat(bpiIntAvg)>=7?'Severe':parseFloat(bpiIntAvg)>=4?'Moderate':'Mild', parseFloat(bpiIntAvg)>=7?RED:parseFloat(bpiIntAvg)>=4?AMBER:GREEN]]:[]),
+                ...(fssMean?[['FSS-9 Fatigue Mean', `${fssMean}/7`, parseFloat(fssMean)>=4?'Clinically Significant':'Below Threshold', parseFloat(fssMean)>=4?RED:GREEN]]:[]),
+                ...(potsCount>0?[['POTS Symptom Screen (7-item)', `${potsCount}/7`, potsCount>=5?'Strongly Positive':potsCount>=3?'Positive':'Low Burden', potsCount>=5?RED:potsCount>=3?AMBER:BLACK]]:[]),
+                ...(mcasCount>0?[['MCAS Symptom Screen (7-item)', `${mcasCount}/7`, mcasCount>=5?'Strongly Positive':mcasCount>=3?'Positive':'Low Burden', mcasCount>=5?RED:mcasCount>=3?AMBER:BLACK]]:[]),
             ];
 
-            const RH = 6.5;
-            const c1=CW*0.52, c2=CW*0.18, c3=CW*0.30;
-
+            const RH=5.8, c1=CW*0.52, c2=CW*0.18, c3=CW*0.30;
             checkPage(RH*(rows.length+1)+4);
-            doc.setFillColor(...NAVY);
-            doc.rect(ML, y, CW, RH, 'F');
-            setFont('bold', 7.5, [255,255,255]);
-            doc.text('Measure', ML+2, y+4.5);
-            doc.text('Score', ML+c1+2, y+4.5);
-            doc.text('Interpretation', ML+c1+c2+2, y+4.5);
-            y += RH;
-
-            rows.forEach(([label, score, interp, ic], i)=>{
+            doc.setFillColor(...NAVY); doc.rect(ML,y,CW,RH,'F');
+            sf('bold',7,[255,255,255]);
+            doc.text('Measure', ML+2, y+4); doc.text('Score', ML+c1+2, y+4); doc.text('Interpretation', ML+c1+c2+2, y+4);
+            y+=RH;
+            rows.forEach(([label,score,interp,ic],i)=>{
                 checkPage(RH+2);
                 doc.setFillColor(...(i%2===0?LGRAY:[255,255,255]));
-                doc.setDrawColor(...RULE);
-                doc.setLineWidth(0.2);
-                doc.rect(ML, y, CW, RH, 'FD');
-                setFont('normal', 8, BLACK);
-                doc.text(label, ML+2, y+4.5);
-                setFont('bold', 8, BLACK);
-                doc.text(score, ML+c1+2, y+4.5);
-                setFont('bold', 8, ic);
-                doc.text(interp, ML+c1+c2+2, y+4.5);
-                y += RH;
+                doc.setDrawColor(...RULE); doc.setLineWidth(0.2);
+                doc.rect(ML,y,CW,RH,'FD');
+                sf('normal',7.5,BLACK); doc.text(label, ML+2, y+4);
+                sf('bold',7.5,BLACK); doc.text(score, ML+c1+2, y+4);
+                sf('bold',7.5,ic); doc.text(interp, ML+c1+c2+2, y+4);
+                y+=RH;
             });
-            y += 6;
+            y+=5;
 
             // ══════════════════════════════════════════════════════════════
             // S4 — IMPRESSION
             // ══════════════════════════════════════════════════════════════
-            sectionTitle('Impression and Potential Diagnosis');
+            secTitle('Impression and Potential Diagnosis');
 
-            const meetsC1 = beightonScore>=5;
-            const meetsC2 = hedsCount>=5;
-            const borderC1 = beightonScore===4;
-            const partC2   = hedsCount>=3;
-
-            let impression, diagnosis, icdLine;
-            if(meetsC1 && meetsC2){
-                diagnosis  = 'Hypermobile Ehlers-Danlos Syndrome (hEDS) \u2014 probable, pending clinical evaluation';
-                icdLine    = 'ICD-10: Q79.6  |  OMIM: 130020  |  Reference: 2017 International Classification of EDS';
-                impression = `${name}'s self-assessment meets the primary screening thresholds for both Criterion 1 (Beighton Score ${beightonScore}/9) and Criterion 2 (${hedsCount}/13 systemic features) of the 2017 International Classification of Ehlers-Danlos Syndromes. In the appropriate clinical context and after exclusion of other heritable connective tissue disorders, this profile is consistent with a preliminary working diagnosis of Hypermobile Ehlers-Danlos Syndrome (hEDS, OMIM 130020).`;
+            const meetsC1=beightonScore>=5, meetsC2=hedsCount>=5;
+            const borderC1=beightonScore===4, partC2=hedsCount>=3;
+            let diagnosis, impression;
+            if(meetsC1&&meetsC2){
+                diagnosis='Hypermobile Ehlers-Danlos Syndrome (hEDS) \u2014 probable, pending clinical evaluation  |  ICD-10: Q79.6  |  OMIM: 130020';
+                impression=`${name}'s assessment meets screening thresholds for both Criterion 1 (Beighton ${beightonScore}/9) and Criterion 2 (${hedsCount}/13 systemic features) of the 2017 International Classification of EDS. After exclusion of other heritable connective tissue disorders, this profile is consistent with a working diagnosis of hEDS.`;
             } else if((meetsC1&&partC2)||(borderC1&&meetsC2)){
-                diagnosis  = 'Hypermobility Spectrum Disorder (HSD) vs. hEDS \u2014 requires clinical evaluation';
-                icdLine    = 'Reference: 2017 International Classification of EDS and HSD';
-                impression = `${name}'s self-assessment meets one primary criterion with partial fulfillment of the other, producing a profile consistent with Hypermobility Spectrum Disorder (HSD) or possibly hEDS pending clinical evaluation. The pattern of systemic involvement, pain burden, and associated autonomic symptoms warrants formal connective tissue assessment.`;
-            } else if(meetsC1||partC2||potsCount>=3||mcasCount>=3){
-                diagnosis  = 'Hypermobility spectrum features \u2014 clinical correlation required';
-                icdLine    = 'Reference: 2017 International Classification of EDS and HSD';
-                impression = `${name}'s self-assessment reveals a clinically significant pattern of symptoms including joint hypermobility and/or systemic connective tissue features with notable autonomic and/or mast cell involvement. While formal 2017 hEDS criteria thresholds are not fully met on self-assessment, the overall clinical picture warrants evaluation for hypermobility spectrum disorder.`;
+                diagnosis='Hypermobility Spectrum Disorder (HSD) vs. hEDS \u2014 requires clinical evaluation';
+                impression=`${name}'s assessment meets one primary criterion with partial fulfillment of the other. The pattern of systemic involvement, pain burden, and associated autonomic symptoms is consistent with HSD or possible hEDS and warrants formal connective tissue assessment.`;
             } else {
-                diagnosis  = 'Below screening threshold \u2014 clinical correlation advised if symptoms are limiting';
-                icdLine    = 'Reference: 2017 International Classification of EDS and HSD';
-                impression = `${name}'s self-assessment does not meet primary screening thresholds for hEDS using the 2017 criteria. This does not exclude the diagnosis, as clinical examination findings and physician-administered Beighton testing may yield different results. Evaluation is appropriate if symptoms are functionally limiting.`;
+                diagnosis='Hypermobility spectrum features \u2014 clinical correlation required';
+                impression=`${name}'s assessment does not fully meet 2017 hEDS screening thresholds but reveals a clinically significant symptom pattern. Physician evaluation is appropriate if symptoms are functionally limiting.`;
             }
 
             // Impression box
-            checkPage(20);
-            const impBoxH = 14;
-            doc.setFillColor(...LTBLUE);
-            doc.setDrawColor(...NAVY);
-            doc.setLineWidth(0.5);
-            doc.rect(ML, y, CW, impBoxH, 'FD');
-            setFont('bold', 7.5, NAVY);
-            doc.text('WORKING IMPRESSION:', ML+3, y+5.5);
-            setFont('normal', 7.5, NAVY);
-            const diagLines = doc.splitTextToSize(diagnosis, CW-58);
-            doc.text(diagLines[0]||'', ML+50, y+5.5);
-            if(diagLines[1]) doc.text(diagLines[1], ML+3, y+10);
-            setFont('italic', 6.5, DGRAY);
-            if(!diagLines[1]) doc.text(icdLine, ML+3, y+10);
-            y += impBoxH + 5;
+            checkPage(16);
+            const impH=13;
+            doc.setFillColor(...LTBLUE); doc.setDrawColor(...NAVY); doc.setLineWidth(0.5);
+            doc.rect(ML,y,CW,impH,'FD');
+            sf('bold',7,NAVY); doc.text('WORKING IMPRESSION:', ML+3, y+5);
+            sf('normal',7,NAVY);
+            const dLines = doc.splitTextToSize(diagnosis, CW-52);
+            doc.text(dLines[0], ML+50, y+5);
+            if(dLines[1]){ sf('normal',6.5,DGRAY); doc.text(dLines[1], ML+3, y+10); }
+            y+=impH+4;
 
             para(impression);
-            y += 2;
-
-            // Comorbidities line
-            const comorbArr = [];
-            if(potsCount>=3) comorbArr.push(`postural orthostatic tachycardia syndrome (POTS) \u2014 ${potsCount}/7 criteria met`);
-            if(mcasCount>=3) comorbArr.push(`mast cell activation syndrome (MCAS) \u2014 ${mcasCount}/7 criteria met`);
-            if(bpiSevAvg&&parseFloat(bpiSevAvg)>=4) comorbArr.push(`chronic pain, ${sevLabel(parseFloat(bpiSevAvg))} intensity (BPI severity mean ${bpiSevAvg}/10)`);
-            if(fssMean&&parseFloat(fssMean)>=4) comorbArr.push(`clinically significant fatigue (FSS mean ${fssMean}/7)`);
-            if(comorbArr.length){
-                para(`Associated comorbidities identified on screening: ${comorbArr.join('; ')}.`);
-            }
-            y += 5;
+            y+=2;
+            const comorbArr=[];
+            if(potsCount>=3) comorbArr.push(`POTS \u2014 ${potsCount}/7 criteria met`);
+            if(mcasCount>=3) comorbArr.push(`MCAS \u2014 ${mcasCount}/7 criteria met`);
+            if(bpiSevAvg&&parseFloat(bpiSevAvg)>=4) comorbArr.push(`chronic pain, ${sev(bpiSevAvg)} (BPI severity ${bpiSevAvg}/10)`);
+            if(fssMean&&parseFloat(fssMean)>=4) comorbArr.push(`clinically significant fatigue (FSS ${fssMean}/7)`);
+            if(comorbArr.length){ para(`Associated comorbidities: ${comorbArr.join('; ')}.`); }
+            y+=4;
 
             // ══════════════════════════════════════════════════════════════
             // S5 — RECOMMENDED WORKUP
             // ══════════════════════════════════════════════════════════════
-            sectionTitle('Recommended Workup and Specialist Referrals');
-            para('The following referrals and investigations are recommended based on the clinical screening profile:');
-            y += 3;
+            secTitle('Recommended Workup and Specialist Referrals');
 
-            let rn = 1;
-            const refs = [];
-
+            const refs=[];
+            let rn=1;
             if(meetsC1||meetsC2||(borderC1&&partC2)){
-                refs.push([`${rn++}.  Genetics / Clinical Geneticist \u2014 Connective Tissue Evaluation`,
-                    'Formal hEDS evaluation using the 2017 International Classification criteria. Comprehensive connective tissue gene panel (Invitae EDS Panel or GeneDx HDCT panel) to exclude heritable CTDs with known mutations: vascular EDS (COL3A1), Marfan syndrome (FBN1), Loeys-Dietz (TGFBR1/2), classical EDS (COL5A1/2). A negative panel supports the hEDS diagnosis.']);
+                refs.push([`${rn++}.  Genetics / Clinical Geneticist`, 'Formal hEDS evaluation per 2017 International Classification. Connective tissue gene panel (Invitae EDS Panel or GeneDx HDCT) to exclude vascular EDS (COL3A1), Marfan syndrome (FBN1), Loeys-Dietz (TGFBR1/2), classical EDS (COL5A1/2). Negative panel supports hEDS diagnosis.']);
             }
             if(potsCount>=3){
-                refs.push([`${rn++}.  Cardiology / Autonomic Neurology \u2014 POTS Evaluation`,
-                    `Patient endorses ${potsCount}/7 POTS screening criteria. Recommend formal tilt-table test (gold standard) or NASA lean test. If confirmed: sodium loading 3\u20135g/day, fluid 2\u20133L/day, compression garments 20\u201330 mmHg (waist-high), supervised recumbent exercise program. Consider beta-blockade or fludrocortisone per autonomic specialist.`]);
+                refs.push([`${rn++}.  Cardiology / Autonomic Neurology \u2014 POTS Evaluation`, `${potsCount}/7 POTS criteria met. Recommend tilt-table test (gold standard). If confirmed: sodium loading 3\u20135g/day, fluid 2\u20133L/day, waist-high compression 20\u201330 mmHg, recumbent exercise program. Consider beta-blockade or fludrocortisone per specialist.`]);
             }
             if(mcasCount>=3){
-                refs.push([`${rn++}.  Allergy / Immunology \u2014 MCAS Evaluation`,
-                    `Patient endorses ${mcasCount}/7 MCAS screening criteria. Recommended labs: serum tryptase (baseline, drawn >24h from any reaction), 24-hour urine N-methylhistamine, 24-hour urine prostaglandin D2. Empiric trial of combined H1 + H2 antihistamine blockade reasonable prior to workup: levocetirizine 5mg QD + famotidine 20mg BID \u00d7 4\u20136 weeks.`]);
+                refs.push([`${rn++}.  Allergy / Immunology \u2014 MCAS Evaluation`, `${mcasCount}/7 MCAS criteria met. Labs: serum tryptase (baseline, >24h post-reaction), 24-hr urine N-methylhistamine and prostaglandin D2. Empiric trial: levocetirizine 5mg QD + famotidine 20mg BID \u00d7 4\u20136 weeks.`]);
             }
-            refs.push([`${rn++}.  Interventional Pain Medicine`,
-                'Evaluation of pain generators, injection-based diagnostics and therapeutics (SI joint injections, facet blocks, occipital nerve blocks, RFA), and orthobiologic treatments (PRP, bone marrow concentrate) for ligamentous laxity and joint instability. Low dose naltrexone (LDN 1.5\u20134.5mg) is an emerging option for neuroinflammation and chronic pain in hEDS.']);
-            refs.push([`${rn++}.  Physical Therapy \u2014 Hypermobility Rehabilitation`,
-                'Referral to PT with specific experience in hypermobility spectrum disorders. Program must emphasize joint stabilization, proprioceptive training, and graduated strengthening \u2014 not stretching or end-range flexibility. The Muldowney Protocol is an evidence-supported framework developed specifically for hEDS and HSD.']);
+            refs.push([`${rn++}.  Interventional Pain Medicine`, 'Evaluation for injection-based treatments (SI joint, facet blocks, nerve blocks, RFA) and orthobiologic options (PRP, bone marrow concentrate) for ligamentous laxity. Low dose naltrexone (LDN 1.5\u20134.5mg) for neuroinflammation and chronic pain.']);
+            refs.push([`${rn++}.  Physical Therapy \u2014 Hypermobility Rehabilitation`, 'PT experienced with HSD/hEDS. Emphasis on joint stabilization, proprioception, graduated strengthening \u2014 not stretching. Muldowney Protocol is an evidence-supported framework for hEDS rehabilitation.']);
             if(bpiSevAvg&&parseFloat(bpiSevAvg)>=6){
-                refs.push([`${rn++}.  Pain Psychology / Occupational Therapy`,
-                    `BPI severity mean of ${bpiSevAvg}/10 and interference mean of ${bpiIntAvg}/10 indicate significant functional impairment. CBT for chronic pain and OT evaluation for adaptive strategies, workplace accommodations, and assistive device assessment are recommended adjuncts.`]);
+                refs.push([`${rn++}.  Pain Psychology / Occupational Therapy`, `BPI severity ${bpiSevAvg}/10 and interference ${bpiIntAvg}/10 indicate significant functional impairment. CBT for chronic pain and OT for adaptive strategies and workplace accommodations.`]);
             }
 
-            refs.forEach(([title, body])=>{
-                checkPage(20);
-                subHead(title);
-                para(body, 5);
-                y += 3;
+            refs.forEach(([title,body])=>{
+                checkPage(16);
+                sf('bold',7.5,BLACK); doc.text(title, ML, y); y+=4.5;
+                para(body, 4);
+                y+=2;
             });
+
+            y+=3;
 
             // ══════════════════════════════════════════════════════════════
             // S6 — NOTE TO TREATING PHYSICIAN
             // ══════════════════════════════════════════════════════════════
-            sectionTitle('Note to Treating Physician');
-
-            checkPage(30);
-            const noteH = 26;
-            doc.setFillColor(245,248,252);
-            doc.setDrawColor(200,210,225);
-            doc.setLineWidth(0.4);
-            doc.rect(ML, y, CW, noteH, 'FD');
-            const ny = y;
-            y += 5;
-            para('This clinical summary was generated via MyEDSTest.com, a validated self-assessment tool developed by Gavin Nixon, D.O. (Interventional Pain Medicine, PM&R), and is presented to facilitate \u2014 not replace \u2014 clinical evaluation.', 3);
-            y += 1;
-            para('hEDS is a clinical diagnosis. No genetic test currently exists for hEDS (confirmed by the 2024 HEDGE Study, n=1,000+). Diagnosis requires physician evaluation per 2017 International Classification criteria after exclusion of other heritable CTDs.', 3);
-            y += 1;
-            setFont('normal', 7.5, DGRAY);
-            doc.text('Resources: Ehlers-Danlos Society (ehlers-danlos.com)  \u2022  Dysautonomia International (dysautonomiainternational.org)  \u2022  MyEDSTest.com', ML+3, y);
-            y = ny + noteH + 6;
+            secTitle('Note to Treating Physician');
+            checkPage(22);
+            const noteH=20;
+            doc.setFillColor(245,248,252); doc.setDrawColor(200,210,225); doc.setLineWidth(0.4);
+            doc.rect(ML,y,CW,noteH,'FD');
+            const ny=y; y+=5;
+            para('This summary was generated via MyEDSTest.com, a self-assessment tool developed by Gavin Nixon, D.O. (Interventional Pain Medicine, PM&R), to facilitate \u2014 not replace \u2014 clinical evaluation.',3);
+            y+=1;
+            para('hEDS is a clinical diagnosis. No genetic test exists (2024 HEDGE Study, n=1,000+). Diagnosis requires physician evaluation per 2017 criteria after exclusion of other heritable CTDs.',3);
+            y+=1;
+            sf('normal',6.5,DGRAY);
+            doc.text('Resources: ehlers-danlos.com  \u2022  dysautonomiainternational.org  \u2022  MyEDSTest.com  \u2022  regenexx.com', ML+3, y);
+            y = ny+noteH+4;
 
             addFooter();
-
             doc.save(`hEDS-Clinical-Summary-${name.replace(/\s+/g,'-')}-${new Date().toISOString().split('T')[0]}.pdf`);
         }
 
