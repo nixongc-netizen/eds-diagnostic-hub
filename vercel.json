@@ -1,17 +1,22 @@
 {
   "version": 2,
   "builds": [
-    {
-      "src": "api/**/*.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "index.html",
-      "use": "@vercel/static"
-    }
+    { "src": "api/**/*.js", "use": "@vercel/node" },
+    { "src": "**/*.html", "use": "@vercel/static" },
+    { "src": "downloads/**", "use": "@vercel/static" },
+    { "src": "blog/**", "use": "@vercel/static" },
+    { "src": "sitemap.xml", "use": "@vercel/static" }
   ],
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/$1" },
+    { "src": "/assessment", "dest": "/assessment.html" },
+    { "src": "/thank-you", "dest": "/thank-you.html" },
+    { "src": "/gravity-sickness", "dest": "/gravity-sickness.html" },
+    { "src": "/blog/(.*)", "dest": "/blog/$1" },
+    { "src": "/downloads/(.*)", "dest": "/downloads/$1" },
+    { "src": "/sitemap.xml", "dest": "/sitemap.xml" },
+    { "src": "/(.+\\.html)", "dest": "/$1" },
+    { "src": "/", "dest": "/index.html" },
     { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
